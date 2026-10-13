@@ -19,10 +19,12 @@ Never written, logged, or exposed.
 
 import argparse
 import base64
+import csv
 import io
 import json
 import os
 import re
+import shutil
 import sys
 import time
 from datetime import datetime, timezone
@@ -902,9 +904,190 @@ def write_pr_summary(
     output_path.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
+def slugify(text: str) -> str:
+    """Generate clean slug from Turkish or English title."""
+    text = text.lower().strip()
+    tr_map = str.maketrans("çğıöşü", "cgiosu")
+    text = text.translate(tr_map)
+    text = re.sub(r"[^a-z0-9]+", "-", text).strip("-")
+    return text or "proje-onerisi"
+
+
+def sync_google_sheet(
+    sheet_id_or_url: str,
+    excel_paths: List[Path],
+    dry_run: bool = False
+) -> int:
+    """
+    Fetch responses from Google Sheet (connected to Google Forms).
+    If a new response is detected that is not in projects.xlsx, append it to projects.xlsx.
+    Returns count of new projects added.
+    """
+    if not REQUESTS_AVAILABLE:
+        print("  [UYARI] 'requests' kütüphanesi yok, Google Sheets senkronizasyonu atlandı.")
+        return 0
+        
+    # Extract sheet ID
+    match = re.search(r"/spreadsheets/d/([a-zA-Z0-9-_]+)", sheet_id_or_url)
+    sheet_id = match.group(1) if match else sheet_id_or_url.strip()
+    
+    csv_url = f"https://docs.google.com/spreadsheets/d/{sheet_id}/export?format=csv"
+    try:
+        res = requests.get(csv_url, timeout=20)
+        if res.status_code != 200:
+            print(f"  [UYARI] Google Sheets export alınamadı (HTTP {res.status_code})")
+            return 0
+        
+        reader = csv.reader(io.StringIO(res.text))
+        rows = list(reader)
+        if len(rows) < 2:
+            return 0
+    except Exception as e:
+        print(f"  [UYARI] Google Sheets bağlantı hatası: {e}")
+        return 0
+
+    # Load existing Excel to find existing slugs & titles
+    target_excel = excel_paths[0]
+    if not target_excel.exists():
+        return 0
+        
+    wb = openpyxl.load_workbook(str(target_excel))
+    ws = wb.active
+    
+    # Map header keys to column indices
+    col_map = {}
+    for col_idx in range(1, ws.max_column + 1):
+        k = ws.cell(row=1, column=col_idx).value
+        if k:
+            col_map[str(k).strip()] = col_idx
+            
+    existing_slugs = set()
+    existing_titles = set()
+    for row_idx in range(2, ws.max_row + 1):
+        s_val = ws.cell(row=row_idx, column=col_map.get("id", 1)).value
+        t_val = ws.cell(row=row_idx, column=col_map.get("title_tr", 14)).value
+        if s_val:
+            existing_slugs.add(str(s_val).strip().lower())
+        if t_val:
+            existing_titles.add(str(t_val).strip().lower())
+
+    palettes = ["gothic-noir", "cobalt-sky", "chili-spice", "ink-wash", "urban-loft"]
+    new_added = 0
+    
+    # Process Google Sheet rows (row 0 is header)
+    for r_idx, r in enumerate(rows[1:], 1):
+        if len(r) < 5:
+            continue
+            
+        title_raw = r[2].strip() if len(r) > 2 else ""
+        if not title_raw:
+            continue
+            
+        base_slug = slugify(title_raw)
+        
+        # Check if already exists by slug or title match
+        is_dup = (base_slug in existing_slugs or title_raw.lower() in existing_titles)
+        if not is_dup:
+            for kw in ["powerbank", "yemekhane", "dining", "devhack", "hackathon", "prompt-labs", "techsummit"]:
+                if (kw in base_slug or kw in title_raw.lower()) and any(kw in es or kw in et for es in existing_slugs for et in existing_titles):
+                    is_dup = True
+                    break
+        if is_dup:
+            continue
+            
+        # Unique slug resolution
+        cand_slug = base_slug
+        suffix_num = 2
+        while cand_slug in existing_slugs:
+            cand_slug = f"{base_slug}-{suffix_num}"
+            suffix_num += 1
+            
+        existing_slugs.add(cand_slug)
+        existing_titles.add(title_raw.lower())
+        
+        author_raw = r[1].strip() if len(r) > 1 else "Öğrenci Girişimi"
+        category_raw = r[3].strip() if len(r) > 3 else "Genel Mühendislik İnovasyonu"
+        category_clean = category_raw.split(",")[0].strip() or "Mühendislik & İnovasyon"
+        problem_raw = r[4].strip() if len(r) > 4 else "Problem detayı formda belirtilmemiş."
+        solution_raw = r[5].strip() if len(r) > 5 else "Çözüm adımları formda belirtilmemiş."
+        audience_raw = r[6].strip() if len(r) > 6 else "Tüm IUS Öğrencileri"
+        cost_raw = r[7].strip() if len(r) > 7 else ""
+        diff_raw = r[8].strip() if len(r) > 8 else "3"
+        first_step_raw = r[10].strip() if len(r) > 10 else "Teknik ön fizibilite yapılması."
+        links_raw = r[11].strip() if len(r) > 11 else ""
+        
+        # Difficulty int 1-5
+        diff_match = re.search(r"\d+", diff_raw)
+        diff_int = int(diff_match.group(0)) if diff_match else 3
+        diff_int = max(1, min(5, diff_int))
+        
+        # Sponsor status
+        sponsor_status = "Sponsor Aranıyor" if any(w in cost_raw.lower() for w in ["sponsor", "büyük bütçe", "400+"]) else "Sponsor Gerekmiyor"
+        
+        # Palette cycle
+        cur_row_count = ws.max_row
+        pal = palettes[cur_row_count % len(palettes)]
+        
+        print(f"  [GOOGLE FORM YANITI] Yeni proje tespit edildi: '{title_raw}' -> Slug: '{cand_slug}', Lider: {author_raw}")
+        new_added += 1
+        
+        if dry_run:
+            continue
+            
+        # Write new row in Excel
+        new_row_idx = ws.max_row + 1
+        row_cells = {
+            "id": cand_slug,
+            "sheet_id": new_row_idx - 1,
+            "is_flagship": True,
+            "featured": True,
+            "difficulty": diff_int,
+            "category_tr": category_clean,
+            "badge_tr": "Proje Fikri",
+            "status_tr": "Öneri",
+            "sponsor_status": sponsor_status,
+            "title_tr": title_raw,
+            "author": author_raw,
+            "ownership_tr": author_raw,
+            "target_audience_tr": audience_raw,
+            "regenerate_image": False,
+            "problem_tr": problem_raw,
+            "solution_tr": solution_raw,
+            "first_step_tr": first_step_raw,
+            "spec1_label_tr": "Kategori",
+            "spec1_val_tr": category_clean,
+            "spec2_label_tr": "Hedef Kitle",
+            "spec2_val_tr": audience_raw,
+            "spec3_label_tr": "Bütçe Kapsamı",
+            "spec3_val_tr": cost_raw.split("(")[0].strip() or "Öğrenci Projesi",
+            "spec4_label_tr": "Zorluk",
+            "spec4_val_tr": f"{diff_int} / 5",
+            "links": links_raw,
+            "palette": pal
+        }
+        
+        for k, v in row_cells.items():
+            if k in col_map:
+                ws.cell(row=new_row_idx, column=col_map[k], value=v)
+
+    if new_added > 0 and not dry_run:
+        wb.save(str(target_excel))
+        wb.close()
+        # Mirror to all target excel paths
+        for other_p in excel_paths[1:]:
+            other_p.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(str(target_excel), str(other_p))
+        print(f"[BAŞARILI] {new_added} yeni proje Google Sheets'ten Excel'e aktarıldı.")
+    else:
+        wb.close()
+        
+    return new_added
+
+
 def main():
     parser = argparse.ArgumentParser(description="IUS Engineering Club - Projects Excel Pipeline")
     parser.add_argument("--excel", type=str, default=None, help="Path to input projects.xlsx")
+    parser.add_argument("--google-sheet", type=str, default=None, help="Google Sheet URL or ID to pull responses from")
     parser.add_argument("--dry-run", action="store_true", help="Inspect and validate without making API calls or modifying assets")
     parser.add_argument("--skip-translate", action="store_true", help="Skip NVIDIA translation step")
     parser.add_argument("--skip-images", action="store_true", help="Skip concept image generation step")
@@ -912,17 +1095,19 @@ def main():
 
     repo_root = Path(__file__).resolve().parent.parent
 
-    # Determine input Excel path
+    # Determine input Excel paths
     excel_candidates = [
         Path(args.excel) if args.excel else None,
         repo_root / "data" / "projects.xlsx",
         repo_root / "projects" / "data" / "projects.xlsx"
     ]
     excel_path = None
+    all_excel_paths = []
     for cand in excel_candidates:
         if cand and cand.exists():
-            excel_path = cand
-            break
+            if not excel_path:
+                excel_path = cand
+            all_excel_paths.append(cand)
 
     if not excel_path:
         print("[HATA] projects.xlsx dosyası bulunamadı! Aranan konumlar:")
@@ -935,6 +1120,12 @@ def main():
     print(f"Girdi Dosyası: {excel_path}")
     if args.dry_run:
         print("[MOD] --dry-run devrede. Harici API çağrısı yapılmayacak.")
+
+    # Optional Google Sheets Auto-Sync (connected to Google Forms)
+    sheet_param = args.google_sheet or os.environ.get("GOOGLE_SHEET_ID") or os.environ.get("GOOGLE_SHEET_URL") or "1r9aVO0WNHy4AtvIQu1rExEB9X1of1KBOU5ErUTf0jFw"
+    if sheet_param:
+        print(f"[GOOGLE FORMS ENTEGRASYONU] Google E-Tablo kontrol ediliyor ({sheet_param[:18]}...)...")
+        sync_google_sheet(sheet_param, all_excel_paths, args.dry_run)
 
     # Read and Validate Excel
     try:

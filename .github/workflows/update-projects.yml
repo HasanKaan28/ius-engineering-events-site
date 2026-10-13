@@ -7,6 +7,8 @@ on:
       - 'projects/data/projects.xlsx'
       - 'scripts/build_projects.py'
       - 'scripts/image_style.txt'
+  schedule:
+    - cron: '*/30 * * * *'
   workflow_dispatch:
     inputs:
       direct_commit:
@@ -55,6 +57,7 @@ jobs:
           NVIDIA_API_KEY: ${{ secrets.NVIDIA_API_KEY }}
           NVIDIA_MODEL: ${{ vars.NVIDIA_MODEL }}
           NVIDIA_IMAGE_MODEL: ${{ vars.NVIDIA_IMAGE_MODEL }}
+          GOOGLE_SHEET_ID: '1r9aVO0WNHy4AtvIQu1rExEB9X1of1KBOU5ErUTf0jFw'
         run: |
           DRY_RUN_FLAG=""
           if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then

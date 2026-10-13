@@ -1,6 +1,6 @@
 # NVIDIA Otomatik Çeviri Denetim Raporu
 
-- **Tarih (UTC):** 2026-10-13 22:58:22
+- **Tarih (UTC):** 2026-10-13 23:46:40
 - **Kullanılan Model:** `Tanımsız / Çevrimdışı`
 - **İşlenen Toplam Alan:** 0
 
