@@ -6,14 +6,14 @@
   <title>IEC // Innovation Showcase — IUS Engineering Portfolio</title>
   <meta name="description" content="IUS Engineering Club official innovation portfolio. Scroll through flagship student engineering projects, IoT stations, hackathons, and AI labs.">
   
-  <!-- Google Fonts: Instrument Sans (Editorial Body) & Space Grotesk (Architectural Headings) -->
+  <!-- Google Fonts: Inter & Plus Jakarta Sans -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
   
   <link rel="stylesheet" href="style.css">
 </head>
-<body class="lang-tr theme-dark">
+<body class="lang-tr theme-dark" data-global-palette="ink-wash">
 
   <!-- Ambient Sound Generator (Web Audio API) -->
   <div id="audio-indicator" class="sound-pill" title="Ses Aç/Kapat" data-i18n-title="title_sound">
@@ -41,21 +41,6 @@
       </nav>
 
       <div class="nav-actions">
-        <!-- Global Palette Switcher Pill -->
-        <div class="palette-picker-inline" id="global-palette-picker">
-          <button class="btn-palette-trigger" type="button" id="btn-global-palette-trigger" title="Genel Renk Paleti" data-i18n-title="title_palette">
-            <div class="palette-dots-preview" id="global-palette-dots">
-              <span style="background: #000000"></span>
-              <span style="background: #D1D0D0"></span>
-              <span style="background: #988686"></span>
-              <span style="background: #5C4E4E"></span>
-            </div>
-            <span class="palette-name-label" id="global-palette-label">Gothic noir</span>
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
-          </button>
-          <div class="palette-flyout-menu global-flyout" id="global-palette-flyout"></div>
-        </div>
-
         <!-- Google Form submission button (Yönetim Fikir & Proje Havuzu) -->
         <a href="https://docs.google.com/forms/d/e/1FAIpQLSeZ3RHZbw2BMaboNw4yS0xLALOv4KXzXdAg1gyF-434rMP5Ew/viewform" target="_blank" rel="noopener" class="btn-pill-primary" id="btn-submit-idea" title="Yeni Proje / Fikir Gönder" data-i18n-title="title_submit">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
@@ -70,16 +55,6 @@
       </div>
     </div>
   </header>
-
-  <!-- VERTICAL RIGHT PROGRESS / DOT NAVIGATION -->
-  <nav class="side-progress-nav" id="side-nav" aria-label="Project Navigation">
-    <div class="progress-track">
-      <div class="progress-bar-fill" id="progress-bar-fill"></div>
-    </div>
-    <ul class="progress-dots" id="progress-dots-list">
-      <!-- Injected dynamically via JS -->
-    </ul>
-  </nav>
 
   <!-- MAIN SCROLL CONTAINER -->
   <main class="showcase-scroll-container" id="scroll-container">
@@ -231,12 +206,7 @@
           </div>
         </div>
 
-        <!-- Color Palette Selection in Modal -->
-        <div class="form-group">
-          <label data-i18n="label_palette">Renk Paleti (5 Resmi Seçenek)</label>
-          <div class="palette-modal-picker" id="modal-palette-picker"></div>
-          <input type="hidden" id="edit-palette" value="gothic-noir">
-        </div>
+        <input type="hidden" id="edit-palette" value="ink-wash">
 
         <!-- AI Image Picker / Visual Selector -->
         <div class="form-group">

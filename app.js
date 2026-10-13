@@ -317,21 +317,22 @@
       navCount.textContent = projectsData.length;
     }
 
-    wrapper.innerHTML = '';
-    dotsList.innerHTML = '';
+    if (dotsList) {
+      dotsList.innerHTML = '';
 
-    // Hero dot
-    const heroDot = document.createElement('li');
-    heroDot.className = 'dot-item active';
-    heroDot.innerHTML = `
-      <button class="dot-btn" aria-label="Hero"></button>
-      <div class="dot-tooltip">00 // Intro</div>
-    `;
-    heroDot.addEventListener('click', () => {
-      playUiBeep(520, 0.03);
-      document.getElementById('hero').scrollIntoView({ behavior: 'smooth' });
-    });
-    dotsList.appendChild(heroDot);
+      // Hero dot
+      const heroDot = document.createElement('li');
+      heroDot.className = 'dot-item active';
+      heroDot.innerHTML = `
+        <button class="dot-btn" aria-label="Hero"></button>
+        <div class="dot-tooltip">00 // Intro</div>
+      `;
+      heroDot.addEventListener('click', () => {
+        playUiBeep(520, 0.03);
+        document.getElementById('hero').scrollIntoView({ behavior: 'smooth' });
+      });
+      dotsList.appendChild(heroDot);
+    }
 
     projectsData.forEach((project, index) => {
       // 1. Build Project Section DOM
@@ -340,12 +341,9 @@
       section.id = `project-${index}`;
       section.dataset.index = index + 1;
 
-      // Palette Resolution: Stored per project, or project.palette, or harmonious fallback cycle
-      const defaultPaletteCycle = ['cobalt-sky', 'urban-loft', 'chili-spice', 'ink-wash', 'gothic-noir'];
-      const fallbackPalette = defaultPaletteCycle[index % defaultPaletteCycle.length];
-      const savedPalette = localStorage.getItem('iec_palette_' + project.id) || project.palette || fallbackPalette;
-      const currentPalConfig = PALETTES[savedPalette] || PALETTES['gothic-noir'];
-      section.dataset.palette = currentPalConfig.id;
+      // Lock Palette to Ink Wash
+      const currentPalConfig = PALETTES['ink-wash'];
+      section.dataset.palette = 'ink-wash';
 
       const title = typeof project.title === 'object' ? (project.title[currentLang] || project.title.tr || '') : (project.title || '');
       const tagline = typeof project.tagline === 'object' ? (project.tagline[currentLang] || project.tagline.tr || '') : (project.tagline || '');
@@ -429,33 +427,6 @@
                 <span>${I18N[currentLang].btn_edit}</span>
               </button>
 
-              <!-- INLINE PALETTE PICKER TRIGGER -->
-              <div class="palette-picker-inline" id="palette-picker-${index}">
-                <button class="btn-palette-trigger" type="button" data-palette-trigger="${index}" title="Renk Paletini Değiştir / Switch Palette">
-                  <div class="palette-dots-preview">
-                    <span style="background: ${currentPalConfig.swatches[0]}"></span>
-                    <span style="background: ${currentPalConfig.swatches[1]}"></span>
-                    <span style="background: ${currentPalConfig.swatches[2]}"></span>
-                    <span style="background: ${currentPalConfig.swatches[3]}"></span>
-                  </div>
-                  <span class="palette-name-label">${currentPalConfig.name}</span>
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
-                </button>
-                <div class="palette-flyout-menu" id="palette-flyout-${index}">
-                  ${Object.values(PALETTES).map(pal => `
-                    <div class="palette-choice-item ${pal.id === currentPalConfig.id ? 'active' : ''}" data-project-idx="${index}" data-palette-id="${pal.id}">
-                      <span class="palette-choice-name">${pal.name}</span>
-                      <div class="palette-swatch-bar">
-                        <span style="background: ${pal.swatches[0]}"></span>
-                        <span style="background: ${pal.swatches[1]}"></span>
-                        <span style="background: ${pal.swatches[2]}"></span>
-                        <span style="background: ${pal.swatches[3]}"></span>
-                      </div>
-                    </div>
-                  `).join('')}
-                </div>
-              </div>
-
               <button class="btn-icon-subtle" data-share-index="${index}" title="${I18N[currentLang].btn_share}">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path><polyline points="16 6 12 2 8 6"></polyline><line x1="12" y1="2" x2="12" y2="15"></line></svg>
               </button>
@@ -475,19 +446,21 @@
 
       wrapper.appendChild(section);
 
-      // 2. Build Dot Nav Item
-      const dot = document.createElement('li');
-      dot.className = 'dot-item';
-      dot.dataset.targetIndex = index + 1;
-      dot.innerHTML = `
-        <button class="dot-btn" aria-label="${title}"></button>
-        <div class="dot-tooltip">0${index + 1} // ${title}</div>
-      `;
-      dot.addEventListener('click', () => {
-        playUiBeep(640, 0.03);
-        section.scrollIntoView({ behavior: 'smooth' });
-      });
-      dotsList.appendChild(dot);
+      // 2. Build Dot Nav Item (if present)
+      if (dotsList) {
+        const dot = document.createElement('li');
+        dot.className = 'dot-item';
+        dot.dataset.targetIndex = index + 1;
+        dot.innerHTML = `
+          <button class="dot-btn" aria-label="${title}"></button>
+          <div class="dot-tooltip">0${index + 1} // ${title}</div>
+        `;
+        dot.addEventListener('click', () => {
+          playUiBeep(640, 0.03);
+          section.scrollIntoView({ behavior: 'smooth' });
+        });
+        dotsList.appendChild(dot);
+      }
 
       // 3. Attach 3D Card Tilt Effect
       attach3DTilt(section.querySelector(`#card-stage-${index}`));
@@ -611,14 +584,16 @@
   }
 
   function initGlobalPaletteSwitcher() {
+    document.body.dataset.globalPalette = 'ink-wash';
+    localStorage.setItem('iec_global_palette', 'ink-wash');
+
     const globalTrigger = document.getElementById('btn-global-palette-trigger');
     const globalFlyout = document.getElementById('global-palette-flyout');
     const globalDots = document.getElementById('global-palette-dots');
     const globalLabel = document.getElementById('global-palette-label');
     if (!globalTrigger || !globalFlyout) return;
 
-    let savedGlobal = localStorage.getItem('iec_global_palette') || 'gothic-noir';
-    if (!PALETTES[savedGlobal]) savedGlobal = 'gothic-noir';
+    let savedGlobal = 'ink-wash';
 
     function updateGlobalTriggerUI(paletteId) {
       const pal = PALETTES[paletteId];
@@ -966,7 +941,7 @@
       p.first_step.en = document.getElementById('edit-first-step-en').value;
 
       // Save Palette Choice from Modal
-      const modalPal = (document.getElementById('edit-palette') && document.getElementById('edit-palette').value) || 'gothic-noir';
+      const modalPal = (document.getElementById('edit-palette') && document.getElementById('edit-palette').value) || 'ink-wash';
       p.palette = modalPal;
       localStorage.setItem('iec_palette_' + p.id, modalPal);
 
