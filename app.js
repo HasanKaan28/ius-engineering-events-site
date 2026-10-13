@@ -23,7 +23,8 @@
       hero_subtitle: "Öğrenciler tarafından tasarlandı, geleceğe göre mühendisliği yapıldı. FENS amfilerinden teknoloji ekosistemine uzanan amiral gemisi donanım, yapay zeka ve yazılım inovasyonlarımız.",
       hero_explore: "Projeleri Keşfet",
       hero_flagships: "Mühendislik İnovasyonları",
-      stat_active_projects: "Aktif Mühendislik Projesi",
+      stat_active_projects: "Planlanmış Mühendislik Projesi",
+      stat_planned_projects: "Planlanmış Mühendislik Projesi",
       stat_prelaunch_members: "Açılmadan +35 Üye",
       stat_departments: "FENS Disiplini",
       stat_events: "Teknik Etkinlik & Çalıştay",
@@ -42,7 +43,7 @@
       label_author: "Öneren / Yazar",
       label_budget: "Bütçe Planı",
       label_difficulty: "Zorluk Seviyesi (1 - 5)",
-      label_owner: "Proje Sorumlusu / Ekip (TR)",
+      label_owner: "Proje Sorumlusu / Ekip",
       label_palette: "Renk Paleti",
       label_gallery: "Konsept Görsel Seçimi",
       ph_custom_url: "veya Özel Görsel URL'si yapıştırın...",
@@ -84,7 +85,8 @@
       hero_subtitle: "Crafted by students, engineered for the future. From FENS lecture halls to the regional tech ecosystem: flagship hardware, AI, and software innovations.",
       hero_explore: "Explore Innovations",
       hero_flagships: "Engineering Portfolio",
-      stat_active_projects: "Active Engineering Projects",
+      stat_active_projects: "Planned Engineering Projects",
+      stat_planned_projects: "Planned Engineering Projects",
       stat_prelaunch_members: "+35 Pre-Launch Members",
       stat_departments: "FENS Disciplines",
       stat_events: "Technical Workshops & Hackathons",
@@ -192,9 +194,13 @@
     'BMS Batarya Yönetimi & Termal Sensörler': { en: 'BMS Battery Protection & Thermal Sensors', tr: 'BMS Batarya Yönetimi & Termal Sensörler' },
     'FENS Lab 3D Baskı / CNC Metal Gövde': { en: 'FENS Lab 3D Printed / CNC Aluminum Enclosure', tr: 'FENS Lab 3D Baskı / CNC Metal Gövde' },
     '150+ Katılımcı (Öğrenciler & Sektör)': { en: '150+ Attendees (Students & Industry)', tr: '150+ Katılımcı (Öğrenciler & Sektör)' },
+    '150+ Delege & Ziyaretçi': { en: '150+ Delegates & Campus Visitors', tr: '150+ Delege & Ziyaretçi' },
     'Tam Gün Konferans + Demo Fuarı': { en: 'Full-Day Conference + Demo Fair', tr: 'Tam Gün Konferans + Demo Fuarı' },
     'IUS Ana Amfi (Main Amphitheater)': { en: 'IUS Main Amphitheater', tr: 'IUS Ana Amfi (Main Amphitheater)' },
-    '6+ Kurumsal Şirket (Saraybosna & Uluslararası)': { en: '6+ Corporate Partners (Sarajevo & International)', tr: '6+ Kurumsal Şirket (Saraybosna & Uluslararası)' }
+    '6+ Kurumsal Şirket (Saraybosna & Uluslararası)': { en: '6+ Corporate Partners (Sarajevo & International)', tr: '6+ Kurumsal Şirket (Saraybosna & Uluslararası)' },
+    'Bit Alliance & Global Tech Şirketleri': { en: 'Bit Alliance & Global Tech Executives', tr: 'Bit Alliance & Global Tech Şirketleri' },
+    'Öğrenci Kulübü Proje Stantları': { en: 'Student Engineering Hardware Booths', tr: 'Öğrenci Kulübü Proje Stantları' },
+    'Doğrudan Staj ve İş Görüşmeleri': { en: 'Direct On-Site Internship & Job Interviews', tr: 'Doğrudan Staj ve İş Görüşmeleri' }
   };
 
   // --------------------------------------------------------------------------

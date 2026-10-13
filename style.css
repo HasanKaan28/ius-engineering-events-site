@@ -424,6 +424,30 @@ body {
   align-items: center;
 }
 
+.hero-emblem {
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero-club-logo {
+  width: 84px;
+  height: 84px;
+  border-radius: 20px;
+  object-fit: contain;
+  background: rgba(255, 255, 255, 0.04);
+  padding: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.4), 0 0 24px rgba(255, 255, 255, 0.06);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+}
+
+.hero-club-logo:hover {
+  transform: scale(1.06) translateY(-2px);
+  box-shadow: 0 16px 44px rgba(0, 0, 0, 0.5), 0 0 32px rgba(255, 255, 255, 0.12);
+}
+
 .hero-badge {
   display: none !important;
 }
