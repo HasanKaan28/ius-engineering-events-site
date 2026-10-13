@@ -1,0 +1,8 @@
+# Graphify
+graphify-out/
+.graphify_analysis.json
+.graphify_labels.json
+
+# OS & Editor
+.DS_Store
+Thumbs.db

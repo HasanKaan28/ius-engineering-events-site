@@ -101,6 +101,23 @@
       sr_lang_changed: "Sayfa dili Türkçe olarak ayarlandı.",
       footer_affiliation: "Uluslararası Saraybosna Üniversitesi (IUS) Mühendislik ve Doğa Bilimleri Fakültesi (FENS) Öğrenci Kulübü Portfolyosu.",
       footer_back_to_top: "Yukarı Dön",
+      about_nav_link: "Hakkımızda",
+      about_badge: "Kulüp Vizyonu & Topluluk",
+      about_title_1: "Geleceği Birlikte",
+      about_title_2: "İnşa Ediyoruz.",
+      about_subtitle: "Uluslararası Saraybosna Üniversitesi Mühendislik ve Doğa Bilimleri Fakültesi (FENS) bünyesinde; teorik eğitimi kampüsün ihtiyaçlarına ve küresel mühendislik vizyonuna uygun somut projelere dönüştüren öğrenci inovasyon topluluğu.",
+      about_pillar_1_title: "Donanım & Kampüs IoT",
+      about_pillar_1_desc: "Öğrenci kartı (RFID) entegrasyonlu akıllı dolaplar, otonom güç istasyonları ve mikrodenetleyici tabanlı kampüs donanımları.",
+      about_pillar_2_title: "Yazılım & Yapay Zeka",
+      about_pillar_2_desc: "Yemekhane canlı veri sistemleri, akran LLM ve modern araç laboratuvarları ile açık kaynak yazılım mimarileri.",
+      about_pillar_3_title: "Ekosistem & Hackathonlar",
+      about_pillar_3_desc: "Saraybosna teknoloji ekosistemi ile köprü, 48 saatlik DevHack yarışmaları ve mezun-öğrenci mentörlük ağı.",
+      about_stat_members: "Aktif Üye & Geliştirici",
+      about_stat_depts: "FENS Mühendislik Disiplini",
+      about_stat_proposals: "Hazır Proje Önerisi",
+      about_stat_initiative: "Öğrenci İnisiyatifi",
+      about_cta_join: "Bu Vizyona Katıl / Fikir Gönder",
+      about_cta_web: "IUS Resmi Web",
       page_seo_title: "IEC // Proje Fikirleri — IUS Mühendislik Kulübü",
       page_seo_desc: "International University of Sarajevo (IUS) Mühendislik Kulübü öğrenci proje fikirleri ve inovasyon portfolyosu. FENS öğrencileri tarafından tasarlanan donanım, IoT, yazılım ve yapay zeka önerileri."
     },
@@ -180,6 +197,23 @@
       sr_lang_changed: "Page language switched to English.",
       footer_affiliation: "International University of Sarajevo (IUS) Faculty of Engineering and Natural Sciences (FENS) Student Club Portfolio.",
       footer_back_to_top: "Back to Top",
+      about_nav_link: "About Us",
+      about_badge: "Club Vision & Community",
+      about_title_1: "Engineering the Future,",
+      about_title_2: "Together.",
+      about_subtitle: "A student innovation collective within the International University of Sarajevo Faculty of Engineering and Natural Sciences (FENS); translating lecture theory into tangible campus projects and global engineering benchmarks.",
+      about_pillar_1_title: "Hardware & Campus IoT",
+      about_pillar_1_desc: "Smart RFID-integrated docks, portable energy stations, and microcontroller-driven autonomous campus hardware.",
+      about_pillar_2_title: "Software & Artificial Intelligence",
+      about_pillar_2_desc: "Real-time dining feeds, peer LLM study stations, and production-grade open-source software architectures.",
+      about_pillar_3_title: "Ecosystem & Hackathons",
+      about_pillar_3_desc: "Direct integration with the Sarajevo tech hub, 48-hour DevHack challenges, and structured student-alumni mentorship.",
+      about_stat_members: "Active Members & Devs",
+      about_stat_depts: "FENS Engineering Disciplines",
+      about_stat_proposals: "Ready Project Proposals",
+      about_stat_initiative: "Student-Led Initiative",
+      about_cta_join: "Join This Vision / Submit Idea",
+      about_cta_web: "IUS Official Portal",
       page_seo_title: "IEC // Project Proposals — IUS Engineering Portfolio",
       page_seo_desc: "International University of Sarajevo (IUS) Engineering Club student project proposals showcase. Hardware, IoT, software and artificial intelligence concepts engineered by FENS students."
     }
@@ -857,6 +891,20 @@
       });
     });
 
+    // About Us dot (Index: projectsData.length + 1)
+    const aboutDot = document.createElement('li');
+    aboutDot.className = 'dot-item';
+    aboutDot.innerHTML = `
+      <button class="dot-btn" aria-label="${currentLang === 'tr' ? 'Hakkımızda' : 'About Us'}"></button>
+      <div class="dot-tooltip">${String(projectsData.length + 1).padStart(2, '0')} // ${currentLang === 'tr' ? 'Hakkımızda' : 'About'}</div>
+    `;
+    aboutDot.addEventListener('click', () => {
+      playUiBeep(520, 0.03);
+      const aboutSec = document.getElementById('about');
+      if (aboutSec) aboutSec.scrollIntoView({ behavior: 'smooth' });
+    });
+    dotsList.appendChild(aboutDot);
+
     // Bind Detail Modal Triggers
     document.querySelectorAll('.btn-inspect-trigger').forEach(btn => {
       btn.addEventListener('click', () => {
@@ -1491,9 +1539,20 @@
     const openDrawerBtn = document.getElementById('open-index-drawer');
     const closeDrawerBtn = document.getElementById('close-index-drawer');
     const drawerBackdrop = document.getElementById('drawer-backdrop');
+    const drawerAboutBtn = document.getElementById('drawer-about-btn');
     if (openDrawerBtn) openDrawerBtn.addEventListener('click', openDrawer);
     if (closeDrawerBtn) closeDrawerBtn.addEventListener('click', closeDrawer);
     if (drawerBackdrop) drawerBackdrop.addEventListener('click', closeDrawer);
+    if (drawerAboutBtn) {
+      drawerAboutBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        closeDrawer();
+        playUiBeep(600, 0.03);
+        const aboutSec = document.getElementById('about');
+        if (aboutSec) aboutSec.scrollIntoView({ behavior: 'smooth' });
+        history.replaceState(null, '', '#about');
+      });
+    }
 
     // 5. Drawer Search & Sort Listeners
     const searchInput = document.getElementById('drawer-search-input');
@@ -1651,7 +1710,8 @@
 
       if (e.key === 'ArrowDown' || e.key === 'PageDown') {
         e.preventDefault();
-        const nextIdx = Math.min(activeSectionIndex + 1, projectsData.length);
+        const maxIdx = document.querySelectorAll('.snap-section').length - 1;
+        const nextIdx = Math.min(activeSectionIndex + 1, maxIdx);
         const targetSec = document.querySelector(`.snap-section[data-index="${nextIdx}"]`);
         if (targetSec) {
           playUiBeep(520, 0.02);

@@ -122,7 +122,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
   
-  <link rel="stylesheet" href="./style.css?v=4">
+  <link rel="stylesheet" href="./style.css?v=5">
 </head>
 <body class="lang-tr theme-dark">
 
@@ -164,6 +164,10 @@
           <span data-i18n="all_projects">Tüm Fikirler</span>
           <span class="counter-chip" id="nav-project-count" aria-label="Toplam proje sayısı">-</span>
         </button>
+        <a href="#about" class="nav-about-btn" id="nav-about-trigger" aria-label="Kulüp Hakkında Bilgi">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+          <span data-i18n="about_nav_link">Hakkımızda</span>
+        </a>
       </nav>
 
       <div class="nav-actions">
@@ -250,23 +254,103 @@
       </div>
     </div>
 
-    <!-- SEMANTIC FOOTER -->
-    <footer class="showcase-footer" role="contentinfo">
-      <div class="footer-inner">
-        <div class="footer-brand">
-          <span class="footer-title">IUS ENGINEERING CLUB</span>
-          <p class="footer-desc" data-i18n="footer_affiliation">Uluslararası Saraybosna Üniversitesi (IUS) Mühendislik ve Doğa Bilimleri Fakültesi (FENS) Öğrenci Kulübü Portfolyosu.</p>
-        </div>
-        <div class="footer-meta">
-          <div class="footer-links">
-            <a href="#hero" class="footer-link" data-i18n="footer_back_to_top">Yukarı Dön</a>
-            <a href="https://docs.google.com/forms/d/e/1FAIpQLSeZ3RHZbw2BMaboNw4yS0xLALOv4KXzXdAg1gyF-434rMP5Ew/viewform" target="_blank" rel="noopener noreferrer" class="footer-link" data-i18n="btn_submit_idea">Fikir Gönder</a>
-            <a href="https://www.ius.edu.ba" target="_blank" rel="noopener noreferrer" class="footer-link">IUS Resmi Web</a>
+    <!-- ABOUT SECTION (Hakkımızda - Kulüp Vizyonu, Odak Alanları & İletişim) -->
+    <section class="snap-section about-section" id="about" data-index="6" aria-labelledby="about-heading">
+      <div class="about-backdrop-glow" aria-hidden="true"></div>
+      <div class="about-container">
+        
+        <!-- Header & Emblem -->
+        <div class="about-header-block animate-slide-up">
+          <div class="about-emblem-row">
+            <img src="./assets/favicon.svg" alt="IUS Engineering Club Emblem" class="about-club-emblem" width="48" height="48" loading="lazy">
+            <div class="hero-badge about-badge">
+              <span class="badge-dot"></span>
+              <span data-i18n="about_badge">Kulüp Vizyonu & Topluluk</span>
+            </div>
           </div>
-          <p class="footer-copy">&copy; 2026 IUS Engineering Club. Tüm hakları saklıdır.</p>
+          <h2 class="about-headline" id="about-heading">
+            <span class="gradient-text" data-i18n="about_title_1">Geleceği Birlikte</span>
+            <span class="white-text" data-i18n="about_title_2">İnşa Ediyoruz.</span>
+          </h2>
+          <p class="about-subtitle" data-i18n="about_subtitle">
+            Uluslararası Saraybosna Üniversitesi Mühendislik ve Doğa Bilimleri Fakültesi (FENS) bünyesinde; teorik eğitimi kampüsün ihtiyaçlarına ve küresel mühendislik vizyonuna uygun somut projelere dönüştüren öğrenci inovasyon topluluğu.
+          </p>
         </div>
+
+        <!-- 3 Pillars Grid -->
+        <div class="about-pillars-grid">
+          <div class="about-pillar-card">
+            <div class="about-pillar-icon" aria-hidden="true">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent-gold)" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="2"></rect><rect x="9" y="9" width="6" height="6"></rect><line x1="9" y1="1" x2="9" y2="4"></line><line x1="15" y1="1" x2="15" y2="4"></line><line x1="9" y1="20" x2="9" y2="23"></line><line x1="15" y1="20" x2="15" y2="23"></line><line x1="20" y1="9" x2="23" y2="9"></line><line x1="20" y1="15" x2="23" y2="15"></line><line x1="1" y1="9" x2="4" y2="9"></line><line x1="1" y1="15" x2="4" y2="15"></line></svg>
+            </div>
+            <h3 class="about-pillar-title" data-i18n="about_pillar_1_title">Donanım & Kampüs IoT</h3>
+            <p class="about-pillar-desc" data-i18n="about_pillar_1_desc">Öğrenci kartı (RFID) entegrasyonlu akıllı dolaplar, otonom güç istasyonları ve mikrodenetleyici tabanlı kampüs donanımları.</p>
+          </div>
+
+          <div class="about-pillar-card">
+            <div class="about-pillar-icon" aria-hidden="true">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent-cyan)" stroke-width="2"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline><line x1="14" y1="4" x2="10" y2="20"></line></svg>
+            </div>
+            <h3 class="about-pillar-title" data-i18n="about_pillar_2_title">Yazılım & Yapay Zeka</h3>
+            <p class="about-pillar-desc" data-i18n="about_pillar_2_desc">Yemekhane canlı veri sistemleri, akran LLM ve modern araç laboratuvarları ile açık kaynak yazılım mimarileri.</p>
+          </div>
+
+          <div class="about-pillar-card">
+            <div class="about-pillar-icon" aria-hidden="true">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent-gold-light)" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+            </div>
+            <h3 class="about-pillar-title" data-i18n="about_pillar_3_title">Ekosistem & Hackathonlar</h3>
+            <p class="about-pillar-desc" data-i18n="about_pillar_3_desc">Saraybosna teknoloji ekosistemi ile köprü, 48 saatlik DevHack yarışmaları ve mezun-öğrenci mentörlük ağı.</p>
+          </div>
+        </div>
+
+        <!-- Metrics Row -->
+        <div class="about-metrics-bar">
+          <div class="about-metric-item">
+            <span class="about-metric-val">+35</span>
+            <span class="about-metric-lbl" data-i18n="about_stat_members">Aktif Üye & Geliştirici</span>
+          </div>
+          <div class="about-metric-divider" aria-hidden="true"></div>
+          <div class="about-metric-item">
+            <span class="about-metric-val">6</span>
+            <span class="about-metric-lbl" data-i18n="about_stat_depts">FENS Mühendislik Disiplini</span>
+          </div>
+          <div class="about-metric-divider" aria-hidden="true"></div>
+          <div class="about-metric-item">
+            <span class="about-metric-val">5</span>
+            <span class="about-metric-lbl" data-i18n="about_stat_proposals">Hazır Proje Önerisi</span>
+          </div>
+          <div class="about-metric-divider" aria-hidden="true"></div>
+          <div class="about-metric-item">
+            <span class="about-metric-val">100%</span>
+            <span class="about-metric-lbl" data-i18n="about_stat_initiative">Öğrenci İnisiyatifi</span>
+          </div>
+        </div>
+
+        <!-- Actions & Navigation Bar -->
+        <div class="about-actions-group">
+          <a href="https://docs.google.com/forms/d/e/1FAIpQLSeZ3RHZbw2BMaboNw4yS0xLALOv4KXzXdAg1gyF-434rMP5Ew/viewform" target="_blank" rel="noopener noreferrer" class="btn-glow-primary">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            <span data-i18n="about_cta_join">Bu Vizyona Katıl / Fikir Gönder</span>
+          </a>
+          <a href="https://www.ius.edu.ba" target="_blank" rel="noopener noreferrer" class="btn-pill-secondary">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+            <span data-i18n="about_cta_web">IUS Resmi Web</span>
+          </a>
+          <a href="#hero" class="btn-pill-secondary" id="btn-back-to-top">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>
+            <span data-i18n="footer_back_to_top">Yukarı Dön</span>
+          </a>
+        </div>
+
+        <!-- Integrated Footer Details -->
+        <footer class="about-footer-compact" role="contentinfo">
+          <p class="about-footer-copy" data-i18n="footer_affiliation">Uluslararası Saraybosna Üniversitesi (IUS) Mühendislik ve Doğa Bilimleri Fakültesi (FENS) Öğrenci Kulübü Portfolyosu.</p>
+          <p class="about-footer-copyright">&copy; 2026 IUS Engineering Club. Tüm hakları saklıdır.</p>
+        </footer>
+
       </div>
-    </footer>
+    </section>
 
   </main>
 
@@ -310,6 +394,13 @@
       <!-- Filtered List of Projects -->
       <div class="drawer-list" id="drawer-projects-list" role="list" aria-label="Filtrelenmiş proje listesi">
         <!-- Injected dynamically via JS -->
+      </div>
+
+      <div class="drawer-about-box">
+        <a href="#about" class="drawer-about-link" id="drawer-about-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent-gold)" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+          <span data-i18n="about_nav_link">Kulüp Vizyonu & Hakkımızda</span>
+        </a>
       </div>
     </div>
   </aside>
@@ -522,6 +613,6 @@
   <div class="toast-container" id="toast-container" role="status" aria-live="polite"></div>
 
   <!-- LOAD APP LOGIC (Single Source: data/projects.json via fetch) -->
-  <script src="./app.js?v=4"></script>
+  <script src="./app.js?v=5"></script>
 </body>
 </html>
