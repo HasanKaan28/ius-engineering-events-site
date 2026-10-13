@@ -730,8 +730,8 @@
     const counter = document.getElementById('slide-counter');
 
     const observerOptions = {
-      root: document.getElementById('scroll-container'),
-      threshold: 0.55
+      root: null,
+      threshold: 0.3
     };
 
     observer = new IntersectionObserver((entries) => {
@@ -949,10 +949,10 @@
       localStorage.setItem('iec_projects_custom', JSON.stringify(projectsData));
 
       // Re-render and restore scroll position
-      const scrollPos = document.getElementById('scroll-container').scrollTop;
+      const scrollPos = window.scrollY;
       renderAllProjects();
       populateDrawerList();
-      document.getElementById('scroll-container').scrollTop = scrollPos;
+      window.scrollTo({ top: scrollPos, behavior: 'instant' });
 
       closeEditModal();
       playUiBeep(920, 0.08);
@@ -1054,10 +1054,9 @@
     populateDrawerList();
 
     // Re-render dynamic project cards in new language
-    const scrollContainer = document.getElementById('scroll-container');
-    const scrollPos = scrollContainer ? scrollContainer.scrollTop : 0;
+    const scrollPos = window.scrollY;
     renderAllProjects();
-    if (scrollContainer) scrollContainer.scrollTop = scrollPos;
+    window.scrollTo({ top: scrollPos, behavior: 'instant' });
 
     playUiBeep(750, 0.03);
   }
@@ -1078,24 +1077,8 @@
 
     if (modalOpen || drawerOpen) return;
 
-    // Arrow keys or Page keys for slide snapping
-    if (e.key === 'ArrowDown' || e.key === 'PageDown') {
-      e.preventDefault();
-      const nextIdx = Math.min(activeSectionIndex + 1, projectsData.length);
-      const targetSec = document.querySelector(`.snap-section[data-index="${nextIdx}"]`);
-      if (targetSec) {
-        playUiBeep(520, 0.02);
-        targetSec.scrollIntoView({ behavior: 'smooth' });
-      }
-    } else if (e.key === 'ArrowUp' || e.key === 'PageUp') {
-      e.preventDefault();
-      const prevIdx = Math.max(activeSectionIndex - 1, 0);
-      const targetSec = document.querySelector(`.snap-section[data-index="${prevIdx}"]`);
-      if (targetSec) {
-        playUiBeep(480, 0.02);
-        targetSec.scrollIntoView({ behavior: 'smooth' });
-      }
-    } else if (e.key === 'e' || e.key === 'E') {
+    // Normal web scrolling with keyboard - no hijacking or restricting page flow
+    if (e.key === 'e' || e.key === 'E') {
       // Shortcut to edit currently viewed project
       if (activeSectionIndex > 0) {
         openEditModal(activeSectionIndex - 1);
