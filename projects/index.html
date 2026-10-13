@@ -122,7 +122,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
   
-  <link rel="stylesheet" href="./style.css?v=7">
+  <link rel="stylesheet" href="./style.css?v=8">
 </head>
 <body class="lang-en theme-dark">
 
@@ -205,7 +205,7 @@
       <div class="hero-content">
         <h1 class="hero-headline animate-slide-up" id="hero-title">
           <span class="gradient-text" data-i18n="hero_title_1">Campus Innovations</span><br>
-          <span class="white-text" data-i18n="hero_title_2">Proposed Project Ideas.</span>
+          <span class="white-text" data-i18n="hero_title_2">Project Ideas.</span>
         </h1>
 
         <p class="hero-subtitle animate-slide-up delay-1" data-i18n="hero_subtitle">
@@ -228,11 +228,6 @@
           <div class="stat-item">
             <div class="stat-number" id="hero-stat-projects">-</div>
             <div class="stat-label" data-i18n="stat_projects_label">Proposed Projects</div>
-          </div>
-          <div class="stat-divider" aria-hidden="true"></div>
-          <div class="stat-item">
-            <div class="stat-number" id="hero-stat-categories">-</div>
-            <div class="stat-label" data-i18n="stat_categories_label">Project Domains</div>
           </div>
         </div>
 
@@ -289,7 +284,7 @@
 
           <div class="about-pillar-card">
             <div class="about-pillar-icon" aria-hidden="true">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent-cyan)" stroke-width="2"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline><line x1="14" y1="4" x2="10" y2="20"></line></svg>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent-gold)" stroke-width="2"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline><line x1="14" y1="4" x2="10" y2="20"></line></svg>
             </div>
             <h3 class="about-pillar-title" data-i18n="about_pillar_2_title">Software & Artificial Intelligence</h3>
             <p class="about-pillar-desc" data-i18n="about_pillar_2_desc">Real-time dining feeds, peer LLM study stations, and production-grade open-source software architectures.</p>
@@ -304,26 +299,11 @@
           </div>
         </div>
 
-        <!-- Metrics Row -->
-        <div class="about-metrics-bar">
+        <!-- Metrics Row (Derived from Verified Projects Data) -->
+        <div class="about-metrics-bar" id="about-metrics-bar">
           <div class="about-metric-item">
-            <span class="about-metric-val">+35</span>
-            <span class="about-metric-lbl" data-i18n="about_stat_members">Active Members & Devs</span>
-          </div>
-          <div class="about-metric-divider" aria-hidden="true"></div>
-          <div class="about-metric-item">
-            <span class="about-metric-val">6</span>
-            <span class="about-metric-lbl" data-i18n="about_stat_depts">FENS Engineering Disciplines</span>
-          </div>
-          <div class="about-metric-divider" aria-hidden="true"></div>
-          <div class="about-metric-item">
-            <span class="about-metric-val">5</span>
-            <span class="about-metric-lbl" data-i18n="about_stat_proposals">Ready Project Proposals</span>
-          </div>
-          <div class="about-metric-divider" aria-hidden="true"></div>
-          <div class="about-metric-item">
-            <span class="about-metric-val">100%</span>
-            <span class="about-metric-lbl" data-i18n="about_stat_initiative">Student-Led Initiative</span>
+            <span class="about-metric-val" id="about-stat-projects-val">5</span>
+            <span class="about-metric-lbl" data-i18n="about_stat_proposals">Project Proposals</span>
           </div>
         </div>
 
@@ -331,7 +311,7 @@
         <div class="about-actions-group">
           <a href="https://docs.google.com/forms/d/e/1FAIpQLSeZ3RHZbw2BMaboNw4yS0xLALOv4KXzXdAg1gyF-434rMP5Ew/viewform" target="_blank" rel="noopener noreferrer" class="btn-glow-primary">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-            <span data-i18n="about_cta_join">Join This Vision / Submit Idea</span>
+            <span data-i18n="about_cta_join">Submit Idea</span>
           </a>
           <a href="https://www.ius.edu.ba" target="_blank" rel="noopener noreferrer" class="btn-pill-secondary">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
@@ -613,6 +593,6 @@
   <div class="toast-container" id="toast-container" role="status" aria-live="polite"></div>
 
   <!-- LOAD APP LOGIC (Single Source: data/projects.json via fetch) -->
-  <script src="./app.js?v=7"></script>
+  <script src="./app.js?v=8"></script>
 </body>
 </html>

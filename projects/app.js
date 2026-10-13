@@ -31,11 +31,12 @@
       all_projects: "Önerilen Projeler",
       btn_submit_idea: "Fikir Gönder",
       hero_title_1: "Kampüsü Değiştirecek",
-      hero_title_2: "Önerilen Proje Fikirleri.",
+      hero_title_2: "Proje Fikirleri.",
       hero_subtitle: "Öğrencilerimiz tarafından hazırlanan, kampüsümüzü ve öğrenci deneyimini geliştirmesi hedeflenen proje fikirleri. FENS amfilerinden teknoloji ekosistemine uzanan donanım, yapay zeka ve yazılım önerilerimiz.",
       hero_explore: "Fikirleri İncele",
       stat_projects_label: "Önerilen Proje",
-      stat_categories_label: "Proje Alanı",
+      specs_scope_label: "Planlanan teknik çerçeve",
+      concept_render_badge: "Konsept görseli",
       scroll_hint: "Aşağı Kaydırın",
       skip_to_content: "İçeriğe Doğrudan Geç",
       drawer_title: "Proje Kataloğu",
@@ -114,9 +115,9 @@
       about_pillar_3_desc: "Saraybosna teknoloji ekosistemi ile köprü, 48 saatlik DevHack yarışmaları ve mezun-öğrenci mentörlük ağı.",
       about_stat_members: "Aktif Üye & Geliştirici",
       about_stat_depts: "FENS Mühendislik Disiplini",
-      about_stat_proposals: "Hazır Proje Önerisi",
+      about_stat_proposals: "Proje Önerisi",
       about_stat_initiative: "Öğrenci İnisiyatifi",
-      about_cta_join: "Bu Vizyona Katıl / Fikir Gönder",
+      about_cta_join: "Fikir Gönder",
       about_cta_web: "IUS Resmi Web",
       page_seo_title: "IEC // Proje Fikirleri — IUS Mühendislik Kulübü",
       page_seo_desc: "International University of Sarajevo (IUS) Mühendislik Kulübü öğrenci proje fikirleri ve inovasyon portfolyosu. FENS öğrencileri tarafından tasarlanan donanım, IoT, yazılım ve yapay zeka önerileri."
@@ -127,11 +128,12 @@
       all_projects: "Proposed Projects",
       btn_submit_idea: "Submit Idea",
       hero_title_1: "Campus Innovations",
-      hero_title_2: "Proposed Project Ideas.",
+      hero_title_2: "Project Ideas.",
       hero_subtitle: "Project proposals developed by engineering students to enhance campus life. Proposed hardware, AI, and software concepts from FENS lecture halls to the tech ecosystem.",
       hero_explore: "Explore Proposals",
       stat_projects_label: "Proposed Projects",
-      stat_categories_label: "Project Domains",
+      specs_scope_label: "Planned technical scope",
+      concept_render_badge: "Concept render",
       scroll_hint: "Scroll Down",
       skip_to_content: "Skip directly to content",
       drawer_title: "Project Catalog",
@@ -210,9 +212,9 @@
       about_pillar_3_desc: "Direct integration with the Sarajevo tech hub, 48-hour DevHack challenges, and structured student-alumni mentorship.",
       about_stat_members: "Active Members & Devs",
       about_stat_depts: "FENS Engineering Disciplines",
-      about_stat_proposals: "Ready Project Proposals",
+      about_stat_proposals: "Project Proposals",
       about_stat_initiative: "Student-Led Initiative",
-      about_cta_join: "Join This Vision / Submit Idea",
+      about_cta_join: "Submit Idea",
       about_cta_web: "IUS Official Portal",
       page_seo_title: "IEC // Innovation Showcase — IUS Engineering Portfolio",
       page_seo_desc: "Student engineering project proposals and innovation portfolio at International University of Sarajevo (IUS). Hardware, IoT, software and AI initiatives engineered by FENS students."
@@ -575,25 +577,65 @@
   }
 
   // --------------------------------------------------------------------------
-  // 7. HERO METRICS (Strictly Derived from Dataset: Projects & Categories)
+  // 7. HERO & ABOUT METRICS (Strictly Derived from Verified Data)
   // --------------------------------------------------------------------------
   function updateHeroStats() {
     const statProjects = document.getElementById('hero-stat-projects');
-    const statCategories = document.getElementById('hero-stat-categories');
     const navCount = document.getElementById('nav-project-count');
 
     if (projectsData.length === 0) return;
 
     const totalProjects = projectsData.length;
-    const categoryCount = new Set(projectsData.map(p => {
-      if (p.category && typeof p.category === 'object') return p.category.tr || p.category.en;
-      return p.category || '';
-    }).filter(Boolean)).size;
 
     if (navCount) navCount.textContent = totalProjects;
 
     animateCount(statProjects, totalProjects);
-    animateCount(statCategories, categoryCount);
+    updateAboutMetrics();
+  }
+
+  function updateAboutMetrics() {
+    const metricsBar = document.getElementById('about-metrics-bar');
+    if (!metricsBar) return;
+
+    const extraStats = window.CLUB_STATS || null;
+    let extraHtml = '';
+    if (extraStats) {
+      if (extraStats.members != null) {
+        extraHtml += `
+          <div class="about-metric-divider" aria-hidden="true"></div>
+          <div class="about-metric-item">
+            <span class="about-metric-val">${escapeHtml(extraStats.members)}</span>
+            <span class="about-metric-lbl">${escapeHtml(I18N[currentLang].about_stat_members)}</span>
+          </div>`;
+      }
+      if (extraStats.disciplines != null) {
+        extraHtml += `
+          <div class="about-metric-divider" aria-hidden="true"></div>
+          <div class="about-metric-item">
+            <span class="about-metric-val">${escapeHtml(extraStats.disciplines)}</span>
+            <span class="about-metric-lbl">${escapeHtml(I18N[currentLang].about_stat_depts)}</span>
+          </div>`;
+      }
+      if (extraStats.initiative != null) {
+        extraHtml += `
+          <div class="about-metric-divider" aria-hidden="true"></div>
+          <div class="about-metric-item">
+            <span class="about-metric-val">${escapeHtml(extraStats.initiative)}</span>
+            <span class="about-metric-lbl">${escapeHtml(I18N[currentLang].about_stat_initiative)}</span>
+          </div>`;
+      }
+    }
+
+    metricsBar.innerHTML = `
+      <div class="about-metric-item">
+        <span class="about-metric-val" id="about-stat-projects-val">${projectsData.length}</span>
+        <span class="about-metric-lbl" data-i18n="about_stat_proposals">${escapeHtml(I18N[currentLang].about_stat_proposals)}</span>
+      </div>
+      ${extraHtml}
+    `;
+
+    const aboutVal = document.getElementById('about-stat-projects-val');
+    animateCount(aboutVal, projectsData.length);
   }
 
   function animateCount(el, targetNum) {
@@ -759,6 +801,7 @@
         if (SPEC_TRANSLATIONS[l]) {
           l = SPEC_TRANSLATIONS[l][currentLang] || l;
         }
+        v = v.replace(/^\[(Planlanan|Proposed)\]\s*/i, '');
         allSpecs.push({ label: l, value: v });
       });
 
@@ -829,8 +872,13 @@
               </div>
             </div>
 
-            <!-- Technical Specs Summary -->
-            ${specsHtml ? `<div class="tech-specs-bar">${specsHtml}</div>` : ''}
+            <!-- Technical Specs Summary with Scope Label -->
+            ${specsHtml ? `
+              <div class="tech-specs-wrapper">
+                <span class="specs-scope-label">${escapeHtml(I18N[currentLang].specs_scope_label)}</span>
+                <div class="tech-specs-bar">${specsHtml}</div>
+              </div>
+            ` : ''}
 
             <!-- Action Buttons -->
             <div class="project-actions-row">
@@ -852,6 +900,7 @@
           <div class="project-visual-stage">
             <div class="visual-canvas-card" id="card-stage-${index}">
               ${pictureMarkup}
+              <span class="concept-render-badge">${escapeHtml(I18N[currentLang].concept_render_badge)}</span>
             </div>
 
             ${galleryThumbsHtml ? `<div class="visual-gallery-thumbs" id="thumbs-${index}">${galleryThumbsHtml}</div>` : ''}

@@ -55,8 +55,8 @@
           "en": "Architecture"
         },
         "value": {
-          "tr": "[Planlanan] ESP32 / IoT Kontrolcü",
-          "en": "[Proposed] ESP32 / IoT Controller"
+          "tr": "ESP32 / IoT Kontrolcü",
+          "en": "ESP32 / IoT Controller"
         }
       },
       {
@@ -65,8 +65,8 @@
           "en": "Authentication"
         },
         "value": {
-          "tr": "[Planlanan] NFC / RFID Okuyucu",
-          "en": "[Proposed] NFC / RFID Reader"
+          "tr": "NFC / RFID Okuyucu",
+          "en": "NFC / RFID Reader"
         }
       },
       {
@@ -75,8 +75,8 @@
           "en": "Safety"
         },
         "value": {
-          "tr": "[Planlanan] BMS Batarya Koruması",
-          "en": "[Proposed] BMS Battery Protection"
+          "tr": "BMS Batarya Koruması",
+          "en": "BMS Battery Protection"
         }
       },
       {
@@ -85,8 +85,8 @@
           "en": "Enclosure"
         },
         "value": {
-          "tr": "[Planlanan] 3D Baskı / Kompakt Gövde",
-          "en": "[Proposed] 3D Printed / Compact Body"
+          "tr": "3D Baskı / Kompakt Gövde",
+          "en": "3D Printed / Compact Body"
         }
       }
     ],
@@ -155,8 +155,8 @@
           "en": "Platform"
         },
         "value": {
-          "tr": "[Planlanan] Responsive Web / PWA",
-          "en": "[Proposed] Responsive Mobile Web / PWA"
+          "tr": "Responsive Web / PWA",
+          "en": "Responsive Mobile Web / PWA"
         }
       },
       {
@@ -165,8 +165,8 @@
           "en": "Data Feed"
         },
         "value": {
-          "tr": "[Planlanan] Günlük Menü Yönetim Paneli",
-          "en": "[Proposed] Daily Menu Management Panel"
+          "tr": "Günlük Menü Yönetim Paneli",
+          "en": "Daily Menu Management Panel"
         }
       },
       {
@@ -175,8 +175,8 @@
           "en": "Development"
         },
         "value": {
-          "tr": "[Planlanan] Öğrenci Açık Kaynak Ekibi",
-          "en": "[Proposed] Student Open-Source Team"
+          "tr": "Öğrenci Açık Kaynak Ekibi",
+          "en": "Student Open-Source Team"
         }
       },
       {
@@ -185,8 +185,8 @@
           "en": "Scope"
         },
         "value": {
-          "tr": "[Planlanan] Kampüs Kafeterya & Yemekhane",
-          "en": "[Proposed] Campus Cafeteria & Dining"
+          "tr": "Kampüs Kafeterya & Yemekhane",
+          "en": "Campus Cafeteria & Dining"
         }
       }
     ],
@@ -253,8 +253,8 @@
           "en": "Participants"
         },
         "value": {
-          "tr": "[Planlanan] ~80 Öğrenci (20 Takım)",
-          "en": "[Proposed] ~80 Students (20 Teams)"
+          "tr": "~80 Öğrenci (20 Takım)",
+          "en": "~80 Students (20 Teams)"
         }
       },
       {
@@ -263,8 +263,8 @@
           "en": "Duration"
         },
         "value": {
-          "tr": "[Planlanan] 24 Saatlik Maraton",
-          "en": "[Proposed] 24 Hours Non-Stop Sprint"
+          "tr": "24 Saatlik Maraton",
+          "en": "24 Hours Non-Stop Sprint"
         }
       },
       {
@@ -273,8 +273,8 @@
           "en": "Prizes"
         },
         "value": {
-          "tr": "[Planlanan] Staj & Donanım Ödülleri",
-          "en": "[Proposed] Internships & Hardware Awards"
+          "tr": "Staj & Donanım Ödülleri",
+          "en": "Internships & Hardware Awards"
         }
       },
       {
@@ -283,8 +283,8 @@
           "en": "Venue"
         },
         "value": {
-          "tr": "[Planlanan] FENS Laboratuvarları",
-          "en": "[Proposed] FENS Computer & Hardware Labs"
+          "tr": "FENS Laboratuvarları",
+          "en": "FENS Computer & Hardware Labs"
         }
       }
     ],
@@ -353,8 +353,8 @@
           "en": "Cadence"
         },
         "value": {
-          "tr": "[Planlanan] Dönemsel Atölye Dizisi",
-          "en": "[Proposed] Semester Workshop Series"
+          "tr": "Dönemsel Atölye Dizisi",
+          "en": "Semester Workshop Series"
         }
       },
       {
@@ -363,8 +363,8 @@
           "en": "Format"
         },
         "value": {
-          "tr": "[Planlanan] Uygulamalı Kodlama Seansı",
-          "en": "[Proposed] Hands-On Live Coding Lab"
+          "tr": "Uygulamalı Kodlama Seansı",
+          "en": "Hands-On Live Coding Lab"
         }
       },
       {
@@ -373,8 +373,8 @@
           "en": "Venue"
         },
         "value": {
-          "tr": "[Planlanan] FENS Bilgisayar Laboratuvarı",
-          "en": "[Proposed] FENS Computer Laboratory"
+          "tr": "FENS Bilgisayar Laboratuvarı",
+          "en": "FENS Computer Laboratory"
         }
       },
       {
@@ -383,8 +383,8 @@
           "en": "Scope"
         },
         "value": {
-          "tr": "[Planlanan] Akıllı Araçlar & LLM Temelleri",
-          "en": "[Proposed] Smart Tools & LLM Fundamentals"
+          "tr": "Akıllı Araçlar & LLM Temelleri",
+          "en": "Smart Tools & LLM Fundamentals"
         }
       }
     ],
@@ -453,8 +453,8 @@
           "en": "Attendance"
         },
         "value": {
-          "tr": "[Planlanan] ~150 Katılımcı",
-          "en": "[Proposed] ~150 Attendees & Visitors"
+          "tr": "~150 Katılımcı",
+          "en": "~150 Attendees & Visitors"
         }
       },
       {
@@ -463,8 +463,8 @@
           "en": "Speakers"
         },
         "value": {
-          "tr": "[Planlanan] Sektör Mühendisleri & Yöneticileri",
-          "en": "[Proposed] Industry Engineers & Leaders"
+          "tr": "Sektör Mühendisleri & Yöneticileri",
+          "en": "Industry Engineers & Leaders"
         }
       },
       {
@@ -473,8 +473,8 @@
           "en": "Exhibition"
         },
         "value": {
-          "tr": "[Planlanan] Öğrenci Proje Masaları",
-          "en": "[Proposed] Student Project Tables"
+          "tr": "Öğrenci Proje Masaları",
+          "en": "Student Project Tables"
         }
       },
       {
@@ -483,8 +483,8 @@
           "en": "Career Track"
         },
         "value": {
-          "tr": "[Planlanan] Staj & Mentorluk Görüşmeleri",
-          "en": "[Proposed] Internship & Mentorship Networking"
+          "tr": "Staj & Mentorluk Görüşmeleri",
+          "en": "Internship & Mentorship Networking"
         }
       }
     ],
