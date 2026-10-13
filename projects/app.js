@@ -280,6 +280,15 @@
       .replace(/'/g, '&#39;');
   }
 
+  // Safely extract localized strings from multilingual objects, strings, or null/undefined
+  function getLocalizedValue(obj, lang = currentLang) {
+    if (!obj) return '';
+    if (typeof obj === 'object') {
+      return obj[lang] || obj.tr || obj.en || '';
+    }
+    return String(obj);
+  }
+
   // Screen Reader Live Announcements (WCAG 2.2 AA)
   function announceToScreenReader(message) {
     const srEl = document.getElementById('sr-announcements');
@@ -303,16 +312,14 @@
   // Returns true ONLY if this project's status differs from the dominant/default status across all projects
   function shouldShowStatusBadge(project) {
     if (!project) return false;
-    const statusVal = typeof project.status === 'object'
-      ? (project.status[currentLang] || project.status.tr || project.status.en || '')
-      : (project.status || '');
+    const statusVal = getLocalizedValue(project.status);
 
     if (isUndeterminedBadge(statusVal)) return false;
 
     // Tally status frequencies across projectsData
     const counts = {};
     projectsData.forEach(p => {
-      const raw = typeof p.status === 'object' ? (p.status.tr || p.status.en || '') : (p.status || '');
+      const raw = p && p.status ? (typeof p.status === 'object' ? (p.status.tr || p.status.en || '') : String(p.status)) : '';
       if (!isUndeterminedBadge(raw)) {
         const key = raw.trim().toLowerCase();
         counts[key] = (counts[key] || 0) + 1;
@@ -542,9 +549,9 @@
 
     const totalProjects = projectsData.length;
     const categoryCount = new Set(projectsData.map(p => {
-      if (typeof p.category === 'object') return p.category.tr || p.category.en;
-      return p.category;
-    })).size;
+      if (p.category && typeof p.category === 'object') return p.category.tr || p.category.en;
+      return p.category || '';
+    }).filter(Boolean)).size;
 
     if (navCount) navCount.textContent = totalProjects;
 
@@ -682,15 +689,15 @@
       const currentPalConfig = PALETTES[savedPalette] || PALETTES['gothic-noir'];
       article.dataset.palette = currentPalConfig.id;
 
-      const title = typeof project.title === 'object' ? (project.title[currentLang] || project.title.tr || '') : (project.title || '');
-      const tagline = typeof project.tagline === 'object' ? (project.tagline[currentLang] || project.tagline.tr || '') : (project.tagline || '');
-      const category = typeof project.category === 'object' ? (project.category[currentLang] || project.category.tr || '') : (project.category || '');
-      const problem = typeof project.problem === 'object' ? (project.problem[currentLang] || project.problem.tr || '') : (project.problem || '');
-      const solution = typeof project.solution === 'object' ? (project.solution[currentLang] || project.solution.tr || '') : (project.solution || '');
-      const ownership = typeof project.ownership === 'object' ? (project.ownership[currentLang] || project.ownership.tr || '') : (project.author || '');
+      const title = getLocalizedValue(project.title);
+      const tagline = getLocalizedValue(project.tagline);
+      const category = getLocalizedValue(project.category);
+      const problem = getLocalizedValue(project.problem);
+      const solution = getLocalizedValue(project.solution);
+      const ownership = getLocalizedValue(project.ownership) || (project.author || '');
       
-      const statusVal = typeof project.status === 'object' ? (project.status[currentLang] || project.status.tr || '') : (project.status || '');
-      const sponsorVal = typeof project.sponsor_status === 'object' ? (project.sponsor_status[currentLang] || project.sponsor_status.tr || '') : (project.sponsor_status || '');
+      const statusVal = getLocalizedValue(project.status);
+      const sponsorVal = getLocalizedValue(project.sponsor_status);
       const difficulty = Math.max(1, Math.min(5, parseInt(project.difficulty, 10) || 3));
 
       // Build difficulty dots HTML
@@ -710,8 +717,8 @@
       // Build specs
       const allSpecs = [];
       (project.specs || []).forEach(s => {
-        let l = typeof s.label === 'object' ? (s.label[currentLang] || s.label.tr || '') : s.label;
-        let v = typeof s.value === 'object' ? (s.value[currentLang] || s.value.tr || '') : s.value;
+        let l = getLocalizedValue(s.label);
+        let v = getLocalizedValue(s.value);
         if (SPEC_TRANSLATIONS[l]) {
           l = SPEC_TRANSLATIONS[l][currentLang] || l;
         }
@@ -894,16 +901,16 @@
     const modal = document.getElementById('detail-modal');
     if (!modal) return;
 
-    const title = typeof p.title === 'object' ? (p.title[currentLang] || p.title.tr || '') : (p.title || '');
-    const tagline = typeof p.tagline === 'object' ? (p.tagline[currentLang] || p.tagline.tr || '') : (p.tagline || '');
-    const category = typeof p.category === 'object' ? (p.category[currentLang] || p.category.tr || '') : (p.category || '');
-    const problem = typeof p.problem === 'object' ? (p.problem[currentLang] || p.problem.tr || '') : (p.problem || '');
-    const solution = typeof p.solution === 'object' ? (p.solution[currentLang] || p.solution.tr || '') : (p.solution || '');
-    const firstStep = typeof p.first_step === 'object' ? (p.first_step[currentLang] || p.first_step.tr || '') : (p.first_step || '');
-    const ownership = typeof p.ownership === 'object' ? (p.ownership[currentLang] || p.ownership.tr || '') : (p.author || '');
+    const title = getLocalizedValue(p.title);
+    const tagline = getLocalizedValue(p.tagline);
+    const category = getLocalizedValue(p.category);
+    const problem = getLocalizedValue(p.problem);
+    const solution = getLocalizedValue(p.solution);
+    const firstStep = getLocalizedValue(p.first_step);
+    const ownership = getLocalizedValue(p.ownership) || (p.author || '');
     
-    const statusVal = typeof p.status === 'object' ? (p.status[currentLang] || p.status.tr || '') : (p.status || '');
-    const sponsorVal = typeof p.sponsor_status === 'object' ? (p.sponsor_status[currentLang] || p.sponsor_status.tr || '') : (p.sponsor_status || '');
+    const statusVal = getLocalizedValue(p.status);
+    const sponsorVal = getLocalizedValue(p.sponsor_status);
 
     document.getElementById('detail-modal-title').textContent = title;
     document.getElementById('detail-modal-tagline').textContent = tagline;
@@ -928,8 +935,8 @@
     // Specs
     const allSpecs = [];
     (p.specs || []).forEach(s => {
-      let l = typeof s.label === 'object' ? (s.label[currentLang] || s.label.tr || '') : s.label;
-      let v = typeof s.value === 'object' ? (s.value[currentLang] || s.value.tr || '') : s.value;
+      let l = getLocalizedValue(s.label);
+      let v = getLocalizedValue(s.value);
       if (SPEC_TRANSLATIONS[l]) {
         l = SPEC_TRANSLATIONS[l][currentLang] || l;
       }
@@ -1048,9 +1055,9 @@
     if (!chipsContainer || projectsData.length === 0) return;
 
     const categories = ['all', ...new Set(projectsData.map(p => {
-      if (typeof p.category === 'object') return p.category.tr || p.category.en;
-      return p.category;
-    }))];
+      if (p.category && typeof p.category === 'object') return p.category.tr || p.category.en;
+      return p.category || '';
+    }).filter(Boolean))];
 
     chipsContainer.innerHTML = categories.map(cat => {
       const label = cat === 'all' ? I18N[currentLang].filter_all : cat;
@@ -1082,9 +1089,9 @@
     // 1. Filter
     let filtered = projectsData.filter((p, originalIdx) => {
       p._originalIndex = originalIdx;
-      const title = (typeof p.title === 'object' ? (p.title[currentLang] || p.title.tr) : p.title || '').toLowerCase();
-      const cat = (typeof p.category === 'object' ? (p.category[currentLang] || p.category.tr) : p.category || '').toLowerCase();
-      const rawCat = (typeof p.category === 'object' ? (p.category.tr || p.category.en) : p.category || '');
+      const title = getLocalizedValue(p.title).toLowerCase();
+      const cat = getLocalizedValue(p.category).toLowerCase();
+      const rawCat = (p.category && typeof p.category === 'object') ? (p.category.tr || p.category.en || '') : (p.category || '');
 
       const matchesQuery = !query || title.includes(query) || cat.includes(query);
       const matchesCategory = activeCategoryFilter === 'all' || rawCat === activeCategoryFilter;
@@ -1099,8 +1106,8 @@
       filtered.sort((a, b) => (a.difficulty || 0) - (b.difficulty || 0));
     } else if (activeSortMode === 'sponsor') {
       filtered.sort((a, b) => {
-        const sA = (a.sponsor_status && (typeof a.sponsor_status === 'object' ? a.sponsor_status.tr : a.sponsor_status)) || '';
-        const sB = (b.sponsor_status && (typeof b.sponsor_status === 'object' ? b.sponsor_status.tr : b.sponsor_status)) || '';
+        const sA = getLocalizedValue(a.sponsor_status);
+        const sB = getLocalizedValue(b.sponsor_status);
         return sA.localeCompare(sB);
       });
     }
@@ -1112,10 +1119,10 @@
     }
 
     filtered.forEach(p => {
-      const title = typeof p.title === 'object' ? (p.title[currentLang] || p.title.tr || '') : p.title;
-      const cat = typeof p.category === 'object' ? (p.category[currentLang] || p.category.tr || '') : p.category;
-      const statusVal = typeof p.status === 'object' ? (p.status[currentLang] || p.status.tr || '') : (p.status || '');
-      const sponsorVal = typeof p.sponsor_status === 'object' ? (p.sponsor_status[currentLang] || p.sponsor_status.tr || '') : (p.sponsor_status || '');
+      const title = getLocalizedValue(p.title);
+      const cat = getLocalizedValue(p.category);
+      const statusVal = getLocalizedValue(p.status);
+      const sponsorVal = getLocalizedValue(p.sponsor_status);
 
       const statusMiniHtml = shouldShowStatusBadge(p)
         ? `<span class="badge-mini status">${escapeHtml(I18N[currentLang].status_label_prefix)} ${escapeHtml(statusVal)}</span>`
@@ -1153,6 +1160,7 @@
 
   function openDrawer() {
     playUiBeep(500, 0.04);
+    populateDrawerList();
     const drawer = document.getElementById('index-drawer');
     const trigger = document.getElementById('open-index-drawer');
     if (drawer) {
