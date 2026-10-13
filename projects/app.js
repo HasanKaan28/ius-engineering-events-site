@@ -1,11 +1,25 @@
 /**
  * IUS Engineering Club — Innovation Projects Showcase Engine
- * Bilingual (TR/EN), Scroll-Snap Observer, In-Place Live Edit,
- * Interactive 3D Card Tilt, and Web Audio API Haptics.
+ * Single Source of Truth: data/projects.json via async fetch
+ * WCAG 2.2 AA Focus Management & Screen Reader Announcements
+ * High Performance WebP / Srcset Image Engine with Zero-CLS
+ * Multilingual SEO, Deep Linking (#slug), & Maintainer Admin Preview
  */
 
 (function () {
   'use strict';
+
+  // --------------------------------------------------------------------------
+  // SECURITY & ARCHITECTURE NOTE:
+  // '?admin=true' is purely a client-side interface toggle for maintainers, NOT
+  // an authentication or security boundary. In GitHub Pages (static hosting),
+  // any modifications made in admin mode are scoped strictly to the local
+  // browser's localStorage. They will NEVER propagate to other visitors.
+  // The only mechanism to persist changes globally is for maintainers to
+  // download/copy the updated JSON and commit it to the repository.
+  // --------------------------------------------------------------------------
+  const urlParams = new URLSearchParams(window.location.search);
+  const isAdmin = urlParams.get('admin') === 'true';
 
   // --------------------------------------------------------------------------
   // 1. DICTIONARY & I18N
@@ -14,92 +28,124 @@
     tr: {
       sound_label: "Ses: Kapalı",
       sound_on: "Ses: Açık",
-      all_projects: "Tüm Projeler",
-      nav_observatory: "Observatory",
-      nav_certificates: "Sertifikalar",
+      all_projects: "Önerilen Projeler",
       btn_submit_idea: "Fikir Gönder",
-      hero_title_1: "Kampüsü Değiştiren",
-      hero_title_2: "Mühendislik Vizyonu.",
-      hero_subtitle: "Öğrenciler tarafından tasarlandı, geleceğe göre mühendisliği yapıldı. FENS amfilerinden teknoloji ekosistemine uzanan amiral gemisi donanım, yapay zeka ve yazılım inovasyonlarımız.",
-      hero_explore: "Projeleri Keşfet",
-      hero_flagships: "Amiral Gemisi Donanımlar",
-      stat_active_projects: "Aktif Mühendislik Projesi",
-      stat_budget: "Dengeli Bütçe Mimarisi",
-      stat_budget_val: "1.300 KM",
-      stat_open_source: "Öğrenci Üretimi & Açık Donanım",
+      hero_title_1: "Kampüsü Değiştirecek",
+      hero_title_2: "Önerilen Proje Fikirleri.",
+      hero_subtitle: "Öğrencilerimiz tarafından hazırlanan, kampüsümüzü ve öğrenci deneyimini geliştirmesi hedeflenen proje fikirleri. FENS amfilerinden teknoloji ekosistemine uzanan donanım, yapay zeka ve yazılım önerilerimiz.",
+      hero_explore: "Fikirleri İncele",
+      stat_projects_label: "Önerilen Proje",
+      stat_flagships_label: "Amiral Gemisi Fikir",
+      stat_categories_label: "Proje Alanı",
       scroll_hint: "Aşağı Kaydırın",
+      skip_to_content: "İçeriğe Doğrudan Geç",
       drawer_title: "Proje Kataloğu",
-      drawer_subtitle: "Doğrudan istediğiniz inovasyona atlayın",
+      drawer_subtitle: "Önerilen Proje Fikirleri — Doğrudan istediğiniz inovasyona atlayın",
       search_placeholder: "Proje, kategori veya etiket ara...",
-      edit_modal_title: "Projeyi Düzenle",
-      edit_modal_desc: "Metinleri, bütçeyi, görselleri ve teknik parametreleri anında değiştirin.",
+      sort_label: "Sırala:",
+      sort_default: "Varsayılan Sıra",
+      sort_diff_desc: "Zorluk (En Yüksek)",
+      sort_diff_asc: "Zorluk (En Düşük)",
+      sort_sponsor: "Sponsor Durumu",
+      filter_all: "Tümü",
+      loading_projects: "Proje fikirleri yükleniyor...",
+      error_loading: "Proje verileri yüklenemedi. Lütfen bağlantınızı kontrol edin veya sayfayı yenileyin.",
+      btn_retry: "Yeniden Dene",
+      btn_inspect_detail: "Detayları İncele",
+      btn_copy_link: "Bağlantıyı Kopyala",
+      btn_support_project: "Bu Projeye Katıl / Destek Ol",
+      first_step_heading: "Planlanan İlk Somut Adım",
+      specs_heading: "Teknik Parametreler & Planlanan Altyapı",
+      edit_modal_title: "Projeyi Düzenle (Yönetici Modu)",
+      edit_modal_desc: "Metinleri, sponsorluk durumunu, görselleri ve teknik parametreleri anında değiştirin.",
       label_title_tr: "Başlık (Türkçe)",
-      label_title_en: "Başlık (İngilizce)",
+      label_title_en: "Title (English)",
       label_tagline_tr: "Slogan / Kısa Açıklama (Türkçe)",
-      label_tagline_en: "Slogan / Kısa Açıklama (İngilizce)",
+      label_tagline_en: "Tagline (English)",
       label_category_tr: "Kategori (TR)",
       label_author: "Öneren / Yazar",
-      label_budget: "Bütçe Planı",
+      label_sponsor_status: "Sponsor Durumu",
+      label_project_status: "Proje Durumu",
       label_difficulty: "Zorluk Seviyesi (1 - 5)",
       label_owner: "Proje Sorumlusu / Ekip (TR)",
       label_palette: "Renk Paleti (5 Resmi Seçenek)",
       label_gallery: "Konsept Görsel Seçimi",
       ph_custom_url: "veya Özel Görsel URL'si yapıştırın...",
       label_problem_tr: "Problem / Gerekçe (Türkçe)",
-      label_problem_en: "Problem / Gerekçe (İngilizce)",
-      label_solution_tr: "Çözüm & Mühendislik İşleyişi (Türkçe)",
-      label_solution_en: "Çözüm & Mühendislik İşleyişi (İngilizce)",
+      label_problem_en: "Problem / Motivation (English)",
+      label_solution_tr: "Önerilen Çözüm & Mühendislik İşleyişi (Türkçe)",
+      label_solution_en: "Proposed Solution & Technical Operation (English)",
       label_first_step_tr: "İlk Somut Adım (Türkçe)",
-      label_first_step_en: "İlk Somut Adım (İngilizce)",
+      label_first_step_en: "First Concrete Step (English)",
       btn_reset: "Varsayılana Sıfırla",
       btn_copy_json: "JSON Kopyala",
-      btn_download_json: "JSON İndir",
-      btn_save_changes: "Değişiklikleri Kaydet",
+      btn_download_json: "projects.json İndir",
+      btn_save_changes: "Önizlemeyi Kaydet",
       card_problem_title: "Problem & İhtiyaç",
-      card_solution_title: "Mühendislik Çözümü",
+      card_solution_title: "Önerilen Çözüm",
       btn_edit: "Düzenle",
       btn_share: "Paylaş",
-      spec_budget_label: "Bütçe Planı",
-      toast_copied: "Proje bağlantısı panoya kopyalandı!",
-      toast_saved: "Değişiklikler başarıyla kaydedildi!",
-      toast_json_copied: "Güncel proje verisi JSON olarak panoya kopyalandı!",
-      toast_json_downloaded: "projects.json indirildi",
-      toast_reset: "Proje orijinal fabrika ayarlarına sıfırlandı!",
+      toast_copied: "Proje derin bağlantısı (#slug) panoya kopyalandı!",
+      toast_saved: "Önizleme güncellendi (Yalnızca bu tarayıcıda kayıtlı)!",
+      toast_json_copied: "projects.json verisi panoya kopyalandı! Repoya commit edebilirsiniz.",
+      toast_json_downloaded: "projects.json başarıyla indirildi. Repoya commit ediniz.",
+      toast_reset: "Proje orijinal repodaki ayarlara sıfırlandı!",
       title_sound: "Ses Aç/Kapat",
       title_palette: "Genel Renk Paleti",
       title_submit: "Yeni Proje / Fikir Gönder",
       title_switch_palette: "Renk Paletini Değiştir",
-      theme_changed: "Genel tema:"
+      theme_changed: "Genel tema:",
+      admin_banner_text: "Yönetici Modu Aktif (Önizleme). Değişiklikler yalnızca bu tarayıcıda geçerlidir; kalıcı olması için JSON'u indirip repoya commit edin.",
+      btn_exit_admin: "Normal Görünüme Dön",
+      status_label_prefix: "Durum:",
+      sponsor_label_prefix: "Sponsor:",
+      sr_lang_changed: "Sayfa dili Türkçe olarak ayarlandı.",
+      footer_affiliation: "Uluslararası Saraybosna Üniversitesi (IUS) Mühendislik ve Doğa Bilimleri Fakültesi (FENS) Öğrenci Kulübü Portfolyosu.",
+      footer_back_to_top: "Yukarı Dön",
+      page_seo_title: "IEC // Proje Fikirleri — IUS Mühendislik Kulübü",
+      page_seo_desc: "International University of Sarajevo (IUS) Mühendislik Kulübü öğrenci proje fikirleri ve inovasyon portfolyosu. FENS öğrencileri tarafından tasarlanan donanım, IoT, yazılım ve yapay zeka önerileri."
     },
     en: {
       sound_label: "Sound: Muted",
       sound_on: "Sound: Active",
-      all_projects: "All Projects",
-      nav_observatory: "Observatory",
-      nav_certificates: "Certificates",
+      all_projects: "Proposed Projects",
       btn_submit_idea: "Submit Idea",
-      hero_title_1: "Engineering Vision",
-      hero_title_2: "Transforming Campus.",
-      hero_subtitle: "Crafted by students, engineered for the future. From FENS lecture halls to the regional tech ecosystem: flagship hardware, AI, and software innovations.",
-      hero_explore: "Explore Innovations",
-      hero_flagships: "Flagship Hardware",
-      stat_active_projects: "Active Engineering Projects",
-      stat_budget: "Balanced Budget Architecture",
-      stat_budget_val: "1,300 KM",
-      stat_open_source: "Student Built & Open Hardware",
+      hero_title_1: "Campus Innovations",
+      hero_title_2: "Proposed Project Ideas.",
+      hero_subtitle: "Project proposals developed by engineering students to enhance campus life. Proposed hardware, AI, and software concepts from FENS lecture halls to the tech ecosystem.",
+      hero_explore: "Explore Proposals",
+      stat_projects_label: "Proposed Projects",
+      stat_flagships_label: "Flagship Proposals",
+      stat_categories_label: "Project Domains",
       scroll_hint: "Scroll Down",
+      skip_to_content: "Skip directly to content",
       drawer_title: "Project Catalog",
-      drawer_subtitle: "Jump directly to any engineering initiative",
+      drawer_subtitle: "Proposed Project Ideas — Jump directly to any initiative",
       search_placeholder: "Search projects, categories or tags...",
-      edit_modal_title: "Edit Project Specs",
-      edit_modal_desc: "Directly modify copy, budget, AI renders and engineering parameters in real-time.",
+      sort_label: "Sort by:",
+      sort_default: "Default Order",
+      sort_diff_desc: "Difficulty (Highest)",
+      sort_diff_asc: "Difficulty (Lowest)",
+      sort_sponsor: "Sponsor Status",
+      filter_all: "All",
+      loading_projects: "Loading proposed project ideas...",
+      error_loading: "Could not load projects dataset. Please verify network connectivity or reload.",
+      btn_retry: "Retry",
+      btn_inspect_detail: "Inspect Details",
+      btn_copy_link: "Copy Direct Link",
+      btn_support_project: "Join / Support This Project",
+      first_step_heading: "Planned First Concrete Milestone",
+      specs_heading: "Technical Architecture & Proposed Specs",
+      edit_modal_title: "Edit Project Specs (Maintainer Mode)",
+      edit_modal_desc: "Modify copy, sponsorship status, renders, and engineering parameters.",
       label_title_tr: "Title (Turkish)",
       label_title_en: "Title (English)",
       label_tagline_tr: "Tagline / Summary (Turkish)",
-      label_tagline_en: "Tagline / Summary (English)",
+      label_tagline_en: "Tagline (English)",
       label_category_tr: "Category (TR)",
       label_author: "Submitted By / Author",
-      label_budget: "Budget Scope",
+      label_sponsor_status: "Sponsorship Status",
+      label_project_status: "Project Status",
       label_difficulty: "Difficulty Level (1 - 5)",
       label_owner: "Project Lead / Team (TR)",
       label_palette: "Color Palette (5 Official Choices)",
@@ -107,56 +153,72 @@
       ph_custom_url: "or paste custom Image URL...",
       label_problem_tr: "Problem / Motivation (Turkish)",
       label_problem_en: "Problem / Motivation (English)",
-      label_solution_tr: "Solution & Engineering (Turkish)",
-      label_solution_en: "Solution & Technical Operation (English)",
+      label_solution_tr: "Proposed Solution & Engineering (Turkish)",
+      label_solution_en: "Proposed Solution & Technical Operation (English)",
       label_first_step_tr: "First Concrete Step (Turkish)",
       label_first_step_en: "First Concrete Step (English)",
       btn_reset: "Reset to Default",
       btn_copy_json: "Copy JSON",
-      btn_download_json: "Download JSON",
-      btn_save_changes: "Save Changes",
+      btn_download_json: "Download projects.json",
+      btn_save_changes: "Save Local Preview",
       card_problem_title: "Problem & Motivation",
-      card_solution_title: "Engineering Solution",
+      card_solution_title: "Proposed Solution",
       btn_edit: "Edit Project",
       btn_share: "Share",
-      spec_budget_label: "Budget Scope",
-      toast_copied: "Project link copied to clipboard!",
-      toast_saved: "Project updated and persisted locally!",
-      toast_json_copied: "Updated project JSON copied to clipboard!",
-      toast_json_downloaded: "projects.json downloaded",
-      toast_reset: "Reset back to factory defaults!",
+      toast_copied: "Project deep link (#slug) copied to clipboard!",
+      toast_saved: "Preview updated (Persisted strictly in local browser)!",
+      toast_json_copied: "projects.json copied to clipboard! Ready to commit to repo.",
+      toast_json_downloaded: "projects.json downloaded. Commit to repo to persist globally.",
+      toast_reset: "Reset back to repository defaults!",
       title_sound: "Toggle Sound",
       title_palette: "Global Color Palette",
       title_submit: "Submit New Project / Idea",
       title_switch_palette: "Switch Color Palette",
-      theme_changed: "Global theme:"
+      theme_changed: "Global theme:",
+      admin_banner_text: "Maintainer Mode Active (Preview). Changes remain local to this browser; commit the downloaded JSON to persist globally.",
+      btn_exit_admin: "Exit Admin View",
+      status_label_prefix: "Status:",
+      sponsor_label_prefix: "Sponsor:",
+      sr_lang_changed: "Page language switched to English.",
+      footer_affiliation: "International University of Sarajevo (IUS) Faculty of Engineering and Natural Sciences (FENS) Student Club Portfolio.",
+      footer_back_to_top: "Back to Top",
+      page_seo_title: "IEC // Project Proposals — IUS Engineering Portfolio",
+      page_seo_desc: "International University of Sarajevo (IUS) Engineering Club student project proposals showcase. Hardware, IoT, software and artificial intelligence concepts engineered by FENS students."
     }
   };
 
-  // Runtime Translation Fallback for Specifications
+  // Runtime Specification Translations
   const SPEC_TRANSLATIONS = {
     'Mimari': { en: 'Architecture', tr: 'Mimari' },
     'Architecture': { en: 'Architecture', tr: 'Mimari' },
     'Doğrulama': { en: 'Authentication', tr: 'Doğrulama' },
     'Authentication': { en: 'Authentication', tr: 'Doğrulama' },
-    'Güvenlik': { en: 'Safety & Sensors', tr: 'Güvenlik' },
-    'Safety & Sensors': { en: 'Safety & Sensors', tr: 'Güvenlik' },
+    'Güvenlik': { en: 'Safety', tr: 'Güvenlik' },
+    'Safety': { en: 'Safety', tr: 'Güvenlik' },
+    'Gövde': { en: 'Enclosure', tr: 'Gövde' },
+    'Enclosure': { en: 'Enclosure', tr: 'Gövde' },
     'Şasi': { en: 'Chassis & Enclosure', tr: 'Şasi' },
     'Chassis & Enclosure': { en: 'Chassis & Enclosure', tr: 'Şasi' },
     'Platform': { en: 'Platform', tr: 'Platform' },
+    'Veri Akışı': { en: 'Data Feed', tr: 'Veri Akışı' },
+    'Data Feed': { en: 'Data Feed', tr: 'Veri Akışı' },
     'Veri Kaynağı': { en: 'Data Source', tr: 'Veri Kaynağı' },
     'Data Source': { en: 'Data Source', tr: 'Veri Kaynağı' },
-    'Geliştirme Maliyeti': { en: 'Development Cost', tr: 'Geliştirme Maliyeti' },
-    'Maliyet': { en: 'Development Cost', tr: 'Maliyet' },
-    'Development Cost': { en: 'Development Cost', tr: 'Geliştirme Maliyeti' },
+    'Geliştirme': { en: 'Development', tr: 'Geliştirme' },
+    'Development': { en: 'Development', tr: 'Geliştirme' },
+    'Geliştirme Modeli': { en: 'Development Model', tr: 'Geliştirme Modeli' },
+    'Development Model': { en: 'Development Model', tr: 'Geliştirme Modeli' },
     'Kapsam': { en: 'Scope', tr: 'Kapsam' },
     'Scope': { en: 'Scope', tr: 'Kapsam' },
+    'İçerik': { en: 'Scope', tr: 'İçerik' },
     'Katılımcı': { en: 'Participants', tr: 'Katılımcı' },
     'Participants': { en: 'Participants', tr: 'Katılımcı' },
     'Süre': { en: 'Duration', tr: 'Süre' },
     'Duration': { en: 'Duration', tr: 'Süre' },
     'Ödül': { en: 'Prizes', tr: 'Ödül' },
     'Prizes': { en: 'Prizes', tr: 'Ödül' },
+    'Mekân': { en: 'Venue', tr: 'Mekân' },
+    'Venue': { en: 'Venue', tr: 'Mekân' },
     'Lokasyon': { en: 'Location', tr: 'Lokasyon' },
     'Location': { en: 'Location', tr: 'Lokasyon' },
     'Periyot': { en: 'Cadence', tr: 'Periyot' },
@@ -183,65 +245,304 @@
     'gothic-noir': {
       id: 'gothic-noir',
       name: 'Gothic noir',
-      swatches: ['#000000', '#D1D0D0', '#988686', '#5C4E4E']
+      swatches: ['#09090B', '#16161C', '#C5C5CD', '#E2B85C']
     },
     'cobalt-sky': {
       id: 'cobalt-sky',
       name: 'Cobalt sky',
-      swatches: ['#0047AB', '#000080', '#82C8E5', '#6D8196']
+      swatches: ['#09090B', '#16161C', '#7E9BB8', '#E2B85C']
     },
     'chili-spice': {
       id: 'chili-spice',
       name: 'Chili spice',
-      swatches: ['#CD1C18', '#FFA896', '#9B1313', '#38000A']
+      swatches: ['#09090B', '#16161C', '#B86B64', '#E2B85C']
     },
     'ink-wash': {
       id: 'ink-wash',
       name: 'Ink wash',
-      swatches: ['#4A4A4A', '#CBCBCB', '#FFFFE3', '#6D8196']
+      swatches: ['#09090B', '#16161C', '#A8A69E', '#E2B85C']
     },
     'urban-loft': {
       id: 'urban-loft',
       name: 'Urban loft',
-      swatches: ['#9C9A9A', '#A35E47', '#000000', '#464646']
+      swatches: ['#09090B', '#16161C', '#B08974', '#E2B85C']
     }
   };
 
   // --------------------------------------------------------------------------
-  // 2. STATE & STORAGE
+  // 2. HTML SANITIZER & BADGE LOGIC
+  // --------------------------------------------------------------------------
+  function escapeHtml(str) {
+    if (str == null) return '';
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
+  // Screen Reader Live Announcements (WCAG 2.2 AA)
+  function announceToScreenReader(message) {
+    const srEl = document.getElementById('sr-announcements');
+    if (!srEl) return;
+    srEl.textContent = '';
+    setTimeout(() => {
+      srEl.textContent = message;
+    }, 50);
+  }
+
+  // Returns true if the badge value is null, undefined, blank, or unspecified
+  function isUndeterminedBadge(val) {
+    if (!val) return true;
+    if (typeof val === 'object') {
+      val = val[currentLang] || val.tr || val.en || '';
+    }
+    const s = String(val).trim().toLowerCase();
+    return s === '' || s === 'belirlenmedi' || s === 'undetermined' || s === '-' || s === 'null' || s === 'undefined' || s === 'none' || s === 'belirtilmedi';
+  }
+
+  // Returns true ONLY if this project's status differs from the dominant/default status across all projects
+  function shouldShowStatusBadge(project) {
+    if (!project) return false;
+    const statusVal = typeof project.status === 'object'
+      ? (project.status[currentLang] || project.status.tr || project.status.en || '')
+      : (project.status || '');
+
+    if (isUndeterminedBadge(statusVal)) return false;
+
+    // Tally status frequencies across projectsData
+    const counts = {};
+    projectsData.forEach(p => {
+      const raw = typeof p.status === 'object' ? (p.status.tr || p.status.en || '') : (p.status || '');
+      if (!isUndeterminedBadge(raw)) {
+        const key = raw.trim().toLowerCase();
+        counts[key] = (counts[key] || 0) + 1;
+      }
+    });
+
+    const keys = Object.keys(counts);
+    // If all projects share the exact same status (e.g. all are "Öneri"), do not repeat the badge on cards
+    if (keys.length <= 1) return false;
+
+    // Find the baseline majority status
+    let maxCount = 0;
+    let majorityStatus = '';
+    for (const k of keys) {
+      if (counts[k] > maxCount) {
+        maxCount = counts[k];
+        majorityStatus = k;
+      }
+    }
+
+    const currentKey = statusVal.trim().toLowerCase();
+    return currentKey !== majorityStatus;
+  }
+
+  // --------------------------------------------------------------------------
+  // 3. WCAG 2.2 AA FOCUS TRAP HELPER
+  // --------------------------------------------------------------------------
+  let currentFocusTrapCleanup = null;
+
+  function trapFocus(containerEl, onEscape) {
+    if (currentFocusTrapCleanup) {
+      currentFocusTrapCleanup();
+      currentFocusTrapCleanup = null;
+    }
+    if (!containerEl) return;
+
+    const previousActiveElement = document.activeElement;
+    const focusableSelector = 'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+
+    function getFocusableElements() {
+      return Array.from(containerEl.querySelectorAll(focusableSelector)).filter(el => {
+        return (el.offsetWidth > 0 || el.offsetHeight > 0 || el === document.activeElement);
+      });
+    }
+
+    // Set initial focus to the first focusable element inside the modal
+    setTimeout(() => {
+      const focusable = getFocusableElements();
+      if (focusable.length > 0) {
+        focusable[0].focus();
+      }
+    }, 60);
+
+    function handleKeydown(e) {
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        if (typeof onEscape === 'function') onEscape();
+        return;
+      }
+
+      if (e.key === 'Tab') {
+        const focusable = getFocusableElements();
+        if (focusable.length === 0) {
+          e.preventDefault();
+          return;
+        }
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+
+        if (e.shiftKey) {
+          if (document.activeElement === first || !containerEl.contains(document.activeElement)) {
+            e.preventDefault();
+            last.focus();
+          }
+        } else {
+          if (document.activeElement === last || !containerEl.contains(document.activeElement)) {
+            e.preventDefault();
+            first.focus();
+          }
+        }
+      }
+    }
+
+    containerEl.addEventListener('keydown', handleKeydown);
+
+    currentFocusTrapCleanup = () => {
+      containerEl.removeEventListener('keydown', handleKeydown);
+      if (previousActiveElement && typeof previousActiveElement.focus === 'function') {
+        try {
+          previousActiveElement.focus();
+        } catch (err) {}
+      }
+      currentFocusTrapCleanup = null;
+    };
+
+    return currentFocusTrapCleanup;
+  }
+
+  // --------------------------------------------------------------------------
+  // 4. PERFORMANCE: RESPONSIVE WEBP PICTURE BUILDER (Zero CLS)
+  // --------------------------------------------------------------------------
+  function getResponsiveImageMarkup(src, alt, isHero, idAttr) {
+    const cleanSrc = escapeHtml(src);
+    const cleanAlt = escapeHtml(alt);
+    const fetchAttr = isHero ? 'fetchpriority="high" loading="eager"' : 'loading="lazy" decoding="async"';
+    const idStr = idAttr ? `id="${idAttr}"` : '';
+
+    if (src && src.endsWith('.webp') && !src.includes('-sm.webp')) {
+      const smSrc = escapeHtml(src.replace(/\.webp$/, '-sm.webp'));
+      return `
+        <picture>
+          <source type="image/webp" srcset="${smSrc} 688w, ${cleanSrc} 1376w" sizes="(max-width: 900px) 100vw, 55vw">
+          <img ${idStr} src="${cleanSrc}" alt="${cleanAlt}" class="visual-image" width="1376" height="768" ${fetchAttr}>
+        </picture>
+      `;
+    }
+    return `<img ${idStr} src="${cleanSrc}" alt="${cleanAlt}" class="visual-image" width="1376" height="768" ${fetchAttr}>`;
+  }
+
+  // --------------------------------------------------------------------------
+  // 5. STATE & STORAGE
   // --------------------------------------------------------------------------
   let currentLang = localStorage.getItem('iec_lang') || 'tr';
   let soundEnabled = false;
   let audioCtx = null;
   let activeSectionIndex = 0;
-
-  // Retrieve customized projects from localStorage if available
   let projectsData = [];
-  try {
-    const cachedCustom = localStorage.getItem('iec_projects_custom');
-    if (cachedCustom) {
-      const parsed = JSON.parse(cachedCustom);
-      // Invalidate if cache contains legacy non-bilingual specs or outdated projects
-      if (parsed.some(p => p.id === 'autonomous-campus-rover' || 
-          (p.title && (p.title.tr || '').includes('Rover')) || 
-          !parsed.some(p => p.id === 'dining-menu-system') ||
-          typeof p.budget === 'string' ||
-          (p.specs && p.specs.some(s => typeof s.label === 'string')))) {
-        localStorage.removeItem('iec_projects_custom');
-        projectsData = JSON.parse(JSON.stringify(window.IEC_PROJECTS || []));
-      } else {
-        projectsData = parsed;
+  let activeCategoryFilter = 'all';
+  let activeSortMode = 'default';
+
+  // --------------------------------------------------------------------------
+  // 6. DATA LOADER (Single Source of Truth: data/projects.json)
+  // --------------------------------------------------------------------------
+  async function loadProjectsData() {
+    const wrapper = document.getElementById('projects-wrapper');
+    try {
+      if (isAdmin) {
+        const cachedCustom = localStorage.getItem('iec_projects_custom');
+        if (cachedCustom) {
+          const parsed = JSON.parse(cachedCustom);
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            projectsData = parsed;
+            onDataLoaded();
+            return;
+          }
+        }
       }
-    } else if (window.IEC_PROJECTS && Array.isArray(window.IEC_PROJECTS)) {
-      projectsData = JSON.parse(JSON.stringify(window.IEC_PROJECTS));
+
+      const response = await fetch('data/projects.json');
+      if (!response.ok) {
+        throw new Error(`HTTP Error ${response.status}: ${response.statusText}`);
+      }
+      const data = await response.json();
+      if (!Array.isArray(data) || data.length === 0) {
+        throw new Error("Dataset is empty or malformed");
+      }
+      projectsData = data;
+      onDataLoaded();
+    } catch (err) {
+      console.error("Failed to load projects data:", err);
+      if (wrapper) {
+        wrapper.innerHTML = `
+          <div class="projects-error-card" role="alert">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+            <h3>${escapeHtml(I18N[currentLang].error_loading)}</h3>
+            <p class="error-detail">${escapeHtml(err.message)}</p>
+            <button class="btn-glow-primary" id="btn-retry-load">
+              <span>${escapeHtml(I18N[currentLang].btn_retry)}</span>
+            </button>
+          </div>
+        `;
+        document.getElementById('btn-retry-load')?.addEventListener('click', loadProjectsData);
+      }
     }
-  } catch (err) {
-    console.warn("Could not load custom cache, using base data:", err);
-    projectsData = window.IEC_PROJECTS || [];
+  }
+
+  function onDataLoaded() {
+    updateHeroStats();
+    populateCategoryFilters();
+    renderAllProjects();
+    populateDrawerList();
+    handleDeepLinkHash();
   }
 
   // --------------------------------------------------------------------------
-  // 3. SOUND SYNTHESIZER (Minimalist UI Feedback)
+  // 7. HERO METRICS (Strictly Derived from Dataset)
+  // --------------------------------------------------------------------------
+  function updateHeroStats() {
+    const statProjects = document.getElementById('hero-stat-projects');
+    const statFlagships = document.getElementById('hero-stat-flagships');
+    const statCategories = document.getElementById('hero-stat-categories');
+    const navCount = document.getElementById('nav-project-count');
+
+    if (projectsData.length === 0) return;
+
+    const totalProjects = projectsData.length;
+    const flagshipCount = projectsData.filter(p => p.is_flagship).length;
+    const categoryCount = new Set(projectsData.map(p => {
+      if (typeof p.category === 'object') return p.category.tr || p.category.en;
+      return p.category;
+    })).size;
+
+    if (navCount) navCount.textContent = totalProjects;
+
+    animateCount(statProjects, totalProjects);
+    animateCount(statFlagships, flagshipCount);
+    animateCount(statCategories, categoryCount);
+  }
+
+  function animateCount(el, targetNum) {
+    if (!el) return;
+    const duration = 1200;
+    const start = performance.now();
+    function tick(now) {
+      const progress = Math.min((now - start) / duration, 1);
+      const easeOut = 1 - Math.pow(1 - progress, 3);
+      el.textContent = Math.round(targetNum * easeOut);
+      if (progress < 1) {
+        requestAnimationFrame(tick);
+      } else {
+        el.textContent = targetNum;
+      }
+    }
+    requestAnimationFrame(tick);
+  }
+
+  // --------------------------------------------------------------------------
+  // 8. SOUND SYNTHESIZER (Web Audio API)
   // --------------------------------------------------------------------------
   function initAudio() {
     if (!audioCtx) {
@@ -262,10 +563,13 @@
       const gain = audioCtx.createGain();
       osc.type = 'sine';
       osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-      gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+
+      gain.gain.setValueAtTime(0.04, audioCtx.currentTime);
       gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
+
       osc.connect(gain);
       gain.connect(audioCtx.destination);
+
       osc.start();
       osc.stop(audioCtx.currentTime + duration);
     } catch (e) {}
@@ -274,28 +578,32 @@
   function toggleSound() {
     soundEnabled = !soundEnabled;
     const pill = document.getElementById('audio-indicator');
-    const label = pill.querySelector('.sound-label');
+    const label = pill ? pill.querySelector('.sound-label') : null;
     if (soundEnabled) {
       initAudio();
-      pill.classList.add('active');
-      label.textContent = I18N[currentLang].sound_on;
+      if (pill) {
+        pill.classList.add('active');
+        pill.setAttribute('aria-pressed', 'true');
+      }
+      if (label) label.textContent = I18N[currentLang].sound_on;
       playUiBeep(880, 0.08);
       showToast(I18N[currentLang].sound_on);
     } else {
-      pill.classList.remove('active');
-      label.textContent = I18N[currentLang].sound_label;
+      if (pill) {
+        pill.classList.remove('active');
+        pill.setAttribute('aria-pressed', 'false');
+      }
+      if (label) label.textContent = I18N[currentLang].sound_label;
       showToast(I18N[currentLang].sound_label);
     }
   }
 
-  // --------------------------------------------------------------------------
-  // 4. TOAST NOTIFICATIONS
-  // --------------------------------------------------------------------------
   function showToast(message) {
     const container = document.getElementById('toast-container');
+    if (!container) return;
     const toast = document.createElement('div');
     toast.className = 'toast';
-    toast.innerHTML = `<span>${message}</span>`;
+    toast.textContent = message;
     container.appendChild(toast);
     setTimeout(() => {
       toast.style.opacity = '0';
@@ -306,16 +614,12 @@
   }
 
   // --------------------------------------------------------------------------
-  // 5. RENDER PROJECTS DOM
+  // 9. RENDER PROJECTS DOM (Semantic HTML & WCAG 2.2 AA)
   // --------------------------------------------------------------------------
   function renderAllProjects() {
     const wrapper = document.getElementById('projects-wrapper');
     const dotsList = document.getElementById('progress-dots-list');
-    const navCount = document.getElementById('nav-project-count');
-
-    if (navCount) {
-      navCount.textContent = projectsData.length;
-    }
+    if (!wrapper || !dotsList) return;
 
     wrapper.innerHTML = '';
     dotsList.innerHTML = '';
@@ -329,23 +633,26 @@
     `;
     heroDot.addEventListener('click', () => {
       playUiBeep(520, 0.03);
-      document.getElementById('hero').scrollIntoView({ behavior: 'smooth' });
+      const hero = document.getElementById('hero');
+      if (hero) hero.scrollIntoView({ behavior: 'smooth' });
     });
     dotsList.appendChild(heroDot);
 
     projectsData.forEach((project, index) => {
-      // 1. Build Project Section DOM
-      const section = document.createElement('section');
-      section.className = 'snap-section project-section';
-      section.id = `project-${index}`;
-      section.dataset.index = index + 1;
+      // Semantic <article> container for each project showcase
+      const article = document.createElement('article');
+      article.className = 'snap-section project-section';
+      article.id = project.id || `project-${index}`;
+      article.dataset.index = index + 1;
+      article.dataset.projectId = project.id;
+      article.setAttribute('aria-labelledby', `project-title-${index}`);
 
-      // Palette Resolution: Stored per project, or project.palette, or harmonious fallback cycle
-      const defaultPaletteCycle = ['cobalt-sky', 'urban-loft', 'chili-spice', 'ink-wash', 'gothic-noir'];
+      // Palette Resolution
+      const defaultPaletteCycle = ['gothic-noir', 'cobalt-sky', 'chili-spice', 'ink-wash', 'urban-loft'];
       const fallbackPalette = defaultPaletteCycle[index % defaultPaletteCycle.length];
       const savedPalette = localStorage.getItem('iec_palette_' + project.id) || project.palette || fallbackPalette;
       const currentPalConfig = PALETTES[savedPalette] || PALETTES['gothic-noir'];
-      section.dataset.palette = currentPalConfig.id;
+      article.dataset.palette = currentPalConfig.id;
 
       const title = typeof project.title === 'object' ? (project.title[currentLang] || project.title.tr || '') : (project.title || '');
       const tagline = typeof project.tagline === 'object' ? (project.tagline[currentLang] || project.tagline.tr || '') : (project.tagline || '');
@@ -354,10 +661,25 @@
       const solution = typeof project.solution === 'object' ? (project.solution[currentLang] || project.solution.tr || '') : (project.solution || '');
       const ownership = typeof project.ownership === 'object' ? (project.ownership[currentLang] || project.ownership.tr || '') : (project.author || '');
       
-      let rawBudget = project.budget;
-      let budgetVal = typeof rawBudget === 'object' ? (rawBudget[currentLang] || rawBudget.tr || '') : (rawBudget || '');
+      const statusVal = typeof project.status === 'object' ? (project.status[currentLang] || project.status.tr || '') : (project.status || '');
+      const sponsorVal = typeof project.sponsor_status === 'object' ? (project.sponsor_status[currentLang] || project.sponsor_status.tr || '') : (project.sponsor_status || '');
+      const difficulty = Math.max(1, Math.min(5, parseInt(project.difficulty, 10) || 3));
 
-      // Specs Cells HTML (cleanly including budget projection in specs table)
+      // Build difficulty dots HTML
+      const diffDots = Array.from({ length: 5 }, (_, d) => 
+        `<span class="diff-dot ${d < difficulty ? 'filled' : ''}" aria-hidden="true"></span>`
+      ).join('');
+
+      // Status Badge: Only rendered if this project's status differs from the dominant/default status
+      const statusBadgeHtml = shouldShowStatusBadge(project)
+        ? `<span class="badge-status" title="${escapeHtml(I18N[currentLang].status_label_prefix)} ${escapeHtml(statusVal)}">${escapeHtml(I18N[currentLang].status_label_prefix)} ${escapeHtml(statusVal)}</span>`
+        : '';
+      // Sponsor Badge: Only rendered if sponsor is non-null and not undetermined
+      const sponsorBadgeHtml = !isUndeterminedBadge(sponsorVal)
+        ? `<span class="badge-sponsor" title="${escapeHtml(I18N[currentLang].sponsor_label_prefix)} ${escapeHtml(sponsorVal)}">${escapeHtml(I18N[currentLang].sponsor_label_prefix)} ${escapeHtml(sponsorVal)}</span>`
+        : '';
+
+      // Build specs
       const allSpecs = [];
       (project.specs || []).forEach(s => {
         let l = typeof s.label === 'object' ? (s.label[currentLang] || s.label.tr || '') : s.label;
@@ -368,104 +690,96 @@
         allSpecs.push({ label: l, value: v });
       });
 
-      if (budgetVal && budgetVal !== 'Planned') {
-        allSpecs.push({
-          label: I18N[currentLang].spec_budget_label,
-          value: budgetVal
-        });
-      }
-
-      const specsHtml = allSpecs.map(s => `
+      const specsHtml = allSpecs.slice(0, 4).map(s => `
         <div class="spec-cell">
-          <span class="spec-name">${s.label}</span>
-          <span class="spec-val">${s.value}</span>
+          <span class="spec-name">${escapeHtml(s.label)}</span>
+          <span class="spec-val">${escapeHtml(s.value)}</span>
         </div>
       `).join('');
 
-      // Gallery Thumbs HTML
+      // Gallery Thumbs HTML with explicit dimensions & lazy loading
       const gallery = project.gallery && project.gallery.length > 0 ? project.gallery : [project.image];
       const galleryThumbsHtml = gallery.length > 1 ? gallery.map((imgSrc, gIdx) => `
-        <div class="thumb-item ${gIdx === 0 ? 'active' : ''}" data-src="${imgSrc}">
-          <img src="${imgSrc}" alt="Thumbnail ${gIdx + 1}" loading="lazy">
-        </div>
+        <button type="button" class="thumb-item ${gIdx === 0 ? 'active' : ''}" data-src="${escapeHtml(imgSrc)}" aria-label="Thumbnail ${gIdx + 1}">
+          <img src="${escapeHtml(imgSrc)}" alt="" width="96" height="54" loading="lazy" decoding="async">
+        </button>
       `).join('') : '';
 
-      section.innerHTML = `
+      // Edit Button for admin mode
+      const editButtonHtml = isAdmin ? `
+        <button class="btn-edit-trigger" data-edit-index="${index}" title="Yönetici Düzenleme Modu" aria-label="${escapeHtml(title)} düzenle">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+          <span>${escapeHtml(I18N[currentLang].btn_edit)}</span>
+        </button>
+      ` : '';
+
+      // Responsive picture markup (First card is eager/fetchpriority=high, rest are lazy)
+      const isHeroCard = (index === 0);
+      const pictureMarkup = getResponsiveImageMarkup(project.image, title, isHeroCard, `main-img-${index}`);
+
+      article.innerHTML = `
         <div class="project-stage">
           <!-- LEFT NARRATIVE -->
           <div class="project-narrative">
             <div class="project-header-meta">
-              <span class="project-category-text">${category}</span>
-              <span class="project-lead-meta">${ownership}</span>
+              <span class="project-category-text">${escapeHtml(category)}</span>
+              <div class="project-badges-row">
+                ${statusBadgeHtml}
+                ${sponsorBadgeHtml}
+              </div>
+              <span class="project-lead-meta">${escapeHtml(ownership)}</span>
             </div>
 
-            <h2 class="project-title">${title}</h2>
-            <p class="project-tagline">${tagline}</p>
+            <h2 class="project-title" id="project-title-${index}">${escapeHtml(title)}</h2>
+            <p class="project-tagline">${escapeHtml(tagline)}</p>
 
-            <!-- Problem & Solution Cards (Clean & Emoji-Free) -->
+            <!-- Difficulty Rating Indicator -->
+            <div class="project-difficulty-bar" aria-label="Zorluk Seviyesi: ${difficulty}/5">
+              <span class="diff-label">Zorluk:</span>
+              <div class="diff-dots-track">${diffDots}</div>
+              <span class="diff-val">${difficulty}/5</span>
+            </div>
+
+            <!-- Problem & Solution Glass Cards with Semantic H3 Hierarchy -->
             <div class="project-cards-container">
               <div class="feature-glass-card">
                 <div class="card-title-bar">
-                  <span class="card-title-text">${I18N[currentLang].card_problem_title}</span>
+                  <h3 class="card-title-text">${escapeHtml(I18N[currentLang].card_problem_title)}</h3>
                 </div>
-                <p class="card-body-text">${problem}</p>
+                <p class="card-body-text">${escapeHtml(problem)}</p>
               </div>
 
               <div class="feature-glass-card">
                 <div class="card-title-bar">
-                  <span class="card-title-text">${I18N[currentLang].card_solution_title}</span>
+                  <h3 class="card-title-text">${escapeHtml(I18N[currentLang].card_solution_title)}</h3>
                 </div>
-                <p class="card-body-text">${solution}</p>
+                <p class="card-body-text">${escapeHtml(solution)}</p>
               </div>
             </div>
 
-            <!-- Technical Specs Grid -->
+            <!-- Technical Specs Summary -->
             ${specsHtml ? `<div class="tech-specs-bar">${specsHtml}</div>` : ''}
 
             <!-- Action Buttons -->
             <div class="project-actions-row">
-              <button class="btn-edit-trigger" data-edit-index="${index}">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
-                <span>${I18N[currentLang].btn_edit}</span>
+              <button class="btn-inspect-trigger" data-detail-index="${index}" aria-label="${escapeHtml(title)} detaylarını incele">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                <span>${escapeHtml(I18N[currentLang].btn_inspect_detail)}</span>
               </button>
 
-              <!-- INLINE PALETTE PICKER TRIGGER -->
-              <div class="palette-picker-inline" id="palette-picker-${index}">
-                <button class="btn-palette-trigger" type="button" data-palette-trigger="${index}" title="Renk Paletini Değiştir / Switch Palette">
-                  <div class="palette-dots-preview">
-                    <span style="background: ${currentPalConfig.swatches[0]}"></span>
-                    <span style="background: ${currentPalConfig.swatches[1]}"></span>
-                    <span style="background: ${currentPalConfig.swatches[2]}"></span>
-                    <span style="background: ${currentPalConfig.swatches[3]}"></span>
-                  </div>
-                  <span class="palette-name-label">${currentPalConfig.name}</span>
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
-                </button>
-                <div class="palette-flyout-menu" id="palette-flyout-${index}">
-                  ${Object.values(PALETTES).map(pal => `
-                    <div class="palette-choice-item ${pal.id === currentPalConfig.id ? 'active' : ''}" data-project-idx="${index}" data-palette-id="${pal.id}">
-                      <span class="palette-choice-name">${pal.name}</span>
-                      <div class="palette-swatch-bar">
-                        <span style="background: ${pal.swatches[0]}"></span>
-                        <span style="background: ${pal.swatches[1]}"></span>
-                        <span style="background: ${pal.swatches[2]}"></span>
-                        <span style="background: ${pal.swatches[3]}"></span>
-                      </div>
-                    </div>
-                  `).join('')}
-                </div>
-              </div>
+              ${editButtonHtml}
 
-              <button class="btn-icon-subtle" data-share-index="${index}" title="${I18N[currentLang].btn_share}">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path><polyline points="16 6 12 2 8 6"></polyline><line x1="12" y1="2" x2="12" y2="15"></line></svg>
+              <!-- Share Direct Slug Button -->
+              <button class="btn-icon-subtle" data-share-slug="${project.id}" title="${escapeHtml(I18N[currentLang].btn_share)}" aria-label="${escapeHtml(title)} bağlantısını kopyala">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path><polyline points="16 6 12 2 8 6"></polyline><line x1="12" y1="2" x2="12" y2="15"></line></svg>
               </button>
             </div>
           </div>
 
-          <!-- RIGHT HERO VISUAL STAGE (Pure Photo Presentation, Zero Overlay Tags) -->
+          <!-- RIGHT HERO VISUAL STAGE -->
           <div class="project-visual-stage">
             <div class="visual-canvas-card" id="card-stage-${index}">
-              <img src="${project.image}" alt="${title}" class="visual-image" id="main-img-${index}" loading="lazy">
+              ${pictureMarkup}
             </div>
 
             ${galleryThumbsHtml ? `<div class="visual-gallery-thumbs" id="thumbs-${index}">${galleryThumbsHtml}</div>` : ''}
@@ -473,254 +787,394 @@
         </div>
       `;
 
-      wrapper.appendChild(section);
+      wrapper.appendChild(article);
 
-      // 2. Build Dot Nav Item
+      // Dot Nav Item
       const dot = document.createElement('li');
       dot.className = 'dot-item';
-      dot.dataset.targetIndex = index + 1;
       dot.innerHTML = `
-        <button class="dot-btn" aria-label="${title}"></button>
-        <div class="dot-tooltip">0${index + 1} // ${title}</div>
+        <button class="dot-btn" aria-label="Project ${index + 1}: ${escapeHtml(title)}"></button>
+        <div class="dot-tooltip">0${index + 1} // ${escapeHtml(title.slice(0, 22))}</div>
       `;
       dot.addEventListener('click', () => {
         playUiBeep(640, 0.03);
-        section.scrollIntoView({ behavior: 'smooth' });
+        article.scrollIntoView({ behavior: 'smooth' });
       });
       dotsList.appendChild(dot);
 
-      // 3. Attach 3D Card Tilt Effect
-      attach3DTilt(section.querySelector(`#card-stage-${index}`));
+      // 3D Tilt
+      const visualCard = article.querySelector(`#card-stage-${index}`);
+      if (visualCard) attach3DTilt(visualCard);
 
-      // 4. Attach Gallery switcher listeners
-      const thumbsContainer = section.querySelector(`#thumbs-${index}`);
-      if (thumbsContainer) {
-        thumbsContainer.querySelectorAll('.thumb-item').forEach(th => {
-          th.addEventListener('click', () => {
-            playUiBeep(720, 0.02);
-            thumbsContainer.querySelectorAll('.thumb-item').forEach(t => t.classList.remove('active'));
-            th.classList.add('active');
-            const mainImg = section.querySelector(`#main-img-${index}`);
-            if (mainImg) {
-              mainImg.src = th.dataset.src;
-            }
-          });
+      // Gallery Thumbnails
+      const thumbs = article.querySelectorAll('.thumb-item');
+      thumbs.forEach(t => {
+        t.addEventListener('click', () => {
+          playUiBeep(720, 0.02);
+          const newSrc = t.dataset.src;
+          const stageCard = article.querySelector(`#card-stage-${index}`);
+          if (stageCard) {
+            stageCard.innerHTML = getResponsiveImageMarkup(newSrc, title, false, `main-img-${index}`);
+          }
+          thumbs.forEach(other => other.classList.remove('active'));
+          t.classList.add('active');
         });
-      }
-    });
-
-    // Populate Drawer List
-    populateDrawerList();
-
-    // Rebind In-Place Edit Buttons
-    document.querySelectorAll('.btn-edit-trigger').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        const idx = parseInt(btn.dataset.editIndex, 10);
-        openEditModal(idx);
       });
     });
 
-    // Rebind Share Buttons
-    document.querySelectorAll('[data-share-index]').forEach(btn => {
+    // Bind Detail Modal Triggers
+    document.querySelectorAll('.btn-inspect-trigger').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const idx = parseInt(btn.dataset.detailIndex, 10);
+        openDetailModal(idx);
+      });
+    });
+
+    // Bind Admin Edit Buttons
+    if (isAdmin) {
+      document.querySelectorAll('.btn-edit-trigger').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const idx = parseInt(btn.dataset.editIndex, 10);
+          openEditModal(idx);
+        });
+      });
+    }
+
+    // Bind Share Slug Buttons
+    document.querySelectorAll('[data-share-slug]').forEach(btn => {
       btn.addEventListener('click', () => {
         playUiBeep(800, 0.04);
-        const url = window.location.origin + window.location.pathname + `#project-${btn.dataset.shareIndex}`;
+        const slug = btn.dataset.shareSlug;
+        const url = `${window.location.origin}${window.location.pathname}#${slug}`;
         navigator.clipboard.writeText(url).then(() => {
           showToast(I18N[currentLang].toast_copied);
         });
       });
     });
 
-    // Rebind Palette Trigger Buttons
-    document.querySelectorAll('[data-palette-trigger]').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const pIdx = btn.dataset.paletteTrigger;
-        const flyout = document.getElementById(`palette-flyout-${pIdx}`);
-        if (!flyout) return;
-        const isOpen = flyout.classList.contains('open');
-        document.querySelectorAll('.palette-flyout-menu').forEach(f => f.classList.remove('open'));
-        if (!isOpen) {
-          flyout.classList.add('open');
-          playUiBeep(640, 0.02);
-        }
-      });
-    });
-
-    // Rebind Palette Choices in Flyout (Instant Change & Persistence)
-    document.querySelectorAll('.palette-flyout-menu .palette-choice-item').forEach(item => {
-      item.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const pIdx = parseInt(item.dataset.projectIdx, 10);
-        const paletteId = item.dataset.paletteId;
-        if (!isNaN(pIdx) && paletteId) {
-          applyPaletteToProject(pIdx, paletteId);
-        }
-      });
-    });
-
-    // Setup Intersection Observer for slide tracking
     setupScrollObserver();
   }
 
   // --------------------------------------------------------------------------
-  // PALETTE APPLICATION & SWITCHING ENGINE
+  // 10. PROJECT DETAIL MODAL & DEEP LINKING (#slug) WITH FOCUS TRAP
   // --------------------------------------------------------------------------
-  function applyPaletteToProject(pIdx, paletteId) {
-    const project = projectsData[pIdx];
-    if (!project || !PALETTES[paletteId]) return;
+  function openDetailModal(index) {
+    const p = projectsData[index];
+    if (!p) return;
 
-    const pal = PALETTES[paletteId];
-    const sec = document.getElementById(`project-${pIdx}`);
-    if (sec) {
-      sec.dataset.palette = paletteId;
-    }
+    playUiBeep(750, 0.03);
+    const modal = document.getElementById('detail-modal');
+    if (!modal) return;
 
-    // Update the trigger button on this slide
-    const picker = document.getElementById(`palette-picker-${pIdx}`);
-    if (picker) {
-      const dots = picker.querySelectorAll('.palette-dots-preview span');
-      if (dots.length >= 4) {
-        dots[0].style.background = pal.swatches[0];
-        dots[1].style.background = pal.swatches[1];
-        dots[2].style.background = pal.swatches[2];
-        dots[3].style.background = pal.swatches[3];
+    const title = typeof p.title === 'object' ? (p.title[currentLang] || p.title.tr || '') : (p.title || '');
+    const tagline = typeof p.tagline === 'object' ? (p.tagline[currentLang] || p.tagline.tr || '') : (p.tagline || '');
+    const category = typeof p.category === 'object' ? (p.category[currentLang] || p.category.tr || '') : (p.category || '');
+    const problem = typeof p.problem === 'object' ? (p.problem[currentLang] || p.problem.tr || '') : (p.problem || '');
+    const solution = typeof p.solution === 'object' ? (p.solution[currentLang] || p.solution.tr || '') : (p.solution || '');
+    const firstStep = typeof p.first_step === 'object' ? (p.first_step[currentLang] || p.first_step.tr || '') : (p.first_step || '');
+    const ownership = typeof p.ownership === 'object' ? (p.ownership[currentLang] || p.ownership.tr || '') : (p.author || '');
+    
+    const statusVal = typeof p.status === 'object' ? (p.status[currentLang] || p.status.tr || '') : (p.status || '');
+    const sponsorVal = typeof p.sponsor_status === 'object' ? (p.sponsor_status[currentLang] || p.sponsor_status.tr || '') : (p.sponsor_status || '');
+
+    document.getElementById('detail-modal-title').textContent = title;
+    document.getElementById('detail-modal-tagline').textContent = tagline;
+
+    // Badges in Modal: Only shown if distinct / assigned
+    const statusBadgeHtml = shouldShowStatusBadge(p)
+      ? `<span class="badge-status">${escapeHtml(I18N[currentLang].status_label_prefix)} ${escapeHtml(statusVal)}</span>`
+      : '';
+    const sponsorBadgeHtml = !isUndeterminedBadge(sponsorVal)
+      ? `<span class="badge-sponsor">${escapeHtml(I18N[currentLang].sponsor_label_prefix)} ${escapeHtml(sponsorVal)}</span>`
+      : '';
+
+    // Tags
+    const tagsContainer = document.getElementById('detail-meta-tags');
+    tagsContainer.innerHTML = `
+      <span class="project-category-text">${escapeHtml(category)}</span>
+      ${statusBadgeHtml}
+      ${sponsorBadgeHtml}
+      <span class="detail-owner-tag">${escapeHtml(ownership)}</span>
+    `;
+
+    // Specs
+    const allSpecs = [];
+    (p.specs || []).forEach(s => {
+      let l = typeof s.label === 'object' ? (s.label[currentLang] || s.label.tr || '') : s.label;
+      let v = typeof s.value === 'object' ? (s.value[currentLang] || s.value.tr || '') : s.value;
+      if (SPEC_TRANSLATIONS[l]) {
+        l = SPEC_TRANSLATIONS[l][currentLang] || l;
       }
-      const label = picker.querySelector('.palette-name-label');
-      if (label) label.textContent = pal.name;
+      allSpecs.push({ label: l, value: v });
+    });
 
-      // Update active state in flyout
-      picker.querySelectorAll('.palette-choice-item').forEach(ch => {
-        ch.classList.toggle('active', ch.dataset.paletteId === paletteId);
-      });
+    const specsTableHtml = allSpecs.map(s => `
+      <div class="detail-spec-row">
+        <span class="detail-spec-key">${escapeHtml(s.label)}</span>
+        <span class="detail-spec-val">${escapeHtml(s.value)}</span>
+      </div>
+    `).join('');
 
-      // Close flyout
-      const flyout = picker.querySelector('.palette-flyout-menu');
-      if (flyout) flyout.classList.remove('open');
+    const bodyContainer = document.getElementById('detail-modal-body');
+    bodyContainer.innerHTML = `
+      <div class="detail-section-block">
+        <h3 class="detail-block-title">${escapeHtml(I18N[currentLang].card_problem_title)}</h3>
+        <p class="detail-block-text">${escapeHtml(problem)}</p>
+      </div>
+
+      <div class="detail-section-block">
+        <h3 class="detail-block-title">${escapeHtml(I18N[currentLang].card_solution_title)}</h3>
+        <p class="detail-block-text">${escapeHtml(solution)}</p>
+      </div>
+
+      ${firstStep ? `
+        <div class="detail-section-block highlight-block">
+          <h3 class="detail-block-title">${escapeHtml(I18N[currentLang].first_step_heading)}</h3>
+          <p class="detail-block-text">${escapeHtml(firstStep)}</p>
+        </div>
+      ` : ''}
+
+      ${specsTableHtml ? `
+        <div class="detail-section-block">
+          <h3 class="detail-block-title">${escapeHtml(I18N[currentLang].specs_heading)}</h3>
+          <div class="detail-specs-table">${specsTableHtml}</div>
+        </div>
+      ` : ''}
+    `;
+
+    // Footer Join Button: Only visible if joinUrl is provided and not null, with rel="noopener noreferrer"
+    const joinBtn = document.getElementById('btn-detail-join');
+    if (joinBtn) {
+      if (p.joinUrl && typeof p.joinUrl === 'string' && p.joinUrl.trim().length > 0) {
+        joinBtn.href = p.joinUrl;
+        joinBtn.target = '_blank';
+        joinBtn.rel = 'noopener noreferrer';
+        joinBtn.style.display = 'inline-flex';
+      } else {
+        joinBtn.style.display = 'none';
+        joinBtn.removeAttribute('href');
+      }
     }
 
-    // Save to project object & dedicated localStorage key so it stays permanently!
-    project.palette = paletteId;
-    localStorage.setItem(`iec_palette_${project.id}`, paletteId);
-    try {
-      localStorage.setItem('iec_projects_custom', JSON.stringify(projectsData));
-    } catch (err) {}
+    // Bind direct share button inside modal
+    const shareBtn = document.getElementById('btn-detail-share');
+    if (shareBtn) {
+      shareBtn.onclick = () => {
+        playUiBeep(800, 0.04);
+        const url = `${window.location.origin}${window.location.pathname}#${p.id}`;
+        navigator.clipboard.writeText(url).then(() => {
+          showToast(I18N[currentLang].toast_copied);
+        });
+      };
+    }
+
+    // Dynamic document title update for rich browser history
+    document.title = `${title} — IEC // IUS Engineering`;
+
+    // Update URL hash without page jump
+    history.replaceState(null, '', `#${p.id}`);
+
+    modal.classList.add('open');
+    modal.setAttribute('aria-hidden', 'false');
+
+    // Trap focus inside modal (WCAG 2.2 AA)
+    trapFocus(modal, closeDetailModal);
+  }
+
+  function closeDetailModal() {
+    const modal = document.getElementById('detail-modal');
+    if (modal) {
+      modal.classList.remove('open');
+      modal.setAttribute('aria-hidden', 'true');
+    }
+    // Revert page title
+    document.title = I18N[currentLang].page_seo_title;
+
+    if (currentFocusTrapCleanup) {
+      currentFocusTrapCleanup();
+    }
+  }
+
+  function handleDeepLinkHash() {
+    const hash = window.location.hash.replace('#', '').trim();
+    if (!hash) return;
+
+    const targetIndex = projectsData.findIndex(p => p.id === hash);
+    if (targetIndex >= 0) {
+      const targetSec = document.getElementById(hash) || document.getElementById(`project-${targetIndex}`);
+      if (targetSec) {
+        setTimeout(() => {
+          targetSec.scrollIntoView({ behavior: 'smooth' });
+        }, 150);
+      }
+    }
+  }
+
+  window.addEventListener('hashchange', handleDeepLinkHash);
+
+  // --------------------------------------------------------------------------
+  // 11. DRAWER CATALOG, SEARCH, FILTERS & SORT WITH FOCUS TRAP
+  // --------------------------------------------------------------------------
+  function populateCategoryFilters() {
+    const chipsContainer = document.getElementById('drawer-category-chips');
+    if (!chipsContainer || projectsData.length === 0) return;
+
+    const categories = ['all', ...new Set(projectsData.map(p => {
+      if (typeof p.category === 'object') return p.category.tr || p.category.en;
+      return p.category;
+    }))];
+
+    chipsContainer.innerHTML = categories.map(cat => {
+      const label = cat === 'all' ? I18N[currentLang].filter_all : cat;
+      return `
+        <button type="button" class="chip-filter-btn ${cat === activeCategoryFilter ? 'active' : ''}" data-cat="${escapeHtml(cat)}">
+          ${escapeHtml(label)}
+        </button>
+      `;
+    }).join('');
+
+    chipsContainer.querySelectorAll('.chip-filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        playUiBeep(680, 0.02);
+        chipsContainer.querySelectorAll('.chip-filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        activeCategoryFilter = btn.dataset.cat;
+        populateDrawerList();
+      });
+    });
+  }
+
+  function populateDrawerList() {
+    const list = document.getElementById('drawer-projects-list');
+    const searchInput = document.getElementById('drawer-search-input');
+    if (!list) return;
+
+    const query = (searchInput?.value || '').toLowerCase().trim();
+
+    // 1. Filter
+    let filtered = projectsData.filter((p, originalIdx) => {
+      p._originalIndex = originalIdx;
+      const title = (typeof p.title === 'object' ? (p.title[currentLang] || p.title.tr) : p.title || '').toLowerCase();
+      const cat = (typeof p.category === 'object' ? (p.category[currentLang] || p.category.tr) : p.category || '').toLowerCase();
+      const rawCat = (typeof p.category === 'object' ? (p.category.tr || p.category.en) : p.category || '');
+
+      const matchesQuery = !query || title.includes(query) || cat.includes(query);
+      const matchesCategory = activeCategoryFilter === 'all' || rawCat === activeCategoryFilter;
+
+      return matchesQuery && matchesCategory;
+    });
+
+    // 2. Sort
+    if (activeSortMode === 'difficulty-desc') {
+      filtered.sort((a, b) => (b.difficulty || 0) - (a.difficulty || 0));
+    } else if (activeSortMode === 'difficulty-asc') {
+      filtered.sort((a, b) => (a.difficulty || 0) - (b.difficulty || 0));
+    } else if (activeSortMode === 'sponsor') {
+      filtered.sort((a, b) => {
+        const sA = (a.sponsor_status && (typeof a.sponsor_status === 'object' ? a.sponsor_status.tr : a.sponsor_status)) || '';
+        const sB = (b.sponsor_status && (typeof b.sponsor_status === 'object' ? b.sponsor_status.tr : b.sponsor_status)) || '';
+        return sA.localeCompare(sB);
+      });
+    }
+
+    list.innerHTML = '';
+    if (filtered.length === 0) {
+      list.innerHTML = `<div class="drawer-empty-msg">${currentLang === 'tr' ? 'Eşleşen proje fikri bulunamadı.' : 'No matching project proposals found.'}</div>`;
+      return;
+    }
+
+    filtered.forEach(p => {
+      const title = typeof p.title === 'object' ? (p.title[currentLang] || p.title.tr || '') : p.title;
+      const cat = typeof p.category === 'object' ? (p.category[currentLang] || p.category.tr || '') : p.category;
+      const statusVal = typeof p.status === 'object' ? (p.status[currentLang] || p.status.tr || '') : (p.status || '');
+      const sponsorVal = typeof p.sponsor_status === 'object' ? (p.sponsor_status[currentLang] || p.sponsor_status.tr || '') : (p.sponsor_status || '');
+
+      const statusMiniHtml = shouldShowStatusBadge(p)
+        ? `<span class="badge-mini status">${escapeHtml(I18N[currentLang].status_label_prefix)} ${escapeHtml(statusVal)}</span>`
+        : '';
+      const sponsorMiniHtml = !isUndeterminedBadge(sponsorVal)
+        ? `<span class="badge-mini sponsor">${escapeHtml(I18N[currentLang].sponsor_label_prefix)} ${escapeHtml(sponsorVal)}</span>`
+        : '';
+
+      const card = document.createElement('a');
+      card.className = 'drawer-project-card';
+      card.href = `#${p.id}`;
+      card.innerHTML = `
+        <img src="${escapeHtml(p.image)}" alt="" class="drawer-card-thumb" width="72" height="48" loading="lazy" decoding="async">
+        <div class="drawer-card-info">
+          <div class="drawer-card-title">${escapeHtml(title)}</div>
+          <div class="drawer-card-cat">${escapeHtml(cat)}</div>
+          <div class="drawer-card-badges">
+            ${statusMiniHtml}
+            ${sponsorMiniHtml}
+            <span class="badge-mini diff">${p.difficulty || 3}/5</span>
+          </div>
+        </div>
+      `;
+      card.addEventListener('click', (e) => {
+        e.preventDefault();
+        closeDrawer();
+        playUiBeep(600, 0.03);
+        const targetSec = document.getElementById(p.id);
+        if (targetSec) targetSec.scrollIntoView({ behavior: 'smooth' });
+        history.replaceState(null, '', `#${p.id}`);
+      });
+      list.appendChild(card);
+    });
+  }
+
+  function openDrawer() {
+    playUiBeep(500, 0.04);
+    const drawer = document.getElementById('index-drawer');
+    const trigger = document.getElementById('open-index-drawer');
+    if (drawer) {
+      drawer.classList.add('open');
+      drawer.setAttribute('aria-hidden', 'false');
+      trigger?.setAttribute('aria-expanded', 'true');
+      trapFocus(drawer, closeDrawer);
+    }
+  }
+
+  function closeDrawer() {
+    const drawer = document.getElementById('index-drawer');
+    const trigger = document.getElementById('open-index-drawer');
+    if (drawer) {
+      drawer.classList.remove('open');
+      drawer.setAttribute('aria-hidden', 'true');
+      trigger?.setAttribute('aria-expanded', 'false');
+    }
+    if (currentFocusTrapCleanup) {
+      currentFocusTrapCleanup();
+    }
+  }
+
+  // --------------------------------------------------------------------------
+  // 12. PROJECT PALETTE ENGINE
+  // --------------------------------------------------------------------------
+  function applyProjectPalette(projectIndex, paletteId) {
+    const project = projectsData[projectIndex];
+    if (!project) return;
+    const sec = document.getElementById(project.id) || document.getElementById(`project-${projectIndex}`);
+    const pal = PALETTES[paletteId] || PALETTES['gothic-noir'];
+    if (!sec || !pal) return;
+
+    sec.dataset.palette = pal.id;
+    project.palette = pal.id;
+    localStorage.setItem(`iec_palette_${project.id}`, pal.id);
 
     playUiBeep(840, 0.04);
-    showToast(currentLang === 'tr' ? `Palet güncellendi: ${pal.name}` : `Palette updated: ${pal.name}`);
   }
 
   function initGlobalPaletteSwitcher() {
-    const globalTrigger = document.getElementById('btn-global-palette-trigger');
-    const globalFlyout = document.getElementById('global-palette-flyout');
-    const globalDots = document.getElementById('global-palette-dots');
-    const globalLabel = document.getElementById('global-palette-label');
-    if (!globalTrigger || !globalFlyout) return;
-
-    let savedGlobal = localStorage.getItem('iec_global_palette') || 'gothic-noir';
-    if (!PALETTES[savedGlobal]) savedGlobal = 'gothic-noir';
-
-    function updateGlobalTriggerUI(paletteId) {
-      const pal = PALETTES[paletteId];
-      if (!pal) return;
-      if (globalDots) {
-        const dots = globalDots.querySelectorAll('span');
-        if (dots.length >= 4) {
-          dots[0].style.background = pal.swatches[0];
-          dots[1].style.background = pal.swatches[1];
-          dots[2].style.background = pal.swatches[2];
-          dots[3].style.background = pal.swatches[3];
-        }
-      }
-      if (globalLabel) globalLabel.textContent = pal.name;
+    // Single Cohesive Palette: Dark Obsidian & Architectural Warm Gold
+    document.body.className = `lang-${currentLang} theme-dark`;
+    if (document.body.dataset.globalPalette) {
+      delete document.body.dataset.globalPalette;
     }
-
-    // Populate global flyout
-    globalFlyout.innerHTML = Object.values(PALETTES).map(pal => `
-      <div class="palette-choice-item ${pal.id === savedGlobal ? 'active' : ''}" data-global-palette-id="${pal.id}">
-        <span class="palette-choice-name">${pal.name}</span>
-        <div class="palette-swatch-bar">
-          <span style="background: ${pal.swatches[0]}"></span>
-          <span style="background: ${pal.swatches[1]}"></span>
-          <span style="background: ${pal.swatches[2]}"></span>
-          <span style="background: ${pal.swatches[3]}"></span>
-        </div>
-      </div>
-    `).join('');
-
-    updateGlobalTriggerUI(savedGlobal);
-    document.body.dataset.globalPalette = savedGlobal;
-
-    globalTrigger.addEventListener('click', (e) => {
-      e.stopPropagation();
-      const isOpen = globalFlyout.classList.contains('open');
-      document.querySelectorAll('.palette-flyout-menu').forEach(f => f.classList.remove('open'));
-      if (!isOpen) {
-        globalFlyout.classList.add('open');
-        playUiBeep(640, 0.02);
-      }
-    });
-
-    globalFlyout.querySelectorAll('.palette-choice-item').forEach(ch => {
-      ch.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const palId = ch.dataset.globalPaletteId;
-        const pal = PALETTES[palId];
-        if (!pal) return;
-
-        savedGlobal = palId;
-        localStorage.setItem('iec_global_palette', palId);
-        document.body.dataset.globalPalette = palId;
-        updateGlobalTriggerUI(palId);
-
-        globalFlyout.querySelectorAll('.palette-choice-item').forEach(c => {
-          c.classList.toggle('active', c.dataset.globalPaletteId === palId);
-        });
-
-        // Set all projects to this palette
-        projectsData.forEach((p, idx) => {
-          applyPaletteToProject(idx, palId);
-        });
-
-        globalFlyout.classList.remove('open');
-        playUiBeep(920, 0.05);
-        showToast(currentLang === 'tr' ? `Genel tema: ${pal.name}` : `Global theme: ${pal.name}`);
-      });
-    });
-  }
-
-  function initModalPaletteChoices(currentPaletteId) {
-    const picker = document.getElementById('modal-palette-picker');
-    const inputHidden = document.getElementById('edit-palette');
-    if (!picker || !inputHidden) return;
-
-    const activeId = currentPaletteId || inputHidden.value || 'gothic-noir';
-    inputHidden.value = activeId;
-
-    picker.innerHTML = Object.values(PALETTES).map(pal => `
-      <div class="palette-modal-choice ${pal.id === activeId ? 'selected' : ''}" data-modal-palette-id="${pal.id}">
-        <div class="palette-swatch-bar">
-          <span style="background: ${pal.swatches[0]}"></span>
-          <span style="background: ${pal.swatches[1]}"></span>
-          <span style="background: ${pal.swatches[2]}"></span>
-          <span style="background: ${pal.swatches[3]}"></span>
-        </div>
-        <span>${pal.name}</span>
-      </div>
-    `).join('');
-
-    picker.querySelectorAll('.palette-modal-choice').forEach(choice => {
-      choice.addEventListener('click', () => {
-        playUiBeep(750, 0.02);
-        picker.querySelectorAll('.palette-modal-choice').forEach(c => c.classList.remove('selected'));
-        choice.classList.add('selected');
-        inputHidden.value = choice.dataset.modalPaletteId;
-      });
-    });
   }
 
   // --------------------------------------------------------------------------
-  // 6. INTERACTIVE 3D CARD TILT (Smooth Perspective Touch)
+  // 13. INTERACTIVE 3D CARD TILT
   // --------------------------------------------------------------------------
   function attach3DTilt(cardElement) {
     if (!cardElement) return;
@@ -732,8 +1186,8 @@
       const centerX = rect.width / 2;
       const centerY = rect.height / 2;
 
-      const rotateX = ((y - centerY) / centerY) * -9; // Max 9 deg
-      const rotateY = ((x - centerX) / centerX) * 9;
+      const rotateX = ((y - centerY) / centerY) * -7;
+      const rotateY = ((x - centerX) / centerX) * 7;
 
       cardElement.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
     });
@@ -744,7 +1198,7 @@
   }
 
   // --------------------------------------------------------------------------
-  // 7. SCROLL OBSERVER & DOT TRACKER
+  // 14. SCROLL OBSERVER & DOT TRACKER
   // --------------------------------------------------------------------------
   let observer = null;
   function setupScrollObserver() {
@@ -752,7 +1206,6 @@
 
     const sections = document.querySelectorAll('.snap-section');
     const dots = document.querySelectorAll('.side-progress-nav .dot-item');
-    const counter = document.getElementById('slide-counter');
 
     const observerOptions = {
       root: document.getElementById('scroll-container'),
@@ -766,11 +1219,7 @@
           activeSectionIndex = index;
 
           dots.forEach((dot, dIdx) => {
-            if (dIdx === index) {
-              dot.classList.add('active');
-            } else {
-              dot.classList.remove('active');
-            }
+            dot.classList.toggle('active', dIdx === index);
           });
         }
       });
@@ -780,92 +1229,73 @@
   }
 
   // --------------------------------------------------------------------------
-  // 8. DRAWER CATALOG LIST
-  // --------------------------------------------------------------------------
-  function populateDrawerList() {
-    const list = document.getElementById('drawer-projects-list');
-    if (!list) return;
-
-    list.innerHTML = '';
-    projectsData.forEach((p, idx) => {
-      const title = typeof p.title === 'object' ? (p.title[currentLang] || p.title.tr || '') : p.title;
-      const cat = typeof p.category === 'object' ? (p.category[currentLang] || p.category.tr || '') : p.category;
-      const card = document.createElement('a');
-      card.className = 'drawer-project-card';
-      card.href = `#project-${idx}`;
-      card.innerHTML = `
-        <img src="${p.image}" alt="${title}" class="drawer-card-thumb" loading="lazy">
-        <div class="drawer-card-info">
-          <div class="drawer-card-title">${title}</div>
-          <div class="drawer-card-cat">${cat}</div>
-        </div>
-      `;
-      card.addEventListener('click', (e) => {
-        e.preventDefault();
-        closeDrawer();
-        playUiBeep(600, 0.03);
-        const targetSec = document.getElementById(`project-${idx}`);
-        if (targetSec) targetSec.scrollIntoView({ behavior: 'smooth' });
-      });
-      list.appendChild(card);
-    });
-  }
-
-  function openDrawer() {
-    playUiBeep(500, 0.04);
-    const drawer = document.getElementById('index-drawer');
-    drawer.classList.add('open');
-    drawer.setAttribute('aria-hidden', 'false');
-  }
-
-  function closeDrawer() {
-    const drawer = document.getElementById('index-drawer');
-    drawer.classList.remove('open');
-    drawer.setAttribute('aria-hidden', 'true');
-  }
-
-  // Drawer Search Filter
-  const searchInput = document.getElementById('drawer-search-input');
-  if (searchInput) {
-    searchInput.addEventListener('input', (e) => {
-      const query = e.target.value.toLowerCase().trim();
-      document.querySelectorAll('.drawer-project-card').forEach(card => {
-        const text = card.textContent.toLowerCase();
-        card.style.display = text.includes(query) ? 'flex' : 'none';
-      });
-    });
-  }
-
-  // --------------------------------------------------------------------------
-  // 9. IN-PLACE LIVE EDIT MODAL (DÜZENLEME SİSTEMİ)
+  // 15. IN-PLACE LIVE EDIT MODAL (Maintainer Admin Mode Only)
   // --------------------------------------------------------------------------
   let currentlyEditingIndex = -1;
 
+  function initModalPaletteChoices(activeId) {
+    const picker = document.getElementById('modal-palette-picker');
+    const inputHidden = document.getElementById('edit-palette');
+    if (!picker || !inputHidden) return;
+
+    picker.innerHTML = Object.values(PALETTES).map(pal => `
+      <div class="palette-modal-choice ${pal.id === activeId ? 'selected' : ''}" data-modal-palette-id="${pal.id}">
+        <div class="palette-swatch-bar">
+          <span style="background: ${pal.swatches[0]}"></span>
+          <span style="background: ${pal.swatches[1]}"></span>
+          <span style="background: ${pal.swatches[2]}"></span>
+          <span style="background: ${pal.swatches[3]}"></span>
+        </div>
+        <span>${escapeHtml(pal.name)}</span>
+      </div>
+    `).join('');
+
+    picker.querySelectorAll('.palette-modal-choice').forEach(choice => {
+      choice.addEventListener('click', () => {
+        playUiBeep(750, 0.02);
+        picker.querySelectorAll('.palette-modal-choice').forEach(c => c.classList.remove('selected'));
+        choice.classList.add('selected');
+        inputHidden.value = choice.dataset.modalPaletteId;
+      });
+    });
+  }
+
   function openEditModal(index) {
+    if (!isAdmin) return;
     currentlyEditingIndex = index;
     const p = projectsData[index];
     if (!p) return;
 
     playUiBeep(700, 0.04);
     const modal = document.getElementById('edit-modal');
+    if (!modal) return;
     modal.classList.add('open');
     modal.setAttribute('aria-hidden', 'false');
 
-    // Populate Fields
     document.getElementById('edit-project-id').value = index;
-    document.getElementById('edit-title-tr').value = (p.title && p.title.tr) || '';
+    document.getElementById('edit-title-tr').value = (p.title && p.title.tr) || (typeof p.title === 'string' ? p.title : '');
     document.getElementById('edit-title-en').value = (p.title && p.title.en) || '';
-    document.getElementById('edit-tagline-tr').value = (p.tagline && p.tagline.tr) || '';
+    document.getElementById('edit-tagline-tr').value = (p.tagline && p.tagline.tr) || (typeof p.tagline === 'string' ? p.tagline : '');
     document.getElementById('edit-tagline-en').value = (p.tagline && p.tagline.en) || '';
-    document.getElementById('edit-category-tr').value = (p.category && (p.category[currentLang] || p.category.tr)) || '';
+    document.getElementById('edit-category-tr').value = (p.category && (p.category.tr || p.category[currentLang])) || '';
     document.getElementById('edit-author').value = p.author || '';
-    document.getElementById('edit-budget').value = typeof p.budget === 'object' ? (p.budget[currentLang] || p.budget.tr || '') : (p.budget || '');
+
+    const sponsorSelect = document.getElementById('edit-sponsor-status');
+    const projectStatusSelect = document.getElementById('edit-project-status');
+    if (sponsorSelect) {
+      sponsorSelect.value = (typeof p.sponsor_status === 'object' && p.sponsor_status ? p.sponsor_status.tr : p.sponsor_status) || '';
+    }
+    if (projectStatusSelect) {
+      projectStatusSelect.value = (typeof p.status === 'object' && p.status ? p.status.tr : p.status) || 'Öneri';
+    }
 
     const diffSlider = document.getElementById('edit-difficulty');
-    diffSlider.value = p.difficulty || 3;
-    document.getElementById('edit-difficulty-val').textContent = `${p.difficulty || 3}/5`;
+    if (diffSlider) {
+      diffSlider.value = p.difficulty || 3;
+      document.getElementById('edit-difficulty-val').textContent = `${p.difficulty || 3}/5`;
+    }
 
-    document.getElementById('edit-ownership-tr').value = (p.ownership && (p.ownership[currentLang] || p.ownership.tr)) || p.author || '';
+    document.getElementById('edit-ownership-tr').value = (p.ownership && (p.ownership.tr || p.ownership[currentLang])) || p.author || '';
     document.getElementById('edit-image-url').value = p.image || '';
 
     document.getElementById('edit-problem-tr').value = (p.problem && p.problem.tr) || '';
@@ -876,160 +1306,56 @@
     document.getElementById('edit-first-step-tr').value = (p.first_step && p.first_step.tr) || '';
     document.getElementById('edit-first-step-en').value = (p.first_step && p.first_step.en) || '';
 
-    // Initialize Palette Choices in Modal
     const currentPal = localStorage.getItem('iec_palette_' + p.id) || p.palette || 'gothic-noir';
     initModalPaletteChoices(currentPal);
 
-    // Highlight matching gallery choice
     highlightSelectedGallery(p.image);
+    trapFocus(modal, closeEditModal);
   }
 
   function closeEditModal() {
     const modal = document.getElementById('edit-modal');
-    modal.classList.remove('open');
-    modal.setAttribute('aria-hidden', 'true');
+    if (modal) {
+      modal.classList.remove('open');
+      modal.setAttribute('aria-hidden', 'true');
+    }
     currentlyEditingIndex = -1;
+    if (currentFocusTrapCleanup) {
+      currentFocusTrapCleanup();
+    }
   }
 
   function highlightSelectedGallery(src) {
     document.querySelectorAll('.gallery-choice').forEach(choice => {
-      if (choice.dataset.src === src) {
-        choice.classList.add('selected');
-      } else {
-        choice.classList.remove('selected');
-      }
+      choice.classList.toggle('selected', choice.dataset.src === src);
     });
   }
 
-  // Gallery Choice click
-  document.querySelectorAll('.gallery-choice').forEach(choice => {
-    choice.addEventListener('click', () => {
-      playUiBeep(850, 0.02);
-      highlightSelectedGallery(choice.dataset.src);
-      document.getElementById('edit-image-url').value = choice.dataset.src;
-    });
-  });
-
-  // Difficulty range slider change
-  const diffSlider = document.getElementById('edit-difficulty');
-  if (diffSlider) {
-    diffSlider.addEventListener('input', (e) => {
-      document.getElementById('edit-difficulty-val').textContent = `${e.target.value}/5`;
-    });
+  function downloadProjectsJson() {
+    const jsonStr = JSON.stringify(projectsData, null, 2);
+    const blob = new Blob([jsonStr], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'projects.json';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    playUiBeep(900, 0.06);
+    showToast(I18N[currentLang].toast_json_downloaded);
   }
 
-  // Form submit (Save edits)
-  const editForm = document.getElementById('edit-project-form');
-  if (editForm) {
-    editForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      if (currentlyEditingIndex < 0) return;
-
-      const p = projectsData[currentlyEditingIndex];
-      p.title = p.title || {};
-      p.title.tr = document.getElementById('edit-title-tr').value;
-      p.title.en = document.getElementById('edit-title-en').value;
-      p.tagline = p.tagline || {};
-      p.tagline.tr = document.getElementById('edit-tagline-tr').value;
-      p.tagline.en = document.getElementById('edit-tagline-en').value;
-      
-      p.category = p.category || {};
-      p.category[currentLang] = document.getElementById('edit-category-tr').value;
-      
-      p.author = document.getElementById('edit-author').value;
-      
-      if (typeof p.budget === 'object') {
-        p.budget[currentLang] = document.getElementById('edit-budget').value;
-      } else {
-        p.budget = document.getElementById('edit-budget').value;
-      }
-
-      p.difficulty = parseInt(document.getElementById('edit-difficulty').value, 10);
-      
-      p.ownership = p.ownership || {};
-      p.ownership[currentLang] = document.getElementById('edit-ownership-tr').value;
-
-      p.image = document.getElementById('edit-image-url').value || p.image;
-      if (!p.gallery || !p.gallery.includes(p.image)) {
-        p.gallery = [p.image, ...(p.gallery || [])];
-      }
-
-      p.problem = p.problem || {};
-      p.problem.tr = document.getElementById('edit-problem-tr').value;
-      p.problem.en = document.getElementById('edit-problem-en').value;
-      p.solution = p.solution || {};
-      p.solution.tr = document.getElementById('edit-solution-tr').value;
-      p.solution.en = document.getElementById('edit-solution-en').value;
-
-      p.first_step = p.first_step || {};
-      p.first_step.tr = document.getElementById('edit-first-step-tr').value;
-      p.first_step.en = document.getElementById('edit-first-step-en').value;
-
-      // Save Palette Choice from Modal
-      const modalPal = (document.getElementById('edit-palette') && document.getElementById('edit-palette').value) || 'gothic-noir';
-      p.palette = modalPal;
-      localStorage.setItem('iec_palette_' + p.id, modalPal);
-
-      // Persist in localStorage
-      localStorage.setItem('iec_projects_custom', JSON.stringify(projectsData));
-
-      // Re-render and restore scroll position
-      const scrollPos = document.getElementById('scroll-container').scrollTop;
-      renderAllProjects();
-      populateDrawerList();
-      document.getElementById('scroll-container').scrollTop = scrollPos;
-
-      closeEditModal();
-      playUiBeep(920, 0.08);
-      showToast(I18N[currentLang].toast_saved);
-    });
-  }
-
-  // Reset to default button
-  const btnReset = document.getElementById('btn-reset-project-default');
-  if (btnReset) {
-    btnReset.addEventListener('click', () => {
-      const confirmMsg = currentLang === 'tr' ? "Bu projenin tüm yerel düzenlemelerini silip fabrika ayarlarına dönmek istediğinize emin misiniz?" : "Reset all local customizations and revert back to default project specs?";
-      if (confirm(confirmMsg)) {
-        localStorage.removeItem('iec_projects_custom');
-        projectsData = JSON.parse(JSON.stringify(window.IEC_PROJECTS || []));
-        renderAllProjects();
-        populateDrawerList();
-        closeEditModal();
-        showToast(I18N[currentLang].toast_reset);
-      }
-    });
-  }
-
-  // Copy JSON button
-  const btnCopyJson = document.getElementById('btn-copy-project-json');
-  if (btnCopyJson) {
-    btnCopyJson.addEventListener('click', () => {
-      if (currentlyEditingIndex < 0) return;
-      const jsonStr = JSON.stringify(projectsData[currentlyEditingIndex], null, 2);
-      navigator.clipboard.writeText(jsonStr).then(() => {
-        showToast(I18N[currentLang].toast_json_copied);
-      });
-    });
-  }
-
-  // Download JSON button
-  const btnDownloadJson = document.getElementById('btn-download-project-json');
-  if (btnDownloadJson) {
-    btnDownloadJson.addEventListener('click', () => {
-      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(projectsData, null, 2));
-      const downloadAnchor = document.createElement('a');
-      downloadAnchor.setAttribute("href", dataStr);
-      downloadAnchor.setAttribute("download", "projects.json");
-      document.body.appendChild(downloadAnchor);
-      downloadAnchor.click();
-      downloadAnchor.remove();
-      showToast(I18N[currentLang].toast_json_downloaded);
+  function copyProjectsJson() {
+    const jsonStr = JSON.stringify(projectsData, null, 2);
+    navigator.clipboard.writeText(jsonStr).then(() => {
+      playUiBeep(850, 0.05);
+      showToast(I18N[currentLang].toast_json_copied);
     });
   }
 
   // --------------------------------------------------------------------------
-  // 10. LANGUAGE SWITCHER (TR / EN)
+  // 16. MULTILINGUAL SEO & LANGUAGE SWITCHER (TR / EN)
   // --------------------------------------------------------------------------
   function setLanguage(lang) {
     currentLang = lang;
@@ -1037,12 +1363,33 @@
     document.documentElement.lang = lang;
     document.body.className = `lang-${lang} theme-dark`;
 
-    // Toggle button active classes
+    // 1. Synchronize Document Title & Meta Description
+    document.title = I18N[lang].page_seo_title;
+
+    const pageMeta = document.getElementById('page-meta-desc');
+    if (pageMeta) {
+      pageMeta.content = I18N[lang].page_seo_desc;
+    }
+
+    // 2. Synchronize Social Open Graph & Twitter Cards
+    const ogTitle = document.getElementById('og-title');
+    if (ogTitle) ogTitle.content = I18N[lang].page_seo_title;
+
+    const ogDesc = document.getElementById('og-desc');
+    if (ogDesc) ogDesc.content = I18N[lang].page_seo_desc;
+
+    const twTitle = document.getElementById('twitter-title');
+    if (twTitle) twTitle.content = I18N[lang].page_seo_title;
+
+    const twDesc = document.getElementById('twitter-desc');
+    if (twDesc) twDesc.content = I18N[lang].page_seo_desc;
+
+    // 3. Update Language Switcher Buttons
     document.querySelectorAll('.lang-btn').forEach(btn => {
       btn.classList.toggle('active', btn.dataset.lang === lang);
     });
 
-    // Translate static elements
+    // 4. Update data-i18n Nodes
     document.querySelectorAll('[data-i18n]').forEach(el => {
       const key = el.dataset.i18n;
       if (I18N[lang] && I18N[lang][key]) {
@@ -1050,7 +1397,6 @@
       }
     });
 
-    // Translate placeholders
     document.querySelectorAll('[data-i18n-ph]').forEach(el => {
       const key = el.dataset.i18nPh;
       if (I18N[lang] && I18N[lang][key]) {
@@ -1058,142 +1404,250 @@
       }
     });
 
-    // Translate tooltips / title attributes
-    document.querySelectorAll('[data-i18n-title]').forEach(el => {
-      const key = el.dataset.i18nTitle;
-      if (I18N[lang] && I18N[lang][key]) {
-        el.title = I18N[lang][key];
-      }
-    });
+    // 5. Screen Reader Live Notification (WCAG 2.2 AA)
+    announceToScreenReader(I18N[lang].sr_lang_changed);
 
-    // Update sound indicator text
-    const soundPill = document.getElementById('audio-indicator');
-    if (soundPill) {
-      const soundLabel = soundPill.querySelector('.sound-label');
-      if (soundLabel) {
-        soundLabel.textContent = soundEnabled ? I18N[lang].sound_on : I18N[lang].sound_label;
-      }
+    // 6. Re-render dynamic elements
+    if (projectsData.length > 0) {
+      renderAllProjects();
+      populateDrawerList();
+      populateCategoryFilters();
+      updateHeroStats();
     }
-
-    // Refresh dynamic drawer list
-    populateDrawerList();
-
-    // Re-render dynamic project cards in new language
-    const scrollContainer = document.getElementById('scroll-container');
-    const scrollPos = scrollContainer ? scrollContainer.scrollTop : 0;
-    renderAllProjects();
-    if (scrollContainer) scrollContainer.scrollTop = scrollPos;
-
-    playUiBeep(750, 0.03);
   }
 
   // --------------------------------------------------------------------------
-  // 11. KEYBOARD NAVIGATION & GLOBAL LISTENERS
+  // 17. INITIALIZATION & GLOBAL LISTENERS
   // --------------------------------------------------------------------------
-  window.addEventListener('keydown', (e) => {
-    // If modal is open, let user type freely, only catch Escape
-    const modalOpen = document.getElementById('edit-modal').classList.contains('open');
-    const drawerOpen = document.getElementById('index-drawer').classList.contains('open');
-
-    if (e.key === 'Escape') {
-      if (modalOpen) closeEditModal();
-      if (drawerOpen) closeDrawer();
-      return;
+  function init() {
+    // 1. Check Admin Mode
+    const adminBanner = document.getElementById('admin-mode-banner');
+    if (adminBanner) {
+      adminBanner.style.display = isAdmin ? 'block' : 'none';
+    }
+    const exitAdminBtn = document.getElementById('exit-admin-btn');
+    if (exitAdminBtn) {
+      exitAdminBtn.href = window.location.pathname;
     }
 
-    if (modalOpen || drawerOpen) return;
-
-    // Arrow keys or Page keys for slide snapping
-    if (e.key === 'ArrowDown' || e.key === 'PageDown') {
-      e.preventDefault();
-      const nextIdx = Math.min(activeSectionIndex + 1, projectsData.length);
-      const targetSec = document.querySelector(`.snap-section[data-index="${nextIdx}"]`);
-      if (targetSec) {
-        playUiBeep(520, 0.02);
-        targetSec.scrollIntoView({ behavior: 'smooth' });
-      }
-    } else if (e.key === 'ArrowUp' || e.key === 'PageUp') {
-      e.preventDefault();
-      const prevIdx = Math.max(activeSectionIndex - 1, 0);
-      const targetSec = document.querySelector(`.snap-section[data-index="${prevIdx}"]`);
-      if (targetSec) {
-        playUiBeep(480, 0.02);
-        targetSec.scrollIntoView({ behavior: 'smooth' });
-      }
-    } else if (e.key === 'e' || e.key === 'E') {
-      // Shortcut to edit currently viewed project
-      if (activeSectionIndex > 0) {
-        openEditModal(activeSectionIndex - 1);
-      }
-    } else if (e.key === 'l' || e.key === 'L') {
-      // Toggle language shortcut
-      setLanguage(currentLang === 'tr' ? 'en' : 'tr');
-    }
-  });
-
-  // --------------------------------------------------------------------------
-  // 12. INITIALIZATION
-  // --------------------------------------------------------------------------
-  document.addEventListener('DOMContentLoaded', () => {
-    // 1. Language buttons
-    document.querySelectorAll('.lang-btn').forEach(btn => {
-      btn.addEventListener('click', () => setLanguage(btn.dataset.lang));
-    });
-
-    // 2. Sound pill
+    // 2. Sound Toggle Listener
     const soundPill = document.getElementById('audio-indicator');
     if (soundPill) {
       soundPill.addEventListener('click', toggleSound);
+      soundPill.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          toggleSound();
+        }
+      });
     }
 
-    // 3. Drawer open / close
-    const btnOpenDrawer = document.getElementById('open-index-drawer');
-    if (btnOpenDrawer) btnOpenDrawer.addEventListener('click', openDrawer);
+    // 3. Language Switcher Buttons
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const lang = btn.dataset.lang;
+        playUiBeep(700, 0.03);
+        setLanguage(lang);
+      });
+    });
 
-    const btnCloseDrawer = document.getElementById('close-index-drawer');
-    if (btnCloseDrawer) btnCloseDrawer.addEventListener('click', closeDrawer);
-
+    // 4. Drawer Open / Close
+    const openDrawerBtn = document.getElementById('open-index-drawer');
+    const closeDrawerBtn = document.getElementById('close-index-drawer');
     const drawerBackdrop = document.getElementById('drawer-backdrop');
+    if (openDrawerBtn) openDrawerBtn.addEventListener('click', openDrawer);
+    if (closeDrawerBtn) closeDrawerBtn.addEventListener('click', closeDrawer);
     if (drawerBackdrop) drawerBackdrop.addEventListener('click', closeDrawer);
 
-    // 4. Modal close
-    const btnCloseModal = document.getElementById('close-edit-modal');
-    if (btnCloseModal) btnCloseModal.addEventListener('click', closeEditModal);
+    // 5. Drawer Search & Sort Listeners
+    const searchInput = document.getElementById('drawer-search-input');
+    if (searchInput) {
+      searchInput.addEventListener('input', () => {
+        populateDrawerList();
+      });
+    }
 
-    const modalBackdrop = document.getElementById('edit-modal-backdrop');
-    if (modalBackdrop) modalBackdrop.addEventListener('click', closeEditModal);
+    const sortSelect = document.getElementById('drawer-sort-select');
+    if (sortSelect) {
+      sortSelect.addEventListener('change', (e) => {
+        playUiBeep(640, 0.02);
+        activeSortMode = e.target.value;
+        populateDrawerList();
+      });
+    }
 
-    // 5. Hero CTA button
-    const heroBtn = document.getElementById('start-tour-btn');
-    if (heroBtn) {
-      heroBtn.addEventListener('click', (e) => {
+    // 6. Detail Modal Close
+    const closeDetailBtn = document.getElementById('close-detail-modal');
+    const detailBackdrop = document.getElementById('detail-modal-backdrop');
+    if (closeDetailBtn) closeDetailBtn.addEventListener('click', closeDetailModal);
+    if (detailBackdrop) detailBackdrop.addEventListener('click', closeDetailModal);
+
+    // 7. Edit Modal Close & Form Listeners
+    const closeEditBtn = document.getElementById('close-edit-modal');
+    const editBackdrop = document.getElementById('edit-modal-backdrop');
+    if (closeEditBtn) closeEditBtn.addEventListener('click', closeEditModal);
+    if (editBackdrop) editBackdrop.addEventListener('click', closeEditModal);
+
+    document.querySelectorAll('.gallery-choice').forEach(choice => {
+      choice.addEventListener('click', () => {
+        playUiBeep(850, 0.02);
+        highlightSelectedGallery(choice.dataset.src);
+        const editImg = document.getElementById('edit-image-url');
+        if (editImg) editImg.value = choice.dataset.src;
+      });
+    });
+
+    const diffSlider = document.getElementById('edit-difficulty');
+    if (diffSlider) {
+      diffSlider.addEventListener('input', (e) => {
+        document.getElementById('edit-difficulty-val').textContent = `${e.target.value}/5`;
+      });
+    }
+
+    // 8. Maintainer Form Submit
+    const editForm = document.getElementById('edit-project-form');
+    if (editForm) {
+      editForm.addEventListener('submit', (e) => {
         e.preventDefault();
-        playUiBeep(600, 0.03);
-        const p0 = document.getElementById('project-0');
-        if (p0) p0.scrollIntoView({ behavior: 'smooth' });
+        if (currentlyEditingIndex < 0 || !isAdmin) return;
+
+        const p = projectsData[currentlyEditingIndex];
+        p.title = p.title || {};
+        p.title.tr = document.getElementById('edit-title-tr').value;
+        p.title.en = document.getElementById('edit-title-en').value;
+        p.tagline = p.tagline || {};
+        p.tagline.tr = document.getElementById('edit-tagline-tr').value;
+        p.tagline.en = document.getElementById('edit-tagline-en').value;
+        
+        p.category = p.category || {};
+        p.category.tr = document.getElementById('edit-category-tr').value;
+        
+        p.author = document.getElementById('edit-author').value;
+
+        const sponsorSelect = document.getElementById('edit-sponsor-status');
+        const projectStatusSelect = document.getElementById('edit-project-status');
+        if (sponsorSelect) {
+          const sVal = sponsorSelect.value;
+          const sEn = sVal === 'Sponsor Aranıyor' ? 'Seeking Sponsor' : sVal === 'Sponsor Gerekmiyor' ? 'No Sponsor Needed' : '';
+          p.sponsor_status = sVal ? { tr: sVal, en: sEn } : null;
+        }
+        if (projectStatusSelect) {
+          const stVal = projectStatusSelect.value;
+          const stEn = stVal === 'Öneri' ? 'Proposal' : stVal === 'Planlanan' ? 'Planned' : stVal === 'Prototip' ? 'Prototype' : stVal === 'Aktif' ? 'Active' : '';
+          p.status = stVal ? { tr: stVal, en: stEn } : { tr: 'Öneri', en: 'Proposal' };
+        }
+
+        p.difficulty = parseInt(document.getElementById('edit-difficulty').value, 10);
+        
+        p.ownership = p.ownership || {};
+        p.ownership.tr = document.getElementById('edit-ownership-tr').value;
+
+        p.image = document.getElementById('edit-image-url').value || p.image;
+        if (!p.gallery || !p.gallery.includes(p.image)) {
+          p.gallery = [p.image, ...(p.gallery || [])];
+        }
+
+        p.problem = p.problem || {};
+        p.problem.tr = document.getElementById('edit-problem-tr').value;
+        p.problem.en = document.getElementById('edit-problem-en').value;
+        p.solution = p.solution || {};
+        p.solution.tr = document.getElementById('edit-solution-tr').value;
+        p.solution.en = document.getElementById('edit-solution-en').value;
+
+        p.first_step = p.first_step || {};
+        p.first_step.tr = document.getElementById('edit-first-step-tr').value;
+        p.first_step.en = document.getElementById('edit-first-step-en').value;
+
+        const modalPal = (document.getElementById('edit-palette') && document.getElementById('edit-palette').value) || 'gothic-noir';
+        p.palette = modalPal;
+        localStorage.setItem('iec_palette_' + p.id, modalPal);
+
+        localStorage.setItem('iec_projects_custom', JSON.stringify(projectsData));
+
+        const scrollPos = document.getElementById('scroll-container').scrollTop;
+        renderAllProjects();
+        populateDrawerList();
+        document.getElementById('scroll-container').scrollTop = scrollPos;
+
+        closeEditModal();
+        playUiBeep(920, 0.08);
+        showToast(I18N[currentLang].toast_saved);
       });
     }
 
-    const heroFilterBtn = document.getElementById('hero-quick-filter-btn');
-    if (heroFilterBtn) {
-      heroFilterBtn.addEventListener('click', () => {
-        playUiBeep(600, 0.03);
-        const p0 = document.getElementById('project-0');
-        if (p0) p0.scrollIntoView({ behavior: 'smooth' });
+    // 9. Reset Button in Modal
+    const btnReset = document.getElementById('btn-reset-project-default');
+    if (btnReset) {
+      btnReset.addEventListener('click', async () => {
+        const confirmMsg = currentLang === 'tr'
+          ? "Bu projenin tüm yerel düzenlemelerini silip depodaki orijinal ayarlara dönmek istediğinize emin misiniz?"
+          : "Reset all local customizations and revert back to repository defaults?";
+        if (confirm(confirmMsg)) {
+          localStorage.removeItem('iec_projects_custom');
+          await loadProjectsData();
+          closeEditModal();
+          showToast(I18N[currentLang].toast_reset);
+        }
       });
     }
 
-    // 6. Initial Render & Language Sync
-    setLanguage(currentLang);
+    // 10. Download & Copy JSON
+    const btnDownload = document.getElementById('btn-download-project-json');
+    if (btnDownload) btnDownload.addEventListener('click', downloadProjectsJson);
 
-    // 7. Global Palette Switcher & Click-Outside Flyout Handler
-    initGlobalPaletteSwitcher();
+    const btnCopy = document.getElementById('btn-copy-project-json');
+    if (btnCopy) btnCopy.addEventListener('click', copyProjectsJson);
 
-    document.addEventListener('click', (e) => {
-      if (!e.target.closest('.palette-picker-inline')) {
-        document.querySelectorAll('.palette-flyout-menu').forEach(f => f.classList.remove('open'));
+    // 11. Keyboard Navigation (Arrows & Page Keys)
+    window.addEventListener('keydown', (e) => {
+      const modalOpen = document.getElementById('edit-modal')?.classList.contains('open');
+      const detailOpen = document.getElementById('detail-modal')?.classList.contains('open');
+      const drawerOpen = document.getElementById('index-drawer')?.classList.contains('open');
+
+      if (e.key === 'Escape') {
+        if (modalOpen) closeEditModal();
+        if (detailOpen) closeDetailModal();
+        if (drawerOpen) closeDrawer();
+        return;
+      }
+
+      if (modalOpen || detailOpen || drawerOpen) return;
+
+      if (e.key === 'ArrowDown' || e.key === 'PageDown') {
+        e.preventDefault();
+        const nextIdx = Math.min(activeSectionIndex + 1, projectsData.length);
+        const targetSec = document.querySelector(`.snap-section[data-index="${nextIdx}"]`);
+        if (targetSec) {
+          playUiBeep(520, 0.02);
+          targetSec.scrollIntoView({ behavior: 'smooth' });
+        }
+      } else if (e.key === 'ArrowUp' || e.key === 'PageUp') {
+        e.preventDefault();
+        const prevIdx = Math.max(activeSectionIndex - 1, 0);
+        const targetSec = document.querySelector(`.snap-section[data-index="${prevIdx}"]`);
+        if (targetSec) {
+          playUiBeep(480, 0.02);
+          targetSec.scrollIntoView({ behavior: 'smooth' });
+        }
+      } else if (isAdmin && (e.key === 'e' || e.key === 'E')) {
+        if (activeSectionIndex > 0) {
+          openEditModal(activeSectionIndex - 1);
+        }
       }
     });
-  });
 
+    // 12. Global Theme & Language Init
+    initGlobalPaletteSwitcher();
+    setLanguage(currentLang);
+
+    // 13. Fetch Projects Data from data/projects.json
+    loadProjectsData();
+  }
+
+  // Run on DOM Ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
 })();

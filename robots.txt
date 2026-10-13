@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://hasankaan28.github.io/ius-engineering-events-site/sitemap.xml
+Sitemap: https://hasankaan28.github.io/ius-engineering-events-site/projects/sitemap.xml

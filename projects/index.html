@@ -3,10 +3,121 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>IEC // Innovation Showcase — IUS Engineering Portfolio</title>
-  <meta name="description" content="IUS Engineering Club official innovation portfolio. Scroll through flagship student engineering projects, IoT stations, hackathons, and AI labs.">
-  
-  <!-- Google Fonts: Instrument Sans (Editorial Body) & Space Grotesk (Architectural Headings) -->
+  <title id="page-title">IEC // Proje Fikirleri — IUS Mühendislik Kulübü</title>
+  <meta name="description" id="page-meta-desc" content="International University of Sarajevo (IUS) Mühendislik Kulübü öğrenci proje fikirleri ve inovasyon portfolyosu. FENS öğrencileri tarafından tasarlanan donanım, IoT, yazılım ve yapay zeka önerileri.">
+  <meta name="author" content="IUS Engineering Club (IEC)">
+  <meta name="robots" content="index, follow">
+
+  <!-- SEO & Canonical Link -->
+  <link rel="canonical" href="https://hasankaan28.github.io/ius-engineering-events-site/projects/">
+  <link rel="alternate" hreflang="tr" href="https://hasankaan28.github.io/ius-engineering-events-site/projects/?lang=tr">
+  <link rel="alternate" hreflang="en" href="https://hasankaan28.github.io/ius-engineering-events-site/projects/?lang=en">
+  <link rel="alternate" hreflang="x-default" href="https://hasankaan28.github.io/ius-engineering-events-site/projects/">
+
+  <!-- Open Graph / Facebook / LinkedIn / WhatsApp Rich Preview -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="IUS Engineering Club">
+  <meta property="og:url" content="https://hasankaan28.github.io/ius-engineering-events-site/projects/">
+  <meta property="og:title" id="og-title" content="IEC // Proje Fikirleri — IUS Mühendislik Kulübü">
+  <meta property="og:description" id="og-desc" content="International University of Sarajevo (IUS) Mühendislik Kulübü öğrenci proje fikirleri ve inovasyon portfolyosu. FENS öğrencileri tarafından tasarlanan donanım, IoT, yazılım ve yapay zeka önerileri.">
+  <meta property="og:image" content="https://hasankaan28.github.io/ius-engineering-events-site/projects/assets/powerbank_station_hero.jpg">
+  <meta property="og:image:secure_url" content="https://hasankaan28.github.io/ius-engineering-events-site/projects/assets/powerbank_station_hero.jpg">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:width" content="1376">
+  <meta property="og:image:height" content="768">
+  <meta property="og:image:alt" content="IUS PowerHub Akıllı Powerbank İstasyonu Mühendislik Proje Fikri">
+  <meta property="og:locale" content="tr_TR">
+  <meta property="og:locale:alternate" content="en_US">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:url" content="https://hasankaan28.github.io/ius-engineering-events-site/projects/">
+  <meta name="twitter:title" id="twitter-title" content="IEC // Proje Fikirleri — IUS Mühendislik Kulübü">
+  <meta name="twitter:description" id="twitter-desc" content="International University of Sarajevo (IUS) Mühendislik Kulübü öğrenci proje fikirleri ve inovasyon portfolyosu. FENS öğrencileri tarafından tasarlanan donanım, IoT, yazılım ve yapay zeka önerileri.">
+  <meta name="twitter:image" content="https://hasankaan28.github.io/ius-engineering-events-site/projects/assets/powerbank_station_hero.jpg">
+  <meta name="twitter:image:alt" content="IUS PowerHub Akıllı Powerbank İstasyonu Mühendislik Proje Fikri">
+
+  <!-- Favicon Set -->
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <link rel="alternate icon" type="image/x-icon" href="assets/favicon.svg">
+
+  <!-- Structured Data: JSON-LD (Schema.org Organization, WebSite & ItemList) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "https://hasankaan28.github.io/ius-engineering-events-site/#organization",
+        "name": "IUS Engineering Club",
+        "alternateName": "IEC",
+        "url": "https://hasankaan28.github.io/ius-engineering-events-site/",
+        "logo": "https://hasankaan28.github.io/ius-engineering-events-site/projects/assets/powerbank_station_hero.jpg",
+        "parentOrganization": {
+          "@type": "EducationalOrganization",
+          "name": "International University of Sarajevo",
+          "alternateName": "IUS",
+          "url": "https://www.ius.edu.ba"
+        },
+        "department": {
+          "@type": "Organization",
+          "name": "Faculty of Engineering and Natural Sciences (FENS)"
+        }
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://hasankaan28.github.io/ius-engineering-events-site/projects/#website",
+        "url": "https://hasankaan28.github.io/ius-engineering-events-site/projects/",
+        "name": "IEC // Innovation Showcase — IUS Engineering Portfolio",
+        "publisher": {
+          "@id": "https://hasankaan28.github.io/ius-engineering-events-site/#organization"
+        },
+        "inLanguage": ["tr", "en"]
+      },
+      {
+        "@type": "ItemList",
+        "@id": "https://hasankaan28.github.io/ius-engineering-events-site/projects/#itemlist",
+        "name": "IUS Engineering Club Proposed Project Ideas",
+        "description": "Student engineering project proposals and campus innovation concepts engineered by FENS students.",
+        "numberOfItems": 5,
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "IUS PowerHub (Akıllı Powerbank İstasyonu)",
+            "url": "https://hasankaan28.github.io/ius-engineering-events-site/projects/#powerbank-station"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "IUS Dining App (Yemekhane Menü & Geri Bildirim Sistemi)",
+            "url": "https://hasankaan28.github.io/ius-engineering-events-site/projects/#dining-menu-system"
+          },
+          {
+            "@type": "ListItem",
+            "position": 3,
+            "name": "DevHack 2027 (IUS 24 Saatlik Mühendislik Hackathonu)",
+            "url": "https://hasankaan28.github.io/ius-engineering-events-site/projects/#devhack-2027"
+          },
+          {
+            "@type": "ListItem",
+            "position": 4,
+            "name": "AI Prompt & Evaluation Labs (Uygulamalı LLM İstasyonu)",
+            "url": "https://hasankaan28.github.io/ius-engineering-events-site/projects/#ai-prompt-labs"
+          },
+          {
+            "@type": "ListItem",
+            "position": 5,
+            "name": "IUS Engineering Summit 2027 (Kariyer & Teknoloji Zirvesi)",
+            "url": "https://hasankaan28.github.io/ius-engineering-events-site/projects/#ius-techsummit-2027"
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+
+  <!-- Google Fonts: Instrument Sans & Space Grotesk -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
@@ -15,65 +126,65 @@
 </head>
 <body class="lang-tr theme-dark">
 
+  <!-- ACCESSIBILITY: SCREEN READER LIVE ANNOUNCEMENTS -->
+  <div id="sr-announcements" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+
+  <!-- ACCESSIBILITY: SKIP TO CONTENT -->
+  <a href="#projects-wrapper" class="skip-to-content" data-i18n="skip_to_content">İçeriğe Doğrudan Geç</a>
+
+  <!-- ADMIN MODE BANNER (Only displayed if ?admin=true is present in the URL) -->
+  <div id="admin-mode-banner" class="admin-mode-banner" style="display: none;" role="status" aria-live="polite">
+    <div class="admin-banner-inner">
+      <span class="admin-badge">ADMIN MODE</span>
+      <span class="admin-text" data-i18n="admin_banner_text">Yönetici Modu Aktif (Önizleme). Değişiklikler yalnızca bu tarayıcıda geçerlidir; kalıcı olması için JSON'u indirip repoya commit edin.</span>
+      <a href="index.html" id="exit-admin-btn" class="btn-exit-admin" data-i18n="btn_exit_admin">Çıkış Yap</a>
+    </div>
+  </div>
+
   <!-- Ambient Sound Generator (Web Audio API) -->
-  <div id="audio-indicator" class="sound-pill" title="Ses Aç/Kapat" data-i18n-title="title_sound">
-    <span class="sound-wave">
+  <div id="audio-indicator" class="sound-pill" title="Ses Aç/Kapat" data-i18n-title="title_sound" role="button" tabindex="0" aria-pressed="false" aria-label="Arka plan sesi aç veya kapat">
+    <span class="sound-wave" aria-hidden="true">
       <span></span><span></span><span></span><span></span>
     </span>
     <span class="sound-label" data-i18n="sound_label">Ses: Kapalı</span>
   </div>
 
   <!-- FLOATING TOP NAVIGATION -->
-  <header class="showcase-nav">
+  <header class="showcase-nav" role="banner">
     <div class="nav-container">
       <div class="nav-brand">
-        <a href="#hero" class="brand-link">
+        <a href="#hero" class="brand-link" aria-label="Ana sayfaya git - IUS Engineering Club">
           <span class="brand-title">IUS ENGINEERING CLUB</span>
         </a>
       </div>
 
-      <nav class="nav-center-menu">
-        <button class="nav-menu-btn" id="open-index-drawer">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
-          <span data-i18n="all_projects">Tüm Projeler</span>
-          <span class="counter-chip" id="nav-project-count">5</span>
+      <nav class="nav-center-menu" aria-label="Proje Kataloğu Gezintisi">
+        <button class="nav-menu-btn" id="open-index-drawer" aria-haspopup="dialog" aria-expanded="false" aria-controls="index-drawer" aria-label="Tüm proje fikirleri kataloğunu aç">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+          <span data-i18n="all_projects">Tüm Fikirler</span>
+          <span class="counter-chip" id="nav-project-count" aria-label="Toplam proje sayısı">-</span>
         </button>
       </nav>
 
       <div class="nav-actions">
-        <!-- Global Palette Switcher Pill -->
-        <div class="palette-picker-inline" id="global-palette-picker">
-          <button class="btn-palette-trigger" type="button" id="btn-global-palette-trigger" title="Genel Renk Paleti" data-i18n-title="title_palette">
-            <div class="palette-dots-preview" id="global-palette-dots">
-              <span style="background: #000000"></span>
-              <span style="background: #D1D0D0"></span>
-              <span style="background: #988686"></span>
-              <span style="background: #5C4E4E"></span>
-            </div>
-            <span class="palette-name-label" id="global-palette-label">Gothic noir</span>
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
-          </button>
-          <div class="palette-flyout-menu global-flyout" id="global-palette-flyout"></div>
-        </div>
-
-        <!-- Google Form submission button (Yönetim Fikir & Proje Havuzu) -->
-        <a href="https://docs.google.com/forms/d/e/1FAIpQLSeZ3RHZbw2BMaboNw4yS0xLALOv4KXzXdAg1gyF-434rMP5Ew/viewform" target="_blank" rel="noopener" class="btn-pill-primary" id="btn-submit-idea" title="Yeni Proje / Fikir Gönder" data-i18n-title="title_submit">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+        <!-- Google Form submission button (Fikir Gönder - Untouched) -->
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLSeZ3RHZbw2BMaboNw4yS0xLALOv4KXzXdAg1gyF-434rMP5Ew/viewform" target="_blank" rel="noopener noreferrer" class="btn-pill-primary" id="btn-submit-idea" title="Yeni Proje / Fikir Gönder" data-i18n-title="title_submit" aria-label="Google Forms üzerinden yeni proje fikri gönder">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
           <span data-i18n="btn_submit_idea">Fikir Gönder</span>
         </a>
 
         <!-- Language Switcher Pill -->
-        <div class="lang-switcher" id="lang-toggle-group">
-          <button class="lang-btn active" data-lang="tr">TR</button>
-          <button class="lang-btn" data-lang="en">EN</button>
+        <div class="lang-switcher" id="lang-toggle-group" role="group" aria-label="Dil Seçimi">
+          <button class="lang-btn active" data-lang="tr" aria-label="Türkçe arayüz">TR</button>
+          <button class="lang-btn" data-lang="en" aria-label="English interface">EN</button>
         </div>
       </div>
     </div>
   </header>
 
   <!-- VERTICAL RIGHT PROGRESS / DOT NAVIGATION -->
-  <nav class="side-progress-nav" id="side-nav" aria-label="Project Navigation">
-    <div class="progress-track">
+  <nav class="side-progress-nav" id="side-nav" aria-label="Bölüm İlerleme Gezintisi">
+    <div class="progress-track" aria-hidden="true">
       <div class="progress-bar-fill" id="progress-bar-fill"></div>
     </div>
     <ul class="progress-dots" id="progress-dots-list">
@@ -82,49 +193,51 @@
   </nav>
 
   <!-- MAIN SCROLL CONTAINER -->
-  <main class="showcase-scroll-container" id="scroll-container">
+  <main class="showcase-scroll-container" id="scroll-container" role="main">
 
     <!-- HERO SECTION -->
-    <section class="snap-section hero-section" id="hero" data-index="0">
-      <div class="hero-backdrop-glow"></div>
+    <section class="snap-section hero-section" id="hero" data-index="0" aria-labelledby="hero-title">
+      <div class="hero-backdrop-glow" aria-hidden="true"></div>
       <div class="hero-content">
-        <h1 class="hero-headline animate-slide-up">
-          <span class="gradient-text" data-i18n="hero_title_1">Kampüsü Değiştiren</span><br>
-          <span class="white-text" data-i18n="hero_title_2">Mühendislik Vizyonu.</span>
+        <h1 class="hero-headline animate-slide-up" id="hero-title">
+          <span class="gradient-text" data-i18n="hero_title_1">Kampüsü Değiştirecek</span><br>
+          <span class="white-text" data-i18n="hero_title_2">Önerilen Proje Fikirleri.</span>
         </h1>
 
         <p class="hero-subtitle animate-slide-up delay-1" data-i18n="hero_subtitle">
-          Öğrenciler tarafından tasarlandı, geleceğe göre mühendisliği yapıldı. FENS amfilerinden teknoloji ekosistemine uzanan amiral gemisi donanım, yapay zeka ve yazılım inovasyonlarımız.
+          Öğrencilerimiz tarafından hazırlanan, kampüsümüzü ve öğrenci deneyimini geliştirmesi hedeflenen proje fikirleri. FENS amfilerinden teknoloji ekosistemine uzanan donanım, yapay zeka ve yazılım önerilerimiz.
         </p>
 
         <div class="hero-cta-group animate-slide-up delay-2">
-          <a href="#project-0" class="btn-glow-primary" id="start-tour-btn">
-            <span data-i18n="hero_explore">Projeleri Keşfet</span>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 13l5 5 5-5M7 6l5 5 5-5"/></svg>
+          <a href="#powerbank-station" class="btn-glow-primary" id="start-tour-btn">
+            <span data-i18n="hero_explore">Fikirleri İncele</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M7 13l5 5 5-5M7 6l5 5 5-5"/></svg>
           </a>
-          <button class="btn-pill-secondary" id="hero-quick-filter-btn">
-            <span data-i18n="hero_flagships">Amiral Gemisi Donanımlar</span>
-          </button>
+          <a href="https://docs.google.com/forms/d/e/1FAIpQLSeZ3RHZbw2BMaboNw4yS0xLALOv4KXzXdAg1gyF-434rMP5Ew/viewform" target="_blank" rel="noopener noreferrer" class="btn-pill-secondary" id="hero-secondary-cta">
+            <span data-i18n="btn_submit_idea">Fikir Gönder</span>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+          </a>
         </div>
 
-        <div class="hero-stats-bar animate-fade-in delay-3">
+        <!-- HERO STATS BAR (Strictly calculated from data/projects.json) -->
+        <div class="hero-stats-bar animate-fade-in delay-3" id="hero-stats-bar" role="region" aria-label="Portfolyo İstatistikleri">
           <div class="stat-item">
-            <div class="stat-number">5+</div>
-            <div class="stat-label" data-i18n="stat_active_projects">Aktif Mühendislik Projesi</div>
+            <div class="stat-number" id="hero-stat-projects">-</div>
+            <div class="stat-label" data-i18n="stat_projects_label">Önerilen Proje</div>
           </div>
-          <div class="stat-divider"></div>
+          <div class="stat-divider" aria-hidden="true"></div>
           <div class="stat-item">
-            <div class="stat-number" data-i18n="stat_budget_val">1.300 KM</div>
-            <div class="stat-label" data-i18n="stat_budget">Dengeli Bütçe Mimarisi</div>
+            <div class="stat-number" id="hero-stat-flagships">-</div>
+            <div class="stat-label" data-i18n="stat_flagships_label">Amiral Gemisi Fikir</div>
           </div>
-          <div class="stat-divider"></div>
+          <div class="stat-divider" aria-hidden="true"></div>
           <div class="stat-item">
-            <div class="stat-number">100%</div>
-            <div class="stat-label" data-i18n="stat_open_source">Öğrenci Üretimi & Açık Donanım</div>
+            <div class="stat-number" id="hero-stat-categories">-</div>
+            <div class="stat-label" data-i18n="stat_categories_label">Proje Alanı</div>
           </div>
         </div>
 
-        <div class="scroll-down-hint">
+        <div class="scroll-down-hint" aria-hidden="true">
           <span data-i18n="scroll_hint">Aşağı Kaydırın</span>
           <div class="mouse-icon">
             <div class="wheel"></div>
@@ -133,47 +246,121 @@
       </div>
     </section>
 
-    <!-- DYNAMIC PROJECT SECTIONS CONTAINER -->
-    <div id="projects-wrapper">
-      <!-- Injected dynamically by app.js -->
+    <!-- DYNAMIC PROJECT ARTICLES CONTAINER -->
+    <div id="projects-wrapper" role="feed" aria-busy="false" aria-label="Önerilen Proje Fikirleri">
+      <!-- Loading Skeleton (Replaced upon fetch) -->
+      <div class="projects-loading-state" id="projects-loading-state" role="status">
+        <div class="loading-spinner" aria-hidden="true"></div>
+        <p data-i18n="loading_projects">Proje fikirleri yükleniyor...</p>
+      </div>
     </div>
+
+    <!-- SEMANTIC FOOTER -->
+    <footer class="showcase-footer" role="contentinfo">
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <span class="footer-title">IUS ENGINEERING CLUB</span>
+          <p class="footer-desc" data-i18n="footer_affiliation">Uluslararası Saraybosna Üniversitesi (IUS) Mühendislik ve Doğa Bilimleri Fakültesi (FENS) Öğrenci Kulübü Portfolyosu.</p>
+        </div>
+        <div class="footer-meta">
+          <div class="footer-links">
+            <a href="#hero" class="footer-link" data-i18n="footer_back_to_top">Yukarı Dön</a>
+            <a href="https://docs.google.com/forms/d/e/1FAIpQLSeZ3RHZbw2BMaboNw4yS0xLALOv4KXzXdAg1gyF-434rMP5Ew/viewform" target="_blank" rel="noopener noreferrer" class="footer-link" data-i18n="btn_submit_idea">Fikir Gönder</a>
+            <a href="https://www.ius.edu.ba" target="_blank" rel="noopener noreferrer" class="footer-link">IUS Resmi Web</a>
+          </div>
+          <p class="footer-copy">&copy; 2026 IUS Engineering Club. Tüm hakları saklıdır.</p>
+        </div>
+      </div>
+    </footer>
 
   </main>
 
-  <!-- QUICK INDEX DRAWER (DRAWER MODAL) -->
-  <aside class="index-drawer" id="index-drawer" aria-hidden="true">
-    <div class="drawer-overlay" id="drawer-backdrop"></div>
+  <!-- QUICK INDEX DRAWER (KATALOG ÇEKMECESİ - Arama, Kategori Filtresi & Sıralama) -->
+  <aside class="index-drawer" id="index-drawer" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="drawer-heading">
+    <div class="drawer-overlay" id="drawer-backdrop" tabindex="-1"></div>
     <div class="drawer-panel">
       <div class="drawer-header">
         <div class="drawer-title-group">
-          <h3 data-i18n="drawer_title">Proje Kataloğu</h3>
-          <p data-i18n="drawer_subtitle">Doğrudan istediğiniz inovasyona atlayın</p>
+          <h2 id="drawer-heading" data-i18n="drawer_title">Proje Kataloğu</h2>
+          <p data-i18n="drawer_subtitle">Doğrudan ilgilendiğiniz proje fikrine atlayın</p>
         </div>
-        <button class="drawer-close-btn" id="close-index-drawer" aria-label="Close">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        <button class="drawer-close-btn" id="close-index-drawer" aria-label="Kataloğu Kapat">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
         </button>
       </div>
 
+      <!-- Live Search Box -->
       <div class="drawer-search-box">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-        <input type="text" id="drawer-search-input" placeholder="Proje, kategori veya etiket ara..." data-i18n-ph="search_placeholder">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        <input type="text" id="drawer-search-input" placeholder="Proje, kategori veya etiket ara..." data-i18n-ph="search_placeholder" aria-label="Proje, kategori veya etiket ara">
       </div>
 
-      <div class="drawer-list" id="drawer-projects-list">
+      <!-- Controls: Category Chips & Sort Selector -->
+      <div class="drawer-controls-bar">
+        <div class="drawer-sort-group">
+          <label for="drawer-sort-select" data-i18n="sort_label">Sırala:</label>
+          <select id="drawer-sort-select" class="drawer-select" aria-label="Projeleri sıralama kriteri">
+            <option value="default" data-i18n="sort_default">Varsayılan Sıra</option>
+            <option value="difficulty-desc" data-i18n="sort_diff_desc">Zorluk (En Yüksek)</option>
+            <option value="difficulty-asc" data-i18n="sort_diff_asc">Zorluk (En Düşük)</option>
+            <option value="sponsor" data-i18n="sort_sponsor">Sponsor Durumu</option>
+          </select>
+        </div>
+
+        <div class="drawer-category-chips" id="drawer-category-chips" role="group" aria-label="Kategori filtreleri">
+          <!-- Dynamically populated category chips -->
+        </div>
+      </div>
+
+      <!-- Filtered List of Projects -->
+      <div class="drawer-list" id="drawer-projects-list" role="list" aria-label="Filtrelenmiş proje listesi">
         <!-- Injected dynamically via JS -->
       </div>
     </div>
   </aside>
 
-  <!-- IN-PLACE LIVE EDIT MODAL (DÜZENLEME PENCERESİ) -->
-  <div class="edit-modal-wrapper" id="edit-modal" aria-hidden="true">
-    <div class="edit-modal-overlay" id="edit-modal-backdrop"></div>
+  <!-- PROJE DETAY MODALI (Derin Link #slug ve Tam İnceleme) -->
+  <div class="detail-modal-wrapper" id="detail-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="detail-modal-title" aria-describedby="detail-modal-tagline">
+    <div class="detail-modal-overlay" id="detail-modal-backdrop" tabindex="-1"></div>
+    <div class="detail-modal-dialog">
+      <div class="detail-modal-header">
+        <div class="detail-meta-tags" id="detail-meta-tags">
+          <!-- Category, Status, Sponsor tags -->
+        </div>
+        <h2 id="detail-modal-title" class="detail-title">-</h2>
+        <p class="detail-tagline" id="detail-modal-tagline">-</p>
+        <button class="modal-close-btn" id="close-detail-modal" aria-label="Detay Penceresini Kapat">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+
+      <div class="detail-modal-body" id="detail-modal-body">
+        <!-- Dynamically injected deep dive details -->
+      </div>
+
+      <div class="detail-modal-footer">
+        <button type="button" class="btn-pill-secondary" id="btn-detail-share">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path><polyline points="16 6 12 2 8 6"></polyline><line x1="12" y1="2" x2="12" y2="15"></line></svg>
+          <span data-i18n="btn_copy_link">Bağlantıyı Kopyala</span>
+        </button>
+        <!-- Conditional Join / Support button (Only rendered if project.joinUrl is not null) -->
+        <a href="#" target="_blank" rel="noopener noreferrer" class="btn-glow-primary" id="btn-detail-join" style="display: none;">
+          <span data-i18n="btn_support_project">Bu Projeye Katıl / Destek Ol</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- IN-PLACE LIVE EDIT MODAL (Yalnızca ?admin=true modunda erişilebilir) -->
+  <div class="edit-modal-wrapper" id="edit-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="edit-modal-title">
+    <div class="edit-modal-overlay" id="edit-modal-backdrop" tabindex="-1"></div>
     <div class="edit-modal-dialog">
       <div class="edit-modal-header">
-        <h2 id="edit-modal-title" data-i18n="edit_modal_title">Projeyi Düzenle</h2>
-        <p class="modal-subtitle" data-i18n="edit_modal_desc">Metinleri, bütçeyi, görselleri ve teknik parametreleri anında değiştirin.</p>
-        <button class="modal-close-btn" id="close-edit-modal" aria-label="Close">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        <h2 id="edit-modal-title" data-i18n="edit_modal_title">Projeyi Düzenle (Yönetici Modu)</h2>
+        <p class="modal-subtitle" data-i18n="edit_modal_desc">Metinleri, sponsorluk durumunu, görselleri ve teknik parametreleri anında değiştirin.</p>
+        <button class="modal-close-btn" id="close-edit-modal" aria-label="Düzenleme Penceresini Kapat">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
         </button>
       </div>
 
@@ -202,7 +389,7 @@
           </div>
         </div>
 
-        <div class="form-row three-cols">
+        <div class="form-row two-cols">
           <div class="form-group">
             <label for="edit-category-tr" data-i18n="label_category_tr">Kategori (TR)</label>
             <input type="text" id="edit-category-tr">
@@ -211,9 +398,26 @@
             <label for="edit-author" data-i18n="label_author">Öneren / Yazar</label>
             <input type="text" id="edit-author">
           </div>
+        </div>
+
+        <!-- 3 Standard Sponsor Status Options & Project Status -->
+        <div class="form-row two-cols">
           <div class="form-group">
-            <label for="edit-budget" data-i18n="label_budget">Bütçe Planı</label>
-            <input type="text" id="edit-budget">
+            <label for="edit-sponsor-status" data-i18n="label_sponsor_status">Sponsor Durumu</label>
+            <select id="edit-sponsor-status" class="drawer-select">
+              <option value="">Belirtilmedi / None</option>
+              <option value="Sponsor Aranıyor">Sponsor Aranıyor / Seeking Sponsor</option>
+              <option value="Sponsor Gerekmiyor">Sponsor Gerekmiyor / No Sponsor Needed</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="edit-project-status" data-i18n="label_project_status">Proje Durumu</label>
+            <select id="edit-project-status" class="drawer-select">
+              <option value="Öneri">Öneri / Proposal</option>
+              <option value="Planlanan">Planlanan / Planned</option>
+              <option value="Prototip">Prototip / Prototype</option>
+              <option value="Aktif">Aktif / Active</option>
+            </select>
           </div>
         </div>
 
@@ -231,35 +435,35 @@
           </div>
         </div>
 
-        <!-- Color Palette Selection in Modal -->
+        <!-- Color Palette Selection in Modal (Admin Mode Only) -->
         <div class="form-group">
           <label data-i18n="label_palette">Renk Paleti (5 Resmi Seçenek)</label>
           <div class="palette-modal-picker" id="modal-palette-picker"></div>
           <input type="hidden" id="edit-palette" value="gothic-noir">
         </div>
 
-        <!-- AI Image Picker / Visual Selector -->
+        <!-- Visual Selector -->
         <div class="form-group">
           <label data-i18n="label_gallery">Konsept Görsel Seçimi</label>
           <div class="image-gallery-picker" id="gallery-picker">
-            <div class="gallery-choice" data-src="assets/powerbank_station_hero.jpg">
-              <img src="assets/powerbank_station_hero.jpg" alt="PowerHub">
+            <div class="gallery-choice" data-src="assets/powerbank_station_hero.webp">
+              <img src="assets/powerbank_station_hero-sm.webp" alt="PowerHub" width="120" height="75" loading="lazy">
               <span>IUS PowerHub</span>
             </div>
-            <div class="gallery-choice" data-src="assets/hackathon_event_hero.jpg">
-              <img src="assets/hackathon_event_hero.jpg" alt="DevHack">
+            <div class="gallery-choice" data-src="assets/hackathon_event_hero.webp">
+              <img src="assets/hackathon_event_hero-sm.webp" alt="DevHack" width="120" height="75" loading="lazy">
               <span>DevHack 2027</span>
             </div>
-            <div class="gallery-choice" data-src="assets/ai_lab_hero.jpg">
-              <img src="assets/ai_lab_hero.jpg" alt="AI Lab">
+            <div class="gallery-choice" data-src="assets/ai_lab_hero.webp">
+              <img src="assets/ai_lab_hero-sm.webp" alt="AI Lab" width="120" height="75" loading="lazy">
               <span>AI Labs Station</span>
             </div>
-            <div class="gallery-choice" data-src="assets/dining_app_hero.jpg">
-              <img src="assets/dining_app_hero.jpg" alt="Dining App">
+            <div class="gallery-choice" data-src="assets/dining_app_hero.webp">
+              <img src="assets/dining_app_hero-sm.webp" alt="Dining App" width="120" height="75" loading="lazy">
               <span>IUS Dining App</span>
             </div>
-            <div class="gallery-choice" data-src="assets/engineering_summit_hero.jpg">
-              <img src="assets/engineering_summit_hero.jpg" alt="Summit">
+            <div class="gallery-choice" data-src="assets/engineering_summit_hero.webp">
+              <img src="assets/engineering_summit_hero-sm.webp" alt="Summit" width="120" height="75" loading="lazy">
               <span>TechSummit Keynote</span>
             </div>
           </div>
@@ -279,11 +483,11 @@
 
         <div class="form-row two-cols">
           <div class="form-group">
-            <label for="edit-solution-tr" data-i18n="label_solution_tr">Çözüm & Mühendislik İşleyişi (Türkçe)</label>
+            <label for="edit-solution-tr" data-i18n="label_solution_tr">Önerilen Çözüm & Mühendislik İşleyişi (Türkçe)</label>
             <textarea id="edit-solution-tr" rows="4"></textarea>
           </div>
           <div class="form-group">
-            <label for="edit-solution-en" data-i18n="label_solution_en">Solution & Technical Operation (English)</label>
+            <label for="edit-solution-en" data-i18n="label_solution_en">Proposed Solution & Technical Operation (English)</label>
             <textarea id="edit-solution-en" rows="4"></textarea>
           </div>
         </div>
@@ -304,14 +508,14 @@
             <span data-i18n="btn_reset">Varsayılana Sıfırla</span>
           </button>
           <div class="footer-actions-right">
-            <button type="button" class="btn-pill-secondary" id="btn-copy-project-json">
+            <button type="button" class="btn-pill-secondary" id="btn-copy-project-json" title="Güncel JSON'u kopyalayıp repoya yapıştırabilirsiniz">
               <span data-i18n="btn_copy_json">JSON Kopyala</span>
             </button>
-            <button type="button" class="btn-pill-secondary" id="btn-download-project-json">
-              <span data-i18n="btn_download_json">JSON İndir</span>
+            <button type="button" class="btn-pill-secondary" id="btn-download-project-json" title="Repoya commit etmek üzere projects.json dosyasını indirin">
+              <span data-i18n="btn_download_json">projects.json İndir</span>
             </button>
             <button type="submit" class="btn-glow-primary" id="btn-save-project-edits">
-              <span data-i18n="btn_save_changes">Değişiklikleri Kaydet</span>
+              <span data-i18n="btn_save_changes">Önizlemeyi Kaydet</span>
             </button>
           </div>
         </div>
@@ -320,10 +524,9 @@
   </div>
 
   <!-- TOAST NOTIFICATIONS -->
-  <div class="toast-container" id="toast-container"></div>
+  <div class="toast-container" id="toast-container" role="status" aria-live="polite"></div>
 
-  <!-- LOAD DATASET & APP LOGIC -->
-  <script src="projects-data.js"></script>
+  <!-- LOAD APP LOGIC (Single Source: data/projects.json via fetch) -->
   <script src="app.js"></script>
 </body>
 </html>
