@@ -24,7 +24,7 @@
       hero_explore: "Projeleri Keşfet",
       hero_flagships: "Mühendislik İnovasyonları",
       stat_active_projects: "Aktif Mühendislik Projesi",
-      stat_students: "Aktif Mühendis & Üye",
+      stat_prelaunch_members: "Açılmadan +35 Üye",
       stat_departments: "FENS Disiplini",
       stat_events: "Teknik Etkinlik & Çalıştay",
       stat_open_source: "Öğrenci Üretimi & Açık Donanım",
@@ -43,7 +43,7 @@
       label_budget: "Bütçe Planı",
       label_difficulty: "Zorluk Seviyesi (1 - 5)",
       label_owner: "Proje Sorumlusu / Ekip (TR)",
-      label_palette: "Renk Paleti (5 Resmi Seçenek)",
+      label_palette: "Renk Paleti",
       label_gallery: "Konsept Görsel Seçimi",
       ph_custom_url: "veya Özel Görsel URL'si yapıştırın...",
       label_problem_tr: "Problem / Gerekçe (Türkçe)",
@@ -85,7 +85,7 @@
       hero_explore: "Explore Innovations",
       hero_flagships: "Engineering Portfolio",
       stat_active_projects: "Active Engineering Projects",
-      stat_students: "Student Engineers & Members",
+      stat_prelaunch_members: "+35 Pre-Launch Members",
       stat_departments: "FENS Disciplines",
       stat_events: "Technical Workshops & Hackathons",
       stat_open_source: "Student Built & Open Hardware",
@@ -103,8 +103,8 @@
       label_author: "Submitted By / Author",
       label_budget: "Budget Scope",
       label_difficulty: "Difficulty Level (1 - 5)",
-      label_owner: "Project Lead / Team (TR)",
-      label_palette: "Color Palette (5 Official Choices)",
+      label_owner: "Project Lead / Team",
+      label_palette: "Color Palette",
       label_gallery: "Concept Visual Selection",
       ph_custom_url: "or paste custom Image URL...",
       label_problem_tr: "Problem / Motivation (Turkish)",
@@ -175,7 +175,26 @@
     'Sergi': { en: 'Exhibition', tr: 'Sergi' },
     'Exhibition': { en: 'Exhibition', tr: 'Sergi' },
     'Kariyer': { en: 'Career Track', tr: 'Kariyer' },
-    'Career Track': { en: 'Career Track', tr: 'Kariyer' }
+    'Career Track': { en: 'Career Track', tr: 'Kariyer' },
+    // Spec Values Translations
+    'Haftalık Düzenli Atölye': { en: 'Weekly Interactive Sessions', tr: 'Haftalık Düzenli Atölye' },
+    'Uygulamalı Canlı Kodlama & Atölye': { en: 'Hands-On Live Coding & Build Labs', tr: 'Uygulamalı Canlı Kodlama & Atölye' },
+    'FENS Bilgisayar Laboratuvarı': { en: 'FENS Computer Laboratory', tr: 'FENS Bilgisayar Laboratuvarı' },
+    'IEC Doğrulanabilir Dijital Katılım Belgesi': { en: 'IEC Verifiable Digital Credential', tr: 'IEC Doğrulanabilir Dijital Katılım Belgesi' },
+    '80+ Mühendislik Öğrencisi (20 Takım)': { en: '80+ Engineering Students (20 Teams)', tr: '80+ Mühendislik Öğrencisi (20 Takım)' },
+    '24 Saat Kesintisiz Maraton': { en: '24 Hours Non-Stop Sprint', tr: '24 Saat Kesintisiz Maraton' },
+    'Staj İmkânları + Donanım/Teknoloji Ödülleri': { en: 'Internship Offers + Tech & Hardware Awards', tr: 'Staj İmkânları + Donanım/Teknoloji Ödülleri' },
+    'IUS FENS Bilgisayar & Donanım Labları': { en: 'IUS FENS Computer & Hardware Labs', tr: 'IUS FENS Bilgisayar & Donanım Labları' },
+    'Mobil Uyumlu Responsive Web / PWA': { en: 'Responsive Mobile Web / PWA', tr: 'Mobil Uyumlu Responsive Web / PWA' },
+    'Yemekhane Günlük Menü API & CMS': { en: 'Cafeteria Daily Menu API & Headless CMS', tr: 'Yemekhane Günlük Menü API & CMS' },
+    'Sıfır Maliyet (Öğrenci Geliştirmesi)': { en: 'Zero Cost (Student Open-Source Development)', tr: 'Sıfır Maliyet (Öğrenci Geliştirmesi)' },
+    'Tüm Kampüs Kafeterya ve Yemekhaneleri': { en: 'All Campus Dining Halls & Cafes', tr: 'Tüm Kampüs Kafeterya ve Yemekhaneleri' },
+    'BMS Batarya Yönetimi & Termal Sensörler': { en: 'BMS Battery Protection & Thermal Sensors', tr: 'BMS Batarya Yönetimi & Termal Sensörler' },
+    'FENS Lab 3D Baskı / CNC Metal Gövde': { en: 'FENS Lab 3D Printed / CNC Aluminum Enclosure', tr: 'FENS Lab 3D Baskı / CNC Metal Gövde' },
+    '150+ Katılımcı (Öğrenciler & Sektör)': { en: '150+ Attendees (Students & Industry)', tr: '150+ Katılımcı (Öğrenciler & Sektör)' },
+    'Tam Gün Konferans + Demo Fuarı': { en: 'Full-Day Conference + Demo Fair', tr: 'Tam Gün Konferans + Demo Fuarı' },
+    'IUS Ana Amfi (Main Amphitheater)': { en: 'IUS Main Amphitheater', tr: 'IUS Ana Amfi (Main Amphitheater)' },
+    '6+ Kurumsal Şirket (Saraybosna & Uluslararası)': { en: '6+ Corporate Partners (Sarajevo & International)', tr: '6+ Kurumsal Şirket (Saraybosna & Uluslararası)' }
   };
 
   // --------------------------------------------------------------------------
@@ -370,6 +389,9 @@
         let v = typeof s.value === 'object' ? (s.value[currentLang] || s.value.tr || '') : s.value;
         if (SPEC_TRANSLATIONS[l]) {
           l = SPEC_TRANSLATIONS[l][currentLang] || l;
+        }
+        if (SPEC_TRANSLATIONS[v]) {
+          v = SPEC_TRANSLATIONS[v][currentLang] || v;
         }
         allSpecs.push({ label: l, value: v });
       });
