@@ -130,8 +130,21 @@ body {
 .nav-brand .brand-link {
   display: flex;
   align-items: center;
+  gap: 12px;
   text-decoration: none;
   color: inherit;
+}
+
+.brand-club-logo {
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+  border-radius: 50%;
+  filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.2));
+  transition: transform 0.25s ease;
+}
+.brand-link:hover .brand-club-logo {
+  transform: scale(1.06) rotate(5deg);
 }
 
 .brand-title {

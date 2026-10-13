@@ -22,7 +22,7 @@
       hero_title_2: "Mühendislik Vizyonu.",
       hero_subtitle: "Öğrenciler tarafından tasarlandı, geleceğe göre mühendisliği yapıldı. FENS amfilerinden teknoloji ekosistemine uzanan amiral gemisi donanım, yapay zeka ve yazılım inovasyonlarımız.",
       hero_explore: "Projeleri Keşfet",
-      hero_flagships: "Amiral Gemisi Donanımlar",
+      hero_flagships: "Mühendislik İnovasyonları",
       stat_active_projects: "Aktif Mühendislik Projesi",
       stat_budget: "Dengeli Bütçe Mimarisi",
       stat_budget_val: "1.300 KM",
@@ -82,7 +82,7 @@
       hero_title_2: "Transforming Campus.",
       hero_subtitle: "Crafted by students, engineered for the future. From FENS lecture halls to the regional tech ecosystem: flagship hardware, AI, and software innovations.",
       hero_explore: "Explore Innovations",
-      hero_flagships: "Flagship Hardware",
+      hero_flagships: "Engineering Portfolio",
       stat_active_projects: "Active Engineering Projects",
       stat_budget: "Balanced Budget Architecture",
       stat_budget_val: "1,300 KM",
@@ -214,6 +214,12 @@
   let soundEnabled = false;
   let audioCtx = null;
   let activeSectionIndex = 0;
+  // Admin Mode: Edit button is hidden from public visitors, accessible only with ?admin=1 or secret shortcut
+  const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.get('admin') === '1' || urlParams.get('edit') === '1') {
+    localStorage.setItem('iec_admin_mode', '1');
+  }
+  let isAdminMode = localStorage.getItem('iec_admin_mode') === '1';
 
   // Retrieve customized projects from localStorage if available
   let projectsData = [];
@@ -422,10 +428,12 @@
 
             <!-- Action Buttons -->
             <div class="project-actions-row">
+              ${isAdminMode ? `
               <button class="btn-edit-trigger" data-edit-index="${index}">
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
                 <span>${I18N[currentLang].btn_edit}</span>
               </button>
+              ` : ''}
 
               <button class="btn-icon-subtle" data-share-index="${index}" title="${I18N[currentLang].btn_share}">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path><polyline points="16 6 12 2 8 6"></polyline><line x1="12" y1="2" x2="12" y2="15"></line></svg>
@@ -1077,9 +1085,18 @@
 
     if (modalOpen || drawerOpen) return;
 
-    // Normal web scrolling with keyboard - no hijacking or restricting page flow
-    if (e.key === 'e' || e.key === 'E') {
-      // Shortcut to edit currently viewed project
+    // Secret Admin Toggle (Ctrl+Shift+E)
+    if ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === 'E' || e.key === 'e')) {
+      e.preventDefault();
+      isAdminMode = !isAdminMode;
+      localStorage.setItem('iec_admin_mode', isAdminMode ? '1' : '0');
+      showToast(isAdminMode ? "Yönetici Düzenleme Modu Açıldı (Admin ON)" : "Yönetici Modu Kapatıldı (Admin OFF)");
+      renderAllProjects();
+      return;
+    }
+
+    // Normal web scrolling with keyboard - edit shortcut only available in admin mode
+    if (isAdminMode && (e.key === 'e' || e.key === 'E')) {
       if (activeSectionIndex > 0) {
         openEditModal(activeSectionIndex - 1);
       }
