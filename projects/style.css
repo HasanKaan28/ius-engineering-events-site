@@ -499,6 +499,9 @@ html, body {
   z-index: 2;
   max-width: 900px;
   margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .hero-headline {
@@ -654,6 +657,13 @@ html, body {
 @keyframes mouseWheel {
   0% { transform: translateY(0); opacity: 1; }
   100% { transform: translateY(8px); opacity: 0; }
+}
+
+/* Accessibility & Ergonomics: Hide scroll down hint on short viewports (< 800px height, e.g. 1366x768 laptop) & mobile landscape */
+@media (max-height: 800px), (orientation: landscape) and (max-height: 520px) {
+  .scroll-down-hint {
+    display: none !important;
+  }
 }
 
 /* ==========================================================================

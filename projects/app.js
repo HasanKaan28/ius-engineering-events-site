@@ -463,11 +463,11 @@
 
       // Robust candidate URLs for GitHub Pages subpath and query versioning
       const candidateUrls = [
-        './data/projects.json?v=3',
-        'data/projects.json?v=3'
+        './data/projects.json?v=4',
+        'data/projects.json?v=4'
       ];
       if (window.location.pathname.includes('/projects')) {
-        candidateUrls.push('/ius-engineering-events-site/projects/data/projects.json?v=3');
+        candidateUrls.push('/ius-engineering-events-site/projects/data/projects.json?v=4');
       }
 
       let data = null;
