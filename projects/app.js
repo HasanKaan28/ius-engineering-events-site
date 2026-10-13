@@ -214,8 +214,8 @@
       about_stat_initiative: "Student-Led Initiative",
       about_cta_join: "Join This Vision / Submit Idea",
       about_cta_web: "IUS Official Portal",
-      page_seo_title: "IEC // Project Proposals — IUS Engineering Portfolio",
-      page_seo_desc: "International University of Sarajevo (IUS) Engineering Club student project proposals showcase. Hardware, IoT, software and artificial intelligence concepts engineered by FENS students."
+      page_seo_title: "IEC // Innovation Showcase — IUS Engineering Portfolio",
+      page_seo_desc: "Student engineering project proposals and innovation portfolio at International University of Sarajevo (IUS). Hardware, IoT, software and AI initiatives engineered by FENS students."
     }
   };
 
@@ -318,7 +318,7 @@
   function getLocalizedValue(obj, lang = currentLang) {
     if (!obj) return '';
     if (typeof obj === 'object') {
-      return obj[lang] || obj.tr || obj.en || '';
+      return obj[lang] || obj.en || obj.tr || '';
     }
     return String(obj);
   }
@@ -474,9 +474,12 @@
   }
 
   // --------------------------------------------------------------------------
-  // 5. STATE & STORAGE
+  // 5. STATE & STORAGE (Default: English; Turkish available as an option)
   // --------------------------------------------------------------------------
-  let currentLang = localStorage.getItem('iec_lang') || 'tr';
+  const urlLangParam = new URLSearchParams(window.location.search).get('lang');
+  let currentLang = (urlLangParam === 'tr' || urlLangParam === 'en')
+    ? urlLangParam
+    : (localStorage.getItem('iec_user_pref_lang') || 'en');
   let soundEnabled = false;
   let audioCtx = null;
   let activeSectionIndex = 0;
@@ -1443,6 +1446,7 @@
   // --------------------------------------------------------------------------
   function setLanguage(lang) {
     currentLang = lang;
+    localStorage.setItem('iec_user_pref_lang', lang);
     localStorage.setItem('iec_lang', lang);
     document.documentElement.lang = lang;
     document.body.className = `lang-${lang} theme-dark`;

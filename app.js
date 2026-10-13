@@ -234,10 +234,10 @@
     }
   };
 
-  // --------------------------------------------------------------------------
-  // 2. STATE & STORAGE
-  // --------------------------------------------------------------------------
-  let currentLang = localStorage.getItem('iec_lang') || 'tr';
+  const urlLangParam = new URLSearchParams(window.location.search).get('lang');
+  let currentLang = (urlLangParam === 'tr' || urlLangParam === 'en')
+    ? urlLangParam
+    : (localStorage.getItem('iec_user_pref_lang') || 'en');
   let soundEnabled = false;
   let audioCtx = null;
   let activeSectionIndex = 0;
@@ -1046,6 +1046,7 @@
   // --------------------------------------------------------------------------
   function setLanguage(lang) {
     currentLang = lang;
+    localStorage.setItem('iec_user_pref_lang', lang);
     localStorage.setItem('iec_lang', lang);
     document.documentElement.lang = lang;
     document.body.className = `lang-${lang} theme-dark`;
