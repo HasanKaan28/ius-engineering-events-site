@@ -97,7 +97,11 @@
       "tr": "FENS dekanlığına teknik proje önerisinin sunulması ve ilk prototip donanım bileşenleri için sponsorluk görüşmelerine başlanması planlanmaktadır.",
       "en": "Present the engineering proposal to FENS Deanship and initiate preliminary talks with potential hardware sponsors for prototyping modules."
     },
-    "palette": "gothic-noir"
+    "palette": "gothic-noir",
+    "image_alt": {
+      "tr": "IUS PowerHub (Akıllı Powerbank İstasyonu)",
+      "en": "IUS PowerHub (Smart Campus Powerbank Station)"
+    }
   },
   {
     "id": "dining-menu-system",
@@ -195,7 +199,11 @@
       "tr": "Kampüs yönetimi ve yemekhane işletmesi ile görüşülerek günlük menü veri akışı mekanizmasının kararlaştırılması hedeflenmektedir.",
       "en": "Consult with campus administration and dining staff to secure a verified daily menu data update process."
     },
-    "palette": "cobalt-sky"
+    "palette": "cobalt-sky",
+    "image_alt": {
+      "tr": "IUS Dining (Yemekhane & Menü Takip Sistemi)",
+      "en": "IUS Dining (Cafeteria & Live Menu App)"
+    }
   },
   {
     "id": "devhack-2027",
@@ -295,7 +303,11 @@
       "tr": "FENS dekanlığı ile takvim uygunluğunun görüşülmesi ve teknoloji firmalarıyla sponsorluk temaslarının başlatılması planlanmaktadır.",
       "en": "Coordinate available calendar dates with FENS Deanship and open preliminary discussions with partner tech companies for sponsorship packages."
     },
-    "palette": "chili-spice"
+    "palette": "chili-spice",
+    "image_alt": {
+      "tr": "IUS DevHack 2027",
+      "en": "IUS DevHack 2027"
+    }
   },
   {
     "id": "ai-prompt-labs",
@@ -395,7 +407,11 @@
       "tr": "Örnek atölye içeriğinin hazırlanması ve lab kullanımı için FENS yönetimine başvuru yapılması hedeflenmektedir.",
       "en": "Draft the introductory workshop syllabus and submit a reservation inquiry for FENS lab availability."
     },
-    "palette": "ink-wash"
+    "palette": "ink-wash",
+    "image_alt": {
+      "tr": "Hands-On AI & Prompt Engineering Labs",
+      "en": "Hands-On AI & Prompt Engineering Labs"
+    }
   },
   {
     "id": "ius-techsummit-2027",
@@ -495,6 +511,10 @@
       "tr": "Amfi takviminin doğrulanması ve potansiyel konuşmacı listesi için ön araştırma yapılması planlanmaktadır.",
       "en": "Confirm amphitheater schedule availability and compile a preliminary list of prospective keynote speakers."
     },
-    "palette": "urban-loft"
+    "palette": "urban-loft",
+    "image_alt": {
+      "tr": "IUS TechSummit 2027",
+      "en": "IUS TechSummit 2027"
+    }
   }
 ]
