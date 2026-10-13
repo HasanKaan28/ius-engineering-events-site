@@ -1,7 +1,7 @@
 # NVIDIA Otomatik Çeviri Denetim Raporu
 
-- **Tarih (UTC):** 2026-10-13 23:46:40
-- **Kullanılan Model:** `Tanımsız / Çevrimdışı`
+- **Tarih (UTC):** 2026-10-13 23:47:04
+- **Kullanılan Model:** `meta/llama-3.3-70b-instruct`
 - **İşlenen Toplam Alan:** 0
 
 | Proje ID | Alan | Türkçe Kaynak | İngilizce Çeviri | Durum | Notlar |
