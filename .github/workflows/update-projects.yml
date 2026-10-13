@@ -8,13 +8,13 @@ on:
       - 'scripts/build_projects.py'
       - 'scripts/image_style.txt'
   schedule:
-    - cron: '*/30 * * * *'
+    - cron: '*/15 * * * *'
   workflow_dispatch:
     inputs:
       direct_commit:
         description: 'Doğrudan main dalına commit at (PR açmak yerine)?'
         required: false
-        default: false
+        default: true
         type: boolean
       dry_run:
         description: 'Dry-run modu (Değişiklik yapmadan simüle et)?'
@@ -26,10 +26,11 @@ on:
 permissions:
   contents: write
   pull-requests: write
+  pages: write
 
-# İsteğe göre doğrudan commit atma varsayılanı (PR için 'false', doğrudan main için 'true')
+# İsteğe göre doğrudan commit atma varsayılanı (Doğrudan canlı yayına almak için 'true')
 env:
-  DIRECT_COMMIT: 'false'
+  DIRECT_COMMIT: 'true'
 
 jobs:
   build-and-sync:
@@ -77,14 +78,17 @@ jobs:
             echo "Herhangi bir değişiklik bulunmadı."
           fi
 
-      - name: Commit and push directly to main
+      - name: Commit and push directly to main (Live Site Publish)
         if: steps.git_status.outputs.has_changes == 'true' && (env.DIRECT_COMMIT == 'true' || github.event.inputs.direct_commit == true)
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add data/ projects/data/ assets/ projects/assets/
-          git commit -m "chore(data): auto-update projects & concept renders from Excel [skip ci]"
+          git commit -m "chore(data): auto-update projects & concept renders from Form/Excel"
           git push origin main
+          gh api -X POST repos/${{ github.repository }}/pages/builds || true
 
       - name: Create Pull Request for Review
         if: steps.git_status.outputs.has_changes == 'true' && env.DIRECT_COMMIT != 'true' && github.event.inputs.direct_commit != true
