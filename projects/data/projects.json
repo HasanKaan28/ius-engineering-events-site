@@ -36,9 +36,9 @@
       "tr": "Tüm IUS Öğrencileri & Personel",
       "en": "All IUS Students & Staff"
     },
-    "image": "assets/powerbank_station_hero.webp",
+    "image": "./assets/powerbank_station_hero.webp",
     "gallery": [
-      "assets/powerbank_station_hero.webp"
+      "./assets/powerbank_station_hero.webp"
     ],
     "problem": {
       "tr": "Amfilerde, kütüphanede ve kafeteryada priz yetersizliği sebebiyle öğrencilerin ders aralarında cihazlarının şarjsız kalması ve priz arama karmaşası yaşaması.",
@@ -136,9 +136,9 @@
       "tr": "Tüm IUS Öğrencileri & Akademisyenler",
       "en": "All IUS Students & Faculty"
     },
-    "image": "assets/dining_app_hero.webp",
+    "image": "./assets/dining_app_hero.webp",
     "gallery": [
-      "assets/dining_app_hero.webp"
+      "./assets/dining_app_hero.webp"
     ],
     "problem": {
       "tr": "Yemekhanede fiziki panoların her zaman güncel tutulamaması ve öğrencilerin günün menüsünü öğrenmek için bizzat yemekhaneye gitmek zorunda kalması.",
@@ -234,9 +234,9 @@
       "tr": "FENS CS/SE/EE Öğrencileri & Saraybosna Yazılımcıları",
       "en": "FENS CS/SE/EE Students & Sarajevo Dev Ecosystem"
     },
-    "image": "assets/hackathon_event_hero.webp",
+    "image": "./assets/hackathon_event_hero.webp",
     "gallery": [
-      "assets/hackathon_event_hero.webp"
+      "./assets/hackathon_event_hero.webp"
     ],
     "problem": {
       "tr": "Öğrencilerin teorik ders projelerinin ötesine geçip gerçek dünya temposunda takım halinde çalışan MVP ürünler ortaya koyabilecekleri rekabetçi bir yarışma ortamı eksikliği.",
@@ -334,9 +334,9 @@
       "tr": "Tüm Üniversite Bölümleri (Yeni Başlayanlar & İleri Düzey)",
       "en": "All Academic Departments (Beginners to Advanced)"
     },
-    "image": "assets/ai_lab_hero.webp",
+    "image": "./assets/ai_lab_hero.webp",
     "gallery": [
-      "assets/ai_lab_hero.webp"
+      "./assets/ai_lab_hero.webp"
     ],
     "problem": {
       "tr": "Yapay zeka araçlarının hızla gelişmesine rağmen öğrencilerin üretim süreçlerinde LLM'leri ve akıllı IDE'leri profesyonel seviyede kullanabilmesi için yapılandırılmış bir akran rehberliği eksikliği.",
@@ -434,9 +434,9 @@
       "tr": "150+ Öğrenci, Akademisyenler ve Şirket Yöneticileri",
       "en": "150+ Students, Academics and Industry Leaders"
     },
-    "image": "assets/engineering_summit_hero.webp",
+    "image": "./assets/engineering_summit_hero.webp",
     "gallery": [
-      "assets/engineering_summit_hero.webp"
+      "./assets/engineering_summit_hero.webp"
     ],
     "problem": {
       "tr": "Mühendislik öğrencilerinin mezuniyet öncesinde sektör yöneticileriyle doğrudan tanışıp projelerini sunabileceği prestijli bir kampüs zirvesi ihtiyacı.",

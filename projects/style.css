@@ -622,10 +622,9 @@ html, body {
 }
 
 .scroll-down-hint {
-  position: absolute;
-  bottom: 24px;
-  left: 50%;
-  transform: translateX(-50%);
+  position: relative;
+  margin-top: 42px;
+  margin-bottom: 16px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1804,13 +1803,23 @@ html, body {
   }
   .hero-stats-bar {
     display: grid;
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr);
     gap: 16px;
-    padding: 18px 24px;
+    padding: 16px 20px;
     width: 100%;
+    margin-top: 24px;
+  }
+  @media (max-width: 400px) {
+    .hero-stats-bar {
+      grid-template-columns: 1fr;
+    }
   }
   .stat-divider {
     display: none;
+  }
+  .scroll-down-hint {
+    margin-top: 28px;
+    margin-bottom: 24px;
   }
 
   .project-cards-container {

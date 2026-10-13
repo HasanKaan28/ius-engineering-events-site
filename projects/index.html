@@ -38,8 +38,8 @@
   <meta name="twitter:image:alt" content="IUS PowerHub Akıllı Powerbank İstasyonu Mühendislik Proje Fikri">
 
   <!-- Favicon Set -->
-  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
-  <link rel="alternate icon" type="image/x-icon" href="assets/favicon.svg">
+  <link rel="icon" type="image/svg+xml" href="./assets/favicon.svg">
+  <link rel="alternate icon" type="image/x-icon" href="./assets/favicon.svg">
 
   <!-- Structured Data: JSON-LD (Schema.org Organization, WebSite & ItemList) -->
   <script type="application/ld+json">
@@ -122,7 +122,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
   
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="./style.css?v=3">
 </head>
 <body class="lang-tr theme-dark">
 
@@ -224,11 +224,6 @@
           <div class="stat-item">
             <div class="stat-number" id="hero-stat-projects">-</div>
             <div class="stat-label" data-i18n="stat_projects_label">Önerilen Proje</div>
-          </div>
-          <div class="stat-divider" aria-hidden="true"></div>
-          <div class="stat-item">
-            <div class="stat-number" id="hero-stat-flagships">-</div>
-            <div class="stat-label" data-i18n="stat_flagships_label">Amiral Gemisi Fikir</div>
           </div>
           <div class="stat-divider" aria-hidden="true"></div>
           <div class="stat-item">
@@ -446,24 +441,24 @@
         <div class="form-group">
           <label data-i18n="label_gallery">Konsept Görsel Seçimi</label>
           <div class="image-gallery-picker" id="gallery-picker">
-            <div class="gallery-choice" data-src="assets/powerbank_station_hero.webp">
-              <img src="assets/powerbank_station_hero-sm.webp" alt="PowerHub" width="120" height="75" loading="lazy">
+            <div class="gallery-choice" data-src="./assets/powerbank_station_hero.webp">
+              <img src="./assets/powerbank_station_hero-sm.webp" alt="PowerHub" width="120" height="75" loading="lazy">
               <span>IUS PowerHub</span>
             </div>
-            <div class="gallery-choice" data-src="assets/hackathon_event_hero.webp">
-              <img src="assets/hackathon_event_hero-sm.webp" alt="DevHack" width="120" height="75" loading="lazy">
+            <div class="gallery-choice" data-src="./assets/hackathon_event_hero.webp">
+              <img src="./assets/hackathon_event_hero-sm.webp" alt="DevHack" width="120" height="75" loading="lazy">
               <span>DevHack 2027</span>
             </div>
-            <div class="gallery-choice" data-src="assets/ai_lab_hero.webp">
-              <img src="assets/ai_lab_hero-sm.webp" alt="AI Lab" width="120" height="75" loading="lazy">
+            <div class="gallery-choice" data-src="./assets/ai_lab_hero.webp">
+              <img src="./assets/ai_lab_hero-sm.webp" alt="AI Lab" width="120" height="75" loading="lazy">
               <span>AI Labs Station</span>
             </div>
-            <div class="gallery-choice" data-src="assets/dining_app_hero.webp">
-              <img src="assets/dining_app_hero-sm.webp" alt="Dining App" width="120" height="75" loading="lazy">
+            <div class="gallery-choice" data-src="./assets/dining_app_hero.webp">
+              <img src="./assets/dining_app_hero-sm.webp" alt="Dining App" width="120" height="75" loading="lazy">
               <span>IUS Dining App</span>
             </div>
-            <div class="gallery-choice" data-src="assets/engineering_summit_hero.webp">
-              <img src="assets/engineering_summit_hero-sm.webp" alt="Summit" width="120" height="75" loading="lazy">
+            <div class="gallery-choice" data-src="./assets/engineering_summit_hero.webp">
+              <img src="./assets/engineering_summit_hero-sm.webp" alt="Summit" width="120" height="75" loading="lazy">
               <span>TechSummit Keynote</span>
             </div>
           </div>
@@ -527,6 +522,6 @@
   <div class="toast-container" id="toast-container" role="status" aria-live="polite"></div>
 
   <!-- LOAD APP LOGIC (Single Source: data/projects.json via fetch) -->
-  <script src="app.js"></script>
+  <script src="./app.js?v=3"></script>
 </body>
 </html>

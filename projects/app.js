@@ -35,7 +35,6 @@
       hero_subtitle: "Öğrencilerimiz tarafından hazırlanan, kampüsümüzü ve öğrenci deneyimini geliştirmesi hedeflenen proje fikirleri. FENS amfilerinden teknoloji ekosistemine uzanan donanım, yapay zeka ve yazılım önerilerimiz.",
       hero_explore: "Fikirleri İncele",
       stat_projects_label: "Önerilen Proje",
-      stat_flagships_label: "Amiral Gemisi Fikir",
       stat_categories_label: "Proje Alanı",
       scroll_hint: "Aşağı Kaydırın",
       skip_to_content: "İçeriğe Doğrudan Geç",
@@ -49,7 +48,7 @@
       sort_sponsor: "Sponsor Durumu",
       filter_all: "Tümü",
       loading_projects: "Proje fikirleri yükleniyor...",
-      error_loading: "Proje verileri yüklenemedi. Lütfen bağlantınızı kontrol edin veya sayfayı yenileyin.",
+      error_loading: "Projeler yüklenemedi, sayfayı yenileyin",
       btn_retry: "Yeniden Dene",
       btn_inspect_detail: "Detayları İncele",
       btn_copy_link: "Bağlantıyı Kopyala",
@@ -115,7 +114,6 @@
       hero_subtitle: "Project proposals developed by engineering students to enhance campus life. Proposed hardware, AI, and software concepts from FENS lecture halls to the tech ecosystem.",
       hero_explore: "Explore Proposals",
       stat_projects_label: "Proposed Projects",
-      stat_flagships_label: "Flagship Proposals",
       stat_categories_label: "Project Domains",
       scroll_hint: "Scroll Down",
       skip_to_content: "Skip directly to content",
@@ -129,7 +127,7 @@
       sort_sponsor: "Sponsor Status",
       filter_all: "All",
       loading_projects: "Loading proposed project ideas...",
-      error_loading: "Could not load projects dataset. Please verify network connectivity or reload.",
+      error_loading: "Projects could not be loaded, please reload the page",
       btn_retry: "Retry",
       btn_inspect_detail: "Inspect Details",
       btn_copy_link: "Copy Direct Link",
@@ -463,25 +461,58 @@
         }
       }
 
-      const response = await fetch('data/projects.json');
-      if (!response.ok) {
-        throw new Error(`HTTP Error ${response.status}: ${response.statusText}`);
+      // Robust candidate URLs for GitHub Pages subpath and query versioning
+      const candidateUrls = [
+        './data/projects.json?v=3',
+        'data/projects.json?v=3'
+      ];
+      if (window.location.pathname.includes('/projects')) {
+        candidateUrls.push('/ius-engineering-events-site/projects/data/projects.json?v=3');
       }
-      const data = await response.json();
-      if (!Array.isArray(data) || data.length === 0) {
-        throw new Error("Dataset is empty or malformed");
+
+      let data = null;
+      let lastError = null;
+
+      for (const url of candidateUrls) {
+        try {
+          const response = await fetch(url);
+          if (response.ok) {
+            const parsed = await response.json();
+            if (Array.isArray(parsed) && parsed.length > 0) {
+              data = parsed;
+              break;
+            }
+          } else {
+            lastError = new Error(`HTTP ${response.status} (${url})`);
+          }
+        } catch (fetchErr) {
+          lastError = fetchErr;
+        }
       }
+
+      if (!data) {
+        throw lastError || new Error("Dataset is empty or could not be loaded");
+      }
+
       projectsData = data;
       onDataLoaded();
     } catch (err) {
-      console.error("Failed to load projects data:", err);
+      console.error("Projeler yüklenemedi, sayfayı yenileyin:", err);
+
+      const navCount = document.getElementById('nav-project-count');
+      if (navCount) navCount.textContent = '!';
+      const statProjects = document.getElementById('hero-stat-projects');
+      if (statProjects) statProjects.textContent = '!';
+      const statCategories = document.getElementById('hero-stat-categories');
+      if (statCategories) statCategories.textContent = '!';
+
       if (wrapper) {
         wrapper.innerHTML = `
-          <div class="projects-error-card" role="alert">
-            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
-            <h3>${escapeHtml(I18N[currentLang].error_loading)}</h3>
-            <p class="error-detail">${escapeHtml(err.message)}</p>
-            <button class="btn-glow-primary" id="btn-retry-load">
+          <div class="projects-error-card" role="alert" style="text-align: center; padding: 48px 24px; margin: 40px auto; max-width: 520px; background: rgba(20, 20, 26, 0.85); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); backdrop-filter: blur(20px);">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--accent-gold)" stroke-width="2" aria-hidden="true" style="margin: 0 auto 16px;"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+            <h3 style="font-family: var(--font-heading); color: #FFFFFF; font-size: 1.25rem; margin-bottom: 8px;">${escapeHtml(I18N[currentLang].error_loading)}</h3>
+            <p class="error-detail" style="color: var(--text-tertiary); font-size: 0.85rem; margin-bottom: 24px;">${escapeHtml(err.message)}</p>
+            <button class="btn-glow-primary" id="btn-retry-load" style="margin: 0 auto;">
               <span>${escapeHtml(I18N[currentLang].btn_retry)}</span>
             </button>
           </div>
@@ -500,18 +531,16 @@
   }
 
   // --------------------------------------------------------------------------
-  // 7. HERO METRICS (Strictly Derived from Dataset)
+  // 7. HERO METRICS (Strictly Derived from Dataset: Projects & Categories)
   // --------------------------------------------------------------------------
   function updateHeroStats() {
     const statProjects = document.getElementById('hero-stat-projects');
-    const statFlagships = document.getElementById('hero-stat-flagships');
     const statCategories = document.getElementById('hero-stat-categories');
     const navCount = document.getElementById('nav-project-count');
 
     if (projectsData.length === 0) return;
 
     const totalProjects = projectsData.length;
-    const flagshipCount = projectsData.filter(p => p.is_flagship).length;
     const categoryCount = new Set(projectsData.map(p => {
       if (typeof p.category === 'object') return p.category.tr || p.category.en;
       return p.category;
@@ -520,7 +549,6 @@
     if (navCount) navCount.textContent = totalProjects;
 
     animateCount(statProjects, totalProjects);
-    animateCount(statFlagships, flagshipCount);
     animateCount(statCategories, categoryCount);
   }
 
