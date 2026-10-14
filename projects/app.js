@@ -1314,6 +1314,9 @@
   // --------------------------------------------------------------------------
   function attach3DTilt(cardElement) {
     if (!cardElement) return;
+    if (window.matchMedia && window.matchMedia('(hover: none) and (pointer: coarse)').matches) {
+      return; // Touch device: bypass tilt calculations for silky smooth touch scrolling
+    }
 
     cardElement.addEventListener('mousemove', (e) => {
       const rect = cardElement.getBoundingClientRect();
