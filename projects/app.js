@@ -67,6 +67,8 @@
       label_sponsor_status: "Sponsor Durumu",
       label_project_status: "Proje Durumu",
       label_difficulty: "Zorluk Seviyesi (1 - 5)",
+      diff_label: "Zorluk:",
+      diff_aria: "Zorluk Seviyesi:",
       label_owner: "Proje Sorumlusu / Ekip (TR)",
       label_palette: "Renk Paleti (5 Resmi Seçenek)",
       label_gallery: "Konsept Görsel Seçimi",
@@ -164,6 +166,8 @@
       label_sponsor_status: "Sponsorship Status",
       label_project_status: "Project Status",
       label_difficulty: "Difficulty Level (1 - 5)",
+      diff_label: "Difficulty:",
+      diff_aria: "Difficulty Level:",
       label_owner: "Project Lead / Team (TR)",
       label_palette: "Color Palette (5 Official Choices)",
       label_gallery: "Concept Visual Selection",
@@ -223,6 +227,16 @@
 
   // Runtime Specification Translations
   const SPEC_TRANSLATIONS = {
+    'Zorluk': { en: 'Difficulty', tr: 'Zorluk' },
+    'Difficulty': { en: 'Difficulty', tr: 'Zorluk' },
+    'Zorluk Seviyesi': { en: 'Difficulty Level', tr: 'Zorluk Seviyesi' },
+    'Difficulty Level': { en: 'Difficulty Level', tr: 'Zorluk Seviyesi' },
+    'Kategori': { en: 'Category', tr: 'Kategori' },
+    'Category': { en: 'Category', tr: 'Kategori' },
+    'Hedef Kitle': { en: 'Target Audience', tr: 'Hedef Kitle' },
+    'Target Audience': { en: 'Target Audience', tr: 'Hedef Kitle' },
+    'Bütçe Kapsamı': { en: 'Budget Scope', tr: 'Bütçe Kapsamı' },
+    'Budget Scope': { en: 'Budget Scope', tr: 'Bütçe Kapsamı' },
     'Mimari': { en: 'Architecture', tr: 'Mimari' },
     'Architecture': { en: 'Architecture', tr: 'Mimari' },
     'Doğrulama': { en: 'Authentication', tr: 'Doğrulama' },
@@ -849,8 +863,8 @@
             <p class="project-tagline">${escapeHtml(tagline)}</p>
 
             <!-- Difficulty Rating Indicator -->
-            <div class="project-difficulty-bar" aria-label="Zorluk Seviyesi: ${difficulty}/5">
-              <span class="diff-label">Zorluk:</span>
+            <div class="project-difficulty-bar" aria-label="${escapeHtml(I18N[currentLang].diff_aria || 'Difficulty Level:')} ${difficulty}/5">
+              <span class="diff-label">${escapeHtml(I18N[currentLang].diff_label || 'Difficulty:')}</span>
               <div class="diff-dots-track">${diffDots}</div>
               <span class="diff-val">${difficulty}/5</span>
             </div>
