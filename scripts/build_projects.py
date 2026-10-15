@@ -988,7 +988,7 @@ def sync_google_sheet(
         # Check if already exists by slug or title match
         is_dup = (base_slug in existing_slugs or title_raw.lower() in existing_titles)
         if not is_dup:
-            for kw in ["powerbank", "yemekhane", "dining", "devhack", "hackathon", "prompt-labs", "techsummit"]:
+            for kw in ["powerbank", "yemekhane", "dining", "devhack", "hackathon", "prompt-labs", "techsummit", "hidro", "hydro"]:
                 if (kw in base_slug or kw in title_raw.lower()) and any(kw in es or kw in et for es in existing_slugs for et in existing_titles):
                     is_dup = True
                     break

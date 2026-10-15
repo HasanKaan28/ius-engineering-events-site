@@ -516,5 +516,107 @@
       "tr": "IUS TechSummit 2027",
       "en": "IUS TechSummit 2027"
     }
+  },
+  {
+    "id": "ius-hydro-plant",
+    "sheet_id": 6,
+    "is_flagship": true,
+    "featured": true,
+    "status": {
+      "tr": "Öneri",
+      "en": "Proposal"
+    },
+    "sponsor_status": null,
+    "joinUrl": null,
+    "category": {
+      "tr": "Yenilenebilir Enerji & Donanım İnovasyonu",
+      "en": "Renewable Energy & Hardware Innovation"
+    },
+    "badge": {
+      "tr": "Proje Fikri",
+      "en": "Project Idea"
+    },
+    "title": {
+      "tr": "IUS HydroGen (Kampüs Mikro Hidroelektrik Santrali)",
+      "en": "IUS HydroGen (Campus Micro-Hydroelectric Turbine)"
+    },
+    "tagline": {
+      "tr": "Kampüs arazisinden geçen nehirden su türbini ile temiz enerji üretimi ve otonom akıllı depolama hedefi.",
+      "en": "Generating clean campus energy and autonomous smart storage from the campus river via a micro water turbine."
+    },
+    "author": "Bekir Enes Çokbekler (Sayman / Finans)",
+    "ownership": {
+      "tr": "Bekir Enes Çokbekler (Proje Lideri & Finans)",
+      "en": "Bekir Enes Çokbekler (Project Lead & Finance)"
+    },
+    "difficulty": 5,
+    "target_audience": {
+      "tr": "FENS Mühendislik Öğrencileri & Araştırmacılar",
+      "en": "FENS Engineering Students & Researchers"
+    },
+    "image": "./assets/hydro_plant_hero.webp",
+    "gallery": [
+      "./assets/hydro_plant_hero.webp"
+    ],
+    "problem": {
+      "tr": "Kampüs içerisindeki öğrenci projeleri ve açık alan prototipleri için bağımsız, sürdürülebilir yeşil enerji kaynağı eksikliği ve nehir akış potansiyelinin değerlendirilememesi.",
+      "en": "Lack of autonomous, off-grid sustainable energy sources for outdoor campus projects and student hardware prototypes, leaving the university's natural river flow unutilized."
+    },
+    "solution": {
+      "tr": "Kampüs arazisinden geçen nehre yerleştirilecek yaklaşık 50 cm çapında ve 1 metre uzunluğunda mikro su değirmeni ve jeneratör mekanizması ile elektrik üretilmesi; akıllı konumlandırma yazılımı ve enerji depolama ünitesiyle kulüp projelerine ve çevre aydınlatmasına temiz güç sağlanması hedeflenmektedir.",
+      "en": "Proposed deployment of a micro water turbine (~50cm diameter, 1m length) and generator along the campus river, equipped with dynamic flow-positioning firmware and battery storage to power student hardware and outdoor lighting."
+    },
+    "specs": [
+      {
+        "label": {
+          "tr": "Türbin / Mekanik",
+          "en": "Turbine / Mechanics"
+        },
+        "value": {
+          "tr": "50cm x 1m Silindirik Çark / Redüktör",
+          "en": "50cm x 1m Cylindrical Impeller / Gearbox"
+        }
+      },
+      {
+        "label": {
+          "tr": "Jeneratör & Güç",
+          "en": "Generator & Power"
+        },
+        "value": {
+          "tr": "AC/DC Alternatör & MPPT Şarj Devresi",
+          "en": "AC/DC Alternator & MPPT Charge Controller"
+        }
+      },
+      {
+        "label": {
+          "tr": "Kontrol & Yazılım",
+          "en": "Control & Software"
+        },
+        "value": {
+          "tr": "ESP32 / Otonom Akış Takip Yazılımı",
+          "en": "ESP32 / Autonomous Flow-Tracking Firmware"
+        }
+      },
+      {
+        "label": {
+          "tr": "Enerji Depolama",
+          "en": "Energy Storage"
+        },
+        "value": {
+          "tr": "LiFePO4 Batarya Paketi / BMS",
+          "en": "LiFePO4 Battery Bank / BMS Protection"
+        }
+      }
+    ],
+    "links": [],
+    "first_step": {
+      "tr": "IUS Rektörlüğü ve FENS Dekanlığı ile görüşülerek nehir kullanım izinlerinin alınması, su debi rejiminin ölçülmesi ve prototip şasi tasarımı için çalışma ekibinin kurulması planlanmaktadır.",
+      "en": "Schedule preliminary briefing with IUS Rectorate and FENS Deanship for site permissions, conduct hydrologic flow measurements, and assemble the multidisciplinary student mechanical & electrical team."
+    },
+    "palette": "urban-loft",
+    "image_alt": {
+      "tr": "IUS Kampüsü Nehir Tipi Mikro Hidroelektrik Santrali Konsept Tasarımı",
+      "en": "Concept render of IUS Campus Micro-Hydroelectric Power Turbine along the river"
+    }
   }
 ]

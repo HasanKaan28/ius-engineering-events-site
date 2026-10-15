@@ -283,7 +283,15 @@
     'Sergi': { en: 'Exhibition', tr: 'Sergi' },
     'Exhibition': { en: 'Exhibition', tr: 'Sergi' },
     'Kariyer': { en: 'Career Track', tr: 'Kariyer' },
-    'Career Track': { en: 'Career Track', tr: 'Kariyer' }
+    'Career Track': { en: 'Career Track', tr: 'Kariyer' },
+    'Türbin / Mekanik': { en: 'Turbine / Mechanics', tr: 'Türbin / Mekanik' },
+    'Turbine / Mechanics': { en: 'Turbine / Mechanics', tr: 'Türbin / Mekanik' },
+    'Jeneratör & Güç': { en: 'Generator & Power', tr: 'Jeneratör & Güç' },
+    'Generator & Power': { en: 'Generator & Power', tr: 'Jeneratör & Güç' },
+    'Kontrol & Yazılım': { en: 'Control & Software', tr: 'Kontrol & Yazılım' },
+    'Control & Software': { en: 'Control & Software', tr: 'Kontrol & Yazılım' },
+    'Enerji Depolama': { en: 'Energy Storage', tr: 'Enerji Depolama' },
+    'Energy Storage': { en: 'Energy Storage', tr: 'Enerji Depolama' }
   };
 
   // --------------------------------------------------------------------------

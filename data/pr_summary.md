@@ -2,7 +2,7 @@
 
 Bu Pull Request, `data/projects.xlsx` Excel dosyasından otomatik olarak üretilmiştir.
 
-- **Toplam Doğrulanan Proje:** 5
+- **Toplam Doğrulanan Proje:** 6
 - **Yeni Üretilen Görsel Dosyaları:** 0
 - **Otomatik Çevrilen Alan Sayısı:** 0
 
