@@ -1,6 +1,6 @@
 # NVIDIA Otomatik Çeviri Denetim Raporu
 
-- **Tarih (UTC):** 2026-10-16 21:07:12
+- **Tarih (UTC):** 2026-10-16 23:35:13
 - **Kullanılan Model:** `meta/llama-3.3-70b-instruct`
 - **İşlenen Toplam Alan:** 0
 
