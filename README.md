@@ -13,63 +13,63 @@ Explore our flagship student engineering initiatives, IoT power stations, campus
 
 ---
 
-## 📖 Projeye Katkıda Bulunacaklar İçin Kılavuz (Geliştirici Rehberi)
+## 📖 Guide for Contributors (Developer Guide)
 
-> ⚠️ **ÖNEMLİ:** Bu projede kod yazmadan, tasarım değiştirmeden veya yeni bir özellik eklemeden önce lütfen **[DEVELOPER_GUIDE.md](DEVELOPER_GUIDE.md)** dosyasını baştan sona okuyunuz. Projenin mimarisini ve **KESİNLİKLE YAPILMAMASI GEREKEN KURALLARI** içerir.
+> ⚠️ **IMPORTANT:** Before writing code, changing the design, or adding a new feature to this project, please read **[DEVELOPER_GUIDE.md](DEVELOPER_GUIDE.md)** from start to finish. It covers the project architecture and the **RULES THAT MUST NEVER BE BROKEN**.
 
-👉 **Detaylı Kılavuz:** [DEVELOPER_GUIDE.md — Geliştirici Kılavuzu & Katkı Kuralları](DEVELOPER_GUIDE.md)
-
----
-
-## ⚡ Temel Özellikler (Highlights)
-
-- **Tek Gerçek Kaynağı (Single Source of Truth):** Hiçbir proje kartı HTML içine elle yazılmaz. Tüm veriler `data/projects.json` dosyasından dinamik olarak çekilir ve semantik `<article>` kartları olarak render edilir.
-- **Otonom Veri & AI Hattı:** [Google Formu](https://docs.google.com/forms/d/e/1FAIpQLSeZ3RHZbw2BMaboNw4yS0xLALOv4KXzXdAg1gyF-434rMP5Ew/viewform) doldurulan her proje, GitHub Actions tarafından periyodik olarak çekilir; NVIDIA LLaMA 3.3 70B ile İngilizceye çevrilir; NVIDIA Stable Diffusion 3.5 Large ile 16:9 konsept görseli üretilir ve **doğrudan canlı yayına alınır**.
-- **Çift Dil Desteği (i18n):** İngilizce (varsayılan) ve Türkçe arasında tek tıkla pürüzsüz anlık geçiş.
-- **5 Resmi Renk Paleti:** Gothic noir, Cobalt sky, Chili spice, Ink wash ve Urban loft temaları.
-- **Gelişmiş Web Audio API:** Tarayıcı yerel ses motoruyla çalışan fütüristik kullanıcı arayüzü ses efektleri.
-- **Kusursuz Mobil Deneyim:** Dynamic Island / çentik uyumlu (`viewport-fit=cover`), 16px form koruması, 44px+ dokunmatik hedefler ve hikaye formatında görsel öncelikli kart dizilimi.
-- **Sıfır Ağır Bağımlılık (Zero Bloat):** React, Vue, Tailwind veya harici CSS/JS kütüphanesi kullanılmaz; saf Vanilla teknolojilerle 60 FPS performans sunar.
+👉 **Detailed Guide:** [DEVELOPER_GUIDE.md — Developer Guide & Contribution Rules](DEVELOPER_GUIDE.md)
 
 ---
 
-## 📁 Proje Dizin Yapısı
+## ⚡ Highlights
+
+- **Single Source of Truth:** No project card is ever hand-written into the HTML. All data is pulled dynamically from `data/projects.json` and rendered as semantic `<article>` cards.
+- **Autonomous Data & AI Pipeline:** Every project submitted through the [Google Form](https://docs.google.com/forms/d/e/1FAIpQLSeZ3RHZbw2BMaboNw4yS0xLALOv4KXzXdAg1gyF-434rMP5Ew/viewform) is fetched periodically by GitHub Actions, translated into English with NVIDIA LLaMA 3.3 70B, given a 16:9 concept image generated with NVIDIA Stable Diffusion 3.5 Large, and **published straight to the live site**.
+- **Bilingual Support (i18n):** Smooth, instant one-click switching between English (default) and Turkish.
+- **5 Official Color Palettes:** Gothic noir, Cobalt sky, Chili spice, Ink wash, and Urban loft themes.
+- **Advanced Web Audio API:** Futuristic UI sound effects powered by the browser's native audio engine.
+- **Flawless Mobile Experience:** Dynamic Island / notch compatible (`viewport-fit=cover`), 16px form protection, 44px+ touch targets, and an image-first, story-style card layout.
+- **Zero Bloat:** No React, Vue, Tailwind, or external CSS/JS libraries; pure Vanilla technologies deliver 60 FPS performance.
+
+---
+
+## 📁 Project Directory Structure
 
 ```plaintext
-├── .github/workflows/       # Otonom CI/CD derleme ve canlı yayın iş akışı
-├── assets/                  # Kök dizin varlıkları & 16:9 WebP konsept renderları
-├── data/                    # projects.json, projects.xlsx ve AI raporları
-├── projects/                # Ana vitrin uygulaması (index.html, style.css, app.js)
-├── scripts/                 # Python veri boru hattı ve görsel prompt motoru
-├── DEVELOPER_GUIDE.md       # Detaylı geliştirici rehberi ve katı kurallar
-└── README.md                # Depo genel tanıtımı
+├── .github/workflows/       # Autonomous CI/CD build and live deployment workflow
+├── assets/                  # Root-level assets & 16:9 WebP concept renders
+├── data/                    # projects.json, projects.xlsx, and AI reports
+├── projects/                # Main showcase application (index.html, style.css, app.js)
+├── scripts/                 # Python data pipeline and image prompt engine
+├── DEVELOPER_GUIDE.md       # Detailed developer guide and strict rules
+└── README.md                # General repository overview
 ```
 
 ---
 
-## 💻 Yerel Geliştirme (Quick Start)
+## 💻 Local Development (Quick Start)
 
-Statik bir sunucu ile projeyi anında yerel ortamınızda çalıştırabilirsiniz:
+You can run the project in your local environment instantly with a static server:
 
 ```powershell
-# Proje kök dizininde sunucu başlatın:
+# Start a server in the project root directory:
 python -m http.server 8099
 ```
 
-Tarayıcınızda açın:
-- **Projeler Vitrini:** [http://localhost:8099/projects/](http://localhost:8099/projects/)
+Open in your browser:
+- **Projects Showcase:** [http://localhost:8099/projects/](http://localhost:8099/projects/)
 
-Python pipeline'ını test etmek için (harici API çağrısı yapmadan):
+To test the Python pipeline (without making external API calls):
 ```powershell
 python scripts/build_projects.py --dry-run
 ```
 
 ---
 
-## 🤝 Yeni Proje Önermek İster misiniz?
+## 🤝 Want to Propose a New Project?
 
-IUS öğrencileri yeni fikir ve projelerini form üzerinden doğrudan sisteme gönderebilir:
-📝 **[Proje Fikri Başvuru Formu (Google Forms)](https://docs.google.com/forms/d/e/1FAIpQLSeZ3RHZbw2BMaboNw4yS0xLALOv4KXzXdAg1gyF-434rMP5Ew/viewform)**
+IUS students can submit their new ideas and projects directly to the system through the form:
+📝 **[Project Idea Application Form (Google Forms)](https://docs.google.com/forms/d/e/1FAIpQLSeZ3RHZbw2BMaboNw4yS0xLALOv4KXzXdAg1gyF-434rMP5Ew/viewform)**
 
 ---
 
